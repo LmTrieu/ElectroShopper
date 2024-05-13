@@ -1,4 +1,5 @@
-﻿using ElectroShopper.Service.Repositories;
+﻿using ElectroShopper.Service.IRepositories;
+using ElectroShopper.Service.Repositories;
 
 namespace ElectroShopper.Service
 {
@@ -8,6 +9,7 @@ namespace ElectroShopper.Service
         {
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
         }
     }
 }

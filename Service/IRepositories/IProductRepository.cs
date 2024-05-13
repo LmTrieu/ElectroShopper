@@ -1,7 +1,7 @@
 ﻿using ElectroShopper.Data.Entities;
 using ElectroShopper.Models;
 
-namespace ElectroShopper.Service.Repositories
+namespace ElectroShopper.Service.IRepositories
 {
     public interface IProductRepository
     {

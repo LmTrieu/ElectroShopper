@@ -2,6 +2,7 @@
 using ElectroShopper.Data;
 using ElectroShopper.Data.Entities;
 using ElectroShopper.Models;
+using ElectroShopper.Service.IRepositories;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 

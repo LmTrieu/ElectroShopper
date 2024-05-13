@@ -1,5 +1,6 @@
 ﻿using ElectroShopper.Data;
 using ElectroShopper.Models;
+using ElectroShopper.Service.IRepositories;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
@@ -18,17 +19,12 @@ namespace ElectroShopper.Controllers
     [ApiController]
     public class CustomAuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IValidator<LoginRequestBodyDto> _validator;
-        public CustomAuthenticationController(IConfiguration configuration, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,
-                                              IValidator<LoginRequestBodyDto> validator) 
+        private readonly ICustomAuthRepository _customAuthRepository;
+        public CustomAuthenticationController(IValidator<LoginRequestBodyDto> validator, ICustomAuthRepository customAuthRepository) 
         {
-            _config = configuration;
-            _signInManager = signInManager;
-            _userManager = userManager;
             _validator = validator;
+            _customAuthRepository = customAuthRepository;
         }
 
         public class ErrorResponse
@@ -61,44 +57,9 @@ namespace ElectroShopper.Controllers
                 return Results.BadRequest(errorResponse);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: true);
-
-            if (result.Succeeded)
+            if (await _customAuthRepository.SignInUser(loginRequestModel))
             {
-                var issuer = _config["Jwt:Issuer"];
-                var audience = _config["Jwt:Audience"];
-                var key = Encoding.ASCII.GetBytes
-                (_config["Jwt:Key"]);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim("Id", Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, loginRequestModel.Email),
-                        new Claim(JwtRegisteredClaimNames.Email, loginRequestModel.Email),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
-                    Issuer = issuer,
-                    Audience = audience,
-                    SigningCredentials = new SigningCredentials
-                    (new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha512Signature)
-                };
-
-                var identityUser = await _userManager.FindByEmailAsync(loginRequestModel.Email);
-                var roles = await _userManager.GetRolesAsync(identityUser);
-
-                foreach (var role in roles)
-                {
-                    tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, role));
-                }
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var stringToken = tokenHandler.WriteToken(token);
-
-                return Results.Ok(stringToken);
+                return Results.Ok(await _customAuthRepository.CreateJwtUserAccessToken(loginRequestModel));
             }
 
             return Results.Unauthorized();

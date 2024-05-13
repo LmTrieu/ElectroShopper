@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ElectroShopper.Data;
 using ElectroShopper.Data.Entities;
+using ElectroShopper.Service.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElectroShopper.Service.Repositories
@@ -54,5 +55,9 @@ namespace ElectroShopper.Service.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<Category> CreateCategoryAsync(Category category)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

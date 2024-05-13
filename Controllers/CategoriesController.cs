@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElectroShopper.Data;
 using ElectroShopper.Data.Entities;
-using ElectroShopper.Service.Repositories;
+using ElectroShopper.Service.IRepositories;
 
 namespace ElectroShopper.Controllers
 {
@@ -16,7 +16,7 @@ namespace ElectroShopper.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public CategoriesController(ApplicationDbContext context, ICategoryRepository categoryRepository)
         {

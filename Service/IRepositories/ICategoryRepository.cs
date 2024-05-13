@@ -1,6 +1,6 @@
 ﻿using ElectroShopper.Data.Entities;
 
-namespace ElectroShopper.Service.Repositories
+namespace ElectroShopper.Service.IRepositories
 {
     public interface ICategoryRepository
     {

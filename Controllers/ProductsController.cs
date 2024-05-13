@@ -5,9 +5,9 @@ using ElectroShopper.Models;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using ElectroShopper.Service.Repositories;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using NuGet.Protocol;
+using ElectroShopper.Service.IRepositories;
 
 namespace ElectroShopper.Controllers
 {
@@ -15,13 +15,11 @@ namespace ElectroShopper.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productRepository;
         private readonly IValidator<ProductRequestBodyDto> _validator;
 
-        public ProductsController(ApplicationDbContext context, IProductRepository productRepository, IValidator<ProductRequestBodyDto> validator)
+        public ProductsController(IProductRepository productRepository, IValidator<ProductRequestBodyDto> validator)
         {
-            _context = context;
             _productRepository = productRepository;
             _validator = validator;
         }
@@ -45,6 +43,7 @@ namespace ElectroShopper.Controllers
         }
 
         // PUT: api/Products/5
+        // Fix this shi
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, ProductRequestBodyDto productdto)
         {
