@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElectroShopper.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "Admin")]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
