@@ -1,4 +1,5 @@
-﻿using RookieEShopper.Application.Dto;
+﻿using Microsoft.AspNetCore.Identity;
+using RookieEShopper.Application.Dto;
 
 namespace RookieEShopper.Application.Repositories
 {
@@ -6,5 +7,7 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<string> CreateJwtUserAccessToken(LoginRequestBodyDto loginRequestModel);
         Task<bool> SignInUser(LoginRequestBodyDto loginRequestModel);
+        Task<IdentityResult> RegisterUser(LoginRequestBodyDto registerRequestBodyDto);
+
     }
 }

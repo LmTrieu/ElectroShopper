@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RookieEShopper.Infrastructure.Persistent;
 
@@ -11,9 +12,11 @@ using RookieEShopper.Infrastructure.Persistent;
 namespace RookieEShopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515065210_UpdateCustomerToBaseApplicationUser")]
+    partial class UpdateCustomerToBaseApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,10 +257,6 @@ namespace RookieEShopper.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("EWallet")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -299,15 +298,8 @@ namespace RookieEShopper.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsRefundable")
-                        .HasColumnType("bit");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("ShippingPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -461,7 +453,7 @@ namespace RookieEShopper.Migrations
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Order", b =>
                 {
                     b.HasOne("RookieEShopper.Domain.Data.Entities.Customer", "Customer")
-                        .WithMany("OrderHistory")
+                        .WithMany()
                         .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
@@ -511,11 +503,6 @@ namespace RookieEShopper.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Customer", b =>
-                {
-                    b.Navigation("OrderHistory");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.OrderDetail", b =>

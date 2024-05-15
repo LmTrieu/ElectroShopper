@@ -7,6 +7,11 @@ using RookieEShopper.Infrastructure.Persistent;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddIdentityApiEndpoints<BaseApplicationUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services
     .AddPresentation()
     .AddApplication()
@@ -16,10 +21,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddIdentityApiEndpoints<Customer>()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 
@@ -32,6 +33,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapIdentityApi<BaseApplicationUser>();
 
 app.MapControllers();
 

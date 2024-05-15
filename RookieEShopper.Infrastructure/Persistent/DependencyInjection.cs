@@ -15,6 +15,8 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddPersitence(configuration);
             services.AddJwtAuthentication(configuration);
             services.AddAutoMapperConfiguration();
+            
+            DbSeed.Initializer(services.BuildServiceProvider());
 
             return services;
         }
@@ -36,6 +38,7 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
+
 
             return services;
         }

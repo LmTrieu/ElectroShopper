@@ -7,6 +7,7 @@ using RookieEShopper.Application.Dto;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Extension.JwtBearer;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,30 +16,24 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
     public class CustomAuthRepository : ICustomAuthRepository
     {
-        private readonly IConfiguration _config;
-        //Will change to BaseApplicationUser
-        private readonly SignInManager<Customer> _signInManager;
-        private readonly UserManager<Customer> _userManager;
+        private readonly SignInManager<BaseApplicationUser> _signInManager;
+        private readonly UserManager<BaseApplicationUser> _userManager;
         private readonly JwtOptions _jwtOptions;
-        public CustomAuthRepository(IConfiguration configuration, SignInManager<Customer> signInManager, UserManager<Customer> userManager
+        public CustomAuthRepository(SignInManager<BaseApplicationUser> signInManager, UserManager<BaseApplicationUser> userManager
                                     ,JwtOptions jwtOptions)
         {
-            _config = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
             _jwtOptions = jwtOptions;
         }
         public async Task<string> CreateJwtUserAccessToken(LoginRequestBodyDto loginRequestModel)
         {
-            //Error here fix later
             var identityUser = await _userManager.FindByEmailAsync(loginRequestModel.Email);
 
-            if (identityUser is null)
-                throw new ArgumentNullException("Bad Login");
+            //Will separate this check later
 
-            var issuer = _jwtOptions.Issuer;
-            var audience = _jwtOptions.Audience;
-            var key = Encoding.ASCII.GetBytes(_jwtOptions.Key);
+            if (identityUser is null)
+                throw new ArgumentNullException(loginRequestModel.Email);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -50,11 +45,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryMinutes),
-                Issuer = issuer,
-                Audience = audience,
+                Issuer = _jwtOptions.Issuer,
+                Audience = _jwtOptions.Audience,
                 SigningCredentials = new SigningCredentials
-                (new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha512Signature)
+                (new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(_jwtOptions.Key)),
+                    SecurityAlgorithms.HmacSha256)
             };
 
             var roles = await _userManager.GetRolesAsync(identityUser);
@@ -68,8 +64,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
-
         }
 
         public async Task<bool> SignInUser(LoginRequestBodyDto loginRequestModel)
@@ -77,6 +71,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return
                 await _signInManager.PasswordSignInAsync(loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: true)
                     is not null;
+        }
+        public async Task<IdentityResult> RegisterUser(LoginRequestBodyDto registerRequestBodyDto)
+        {
+            var user = new BaseApplicationUser { Email = registerRequestBodyDto.Email, UserName = registerRequestBodyDto.Email };
+            var result = await _userManager.CreateAsync(user, registerRequestBodyDto.Password );
+            return result;
         }
     }
 }

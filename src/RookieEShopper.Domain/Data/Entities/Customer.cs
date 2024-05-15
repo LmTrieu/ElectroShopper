@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RookieEShopper.Domain.Data.Entities
 {
-    public class Customer : IdentityUser
+    public class Customer
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public int Age { get; set; }
-        public string? Address { get; set; }
-
+        public int Id { get; set; }      
+        public ICollection<Order> OrderHistory { get; set; } = new List<Order>();
+        [Precision(18, 2)]
+        public decimal EWallet {  get; set; } = 0;
     }
 }
