@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RookieEShopper.Application\RookieEShopper.Application.csproj" />
-    <ProjectReference Include="..\src\RookieEShopper.Domain\RookieEShopper.Domain.csproj" />
+    <ProjectReference Include="..\RookieEShopper.Domain\RookieEShopper.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

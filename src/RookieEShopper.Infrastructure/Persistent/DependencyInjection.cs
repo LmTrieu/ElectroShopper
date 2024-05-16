@@ -6,6 +6,7 @@ using RookieEShopper.Application.Repositories;
 using RookieEShopper.Infrastructure.Extension.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using RookieEShopper.Infrastructure.Extension.AutoMapper;
+using RookieEShopper.Infrastructure.Services;
 namespace RookieEShopper.Infrastructure.Persistent
 {
     public static class DependencyInjection

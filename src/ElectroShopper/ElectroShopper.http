@@ -1,6 +1,0 @@
-@ElectroShopper_HostAddress = http://localhost:5188
-
-GET {{ElectroShopper_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -4,15 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using RookieEShopper.Domain.Data.Entities;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RookieEShopper.Infrastructure.Persistent
+namespace RookieEShopper.Infrastructure.Services
 {
     public static class DbSeed
     {
-        public static async void Initializer (IServiceProvider serviceProvider)
+        public static async void Initializer(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
-            string[] roles = new string[] { "Customer", "Administrator", "Seller"};
+            string[] roles = new string[] { "Customer", "Administrator", "Seller" };
 
             foreach (string role in roles)
             {
