@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -81,6 +82,21 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             {
                 return false;
             }
+        }
+
+        public async Task<bool> UploadProductImage(IFormFile image)
+        {
+            string path = image.FileName + "_" + Guid.NewGuid().ToString();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            using (var stream = File.Create(path))
+            {
+                await image.CopyToAsync(stream);
+            }
+            throw new NotImplementedException();
         }
     }
 }

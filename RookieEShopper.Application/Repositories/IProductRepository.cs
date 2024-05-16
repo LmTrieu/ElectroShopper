@@ -1,4 +1,5 @@
-﻿using RookieEShopper.Application.Dto;
+﻿using Microsoft.AspNetCore.Http;
+using RookieEShopper.Application.Dto;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Application.Repositories
@@ -13,6 +14,7 @@ namespace RookieEShopper.Application.Repositories
         Task<Product?> UpdateProductAsync(int id, ProductRequestBodyDto productdto);
         Task<bool> DeleteProductAsync(Product product);
         Task<bool> IsProductExist(int id);
+        Task<bool> UploadProductImage(IFormFile image);
 
     }
 }
