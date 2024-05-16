@@ -30,7 +30,7 @@ namespace RookieEShopper.Infrastructure.Persistent
                 throw new ArgumentNullException("Connection string not found");
             }
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString, providerOptions =>
                 {
                     providerOptions.EnableRetryOnFailure().CommandTimeout(60);
@@ -40,7 +40,7 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
 
-
+            services.AddTransient<FileService>();
             return services;
         }
     }

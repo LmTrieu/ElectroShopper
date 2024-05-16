@@ -22,4 +22,8 @@
     <ProjectReference Include="..\RookieEShopper.Domain\RookieEShopper.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\ProductImages\1\" />
+  </ItemGroup>
+
 </Project>

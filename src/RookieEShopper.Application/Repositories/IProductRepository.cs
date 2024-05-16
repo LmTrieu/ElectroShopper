@@ -14,7 +14,7 @@ namespace RookieEShopper.Application.Repositories
         Task<Product?> UpdateProductAsync(int id, ProductRequestBodyDto productdto);
         Task<bool> DeleteProductAsync(Product product);
         Task<bool> IsProductExist(int id);
-        Task<bool> UploadProductImage(IFormFile image);
+        Task UploadProductImage(int id,IFormFile image);
 
     }
 }

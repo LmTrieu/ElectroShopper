@@ -4,6 +4,9 @@ using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Dto;
 using Microsoft.AspNetCore.Http;
+using RookieEShopper.Infrastructure.Services;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -12,12 +15,19 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly FileService _fileService;
 
-        public ProductRepository(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository)
+        private string folderPath;
+
+        public ProductRepository(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository,
+            FileService fileService, IWebHostEnvironment env)
         {
             _context = context;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _fileService = fileService;
+
+            folderPath = env.ContentRootPath + "\\wwwroot\\ProductImages\\";
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -84,19 +94,26 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             }
         }
 
-        public async Task<bool> UploadProductImage(IFormFile image)
+        public async Task UploadProductImage(int id,IFormFile image)
         {
-            string path = image.FileName + "_" + Guid.NewGuid().ToString();
-            if (!Directory.Exists(path))
+            folderPath += id;
+
+            if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(folderPath);
             }
 
-            using (var stream = File.Create(path))
-            {
-                await image.CopyToAsync(stream);
-            }
-            throw new NotImplementedException();
+            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString()+ "_" + image.FileName;
+
+            var product = await _context.Products.FindAsync(id);
+
+            if (product is null)
+                throw new ArgumentNullException(product.ToString());            
+
+            await _fileService.uploadImage(imagePath,image);
+
+            product.imagePath = imagePath.Replace(folderPath, "").TrimStart('\\');                
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 using RookieEShopper.Api;
 using RookieEShopper.Application;
 using RookieEShopper.Domain.Data.Entities;
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapIdentityApi<BaseApplicationUser>();
 

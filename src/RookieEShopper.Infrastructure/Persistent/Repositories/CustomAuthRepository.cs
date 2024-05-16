@@ -68,14 +68,14 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         public async Task<bool> SignInUser(LoginRequestBodyDto loginRequestModel)
         {
-            return
-                await _signInManager.PasswordSignInAsync(loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: true)
+            return await _signInManager.PasswordSignInAsync(loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: true)
                     is not null;
         }
         public async Task<IdentityResult> RegisterUser(LoginRequestBodyDto registerRequestBodyDto)
         {
             var user = new BaseApplicationUser { Email = registerRequestBodyDto.Email, UserName = registerRequestBodyDto.Email };
             var result = await _userManager.CreateAsync(user, registerRequestBodyDto.Password );
+
             return result;
         }
     }

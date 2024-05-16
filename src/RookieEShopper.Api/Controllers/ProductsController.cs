@@ -79,6 +79,22 @@ namespace RookieEShopper.Backend.Controllers
             }
         }
 
+        [HttpPost("{id}")]
+        public async Task<ActionResult<Product>> PostProductImage(int id, IFormFile image)
+        {
+            //ValidationResult validationResult = _validator.Validate(productdto);
+            //if (validationResult.IsValid)
+            //{
+            //    return Ok(await _productRepository.UploadProductImage());
+            //}
+            //else
+            //{
+            //    return BadRequest(validationResult.ToDictionary().ToList());
+            //}
+            await _productRepository.UploadProductImage(id,image);
+            return Ok();
+        }
+
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
