@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto;
 using RookieEShopper.Application.Repositories;
@@ -10,14 +11,16 @@ namespace RookieEShopper.Backend.Controllers
     [ApiController]
     public class CustomAuthenticationController : ControllerBase
     {
-        private readonly IValidator<LoginRequestBodyDto> _validator;
+        private readonly IValidator<LoginCustomerDto> _validator;
         private readonly ICustomAuthRepository _customAuthRepository;
-        public CustomAuthenticationController(IValidator<LoginRequestBodyDto> validator, ICustomAuthRepository customAuthRepository)
+
+        public CustomAuthenticationController(IValidator<LoginCustomerDto> validator, ICustomAuthRepository customAuthRepository)
         {
             _validator = validator;
             _customAuthRepository = customAuthRepository;
         }
 
+        // Will change to Global Exception
         public class ErrorResponse
         {
             public List<ErrorDetail>? Errors { get; set; }
@@ -30,7 +33,8 @@ namespace RookieEShopper.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IResult> Login([FromBody] LoginRequestBodyDto loginRequestModel)
+        [Route("Login")]
+        public async Task<IResult> Login([FromBody] LoginCustomerDto loginRequestModel)
         {
             ValidationResult validationResult = _validator.Validate(loginRequestModel);
 
@@ -55,5 +59,36 @@ namespace RookieEShopper.Backend.Controllers
 
             return Results.Unauthorized();
         }
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<Results<Created<LoginCustomerDto>, BadRequest<ErrorResponse>>> Register([FromBody] LoginCustomerDto loginRequestModel)
+        {
+            ValidationResult validationResult = _validator.Validate(loginRequestModel);
+
+            if (!validationResult.IsValid)
+            {
+                var errorResponse = new ErrorResponse()
+                {
+                    Errors = validationResult.Errors.Select(e => new ErrorDetail
+                    {
+                        FieldName = e.PropertyName,
+                        ErrorMessage = e.ErrorMessage
+                    }).ToList()
+                };
+
+                return TypedResults.BadRequest(errorResponse);
+            }
+
+            await _customAuthRepository.RegisterUser(loginRequestModel);
+
+            return TypedResults.Created("/api/CustomAuthentication/Register", loginRequestModel);
+        }
+
+        //[HttpGet]
+        //[Route("Logout")]
+        //public async Task<IResult> Logout([FromBody] LoginRequestBodyDto loginRequestModel)
+        //{
+        //}
     }
 }

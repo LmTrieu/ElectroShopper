@@ -8,9 +8,8 @@ namespace RookieEShopper.Backend.Service
     {
         public AutoMapperProfile()
         {
-            CreateMap<ProductRequestBodyDto, Product>();
+            CreateMap<CreateProductDto, Product>();
             CreateMap<Product, Product>();
         }
-
     }
 }

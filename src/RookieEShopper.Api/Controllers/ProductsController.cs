@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
-using RookieEShopper.Application.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Backend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IValidator<ProductRequestBodyDto> _validator;
+        private readonly IValidator<CreateProductDto> _validator;
 
-        public ProductsController(IProductRepository productRepository, IValidator<ProductRequestBodyDto> validator)
+        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator)
         {
             _productRepository = productRepository;
             _validator = validator;
         }
+
         // GET: api/Products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -41,7 +44,7 @@ namespace RookieEShopper.Backend.Controllers
         // PUT: api/Products/5
         // Fix this shi
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, ProductRequestBodyDto productdto)
+        public async Task<IActionResult> PutProduct(int id, CreateProductDto productdto)
         {
             ValidationResult validationResult = _validator.Validate(productdto);
             if (validationResult.IsValid)
@@ -66,7 +69,7 @@ namespace RookieEShopper.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(ProductRequestBodyDto productdto)
+        public async Task<ActionResult<Product>> PostProduct(CreateProductDto productdto)
         {
             ValidationResult validationResult = _validator.Validate(productdto);
             if (validationResult.IsValid)
@@ -91,7 +94,7 @@ namespace RookieEShopper.Backend.Controllers
             //{
             //    return BadRequest(validationResult.ToDictionary().ToList());
             //}
-            await _productRepository.UploadProductImage(id,image);
+            await _productRepository.UploadProductImage(id, image);
             return Ok();
         }
 

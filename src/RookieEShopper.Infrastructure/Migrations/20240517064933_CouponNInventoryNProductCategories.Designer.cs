@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RookieEShopper.Infrastructure.Persistent;
 
@@ -11,9 +12,11 @@ using RookieEShopper.Infrastructure.Persistent;
 namespace RookieEShopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240517064933_CouponNInventoryNProductCategories")]
+    partial class CouponNInventoryNProductCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,7 +246,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Category", b =>
@@ -269,7 +272,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Coupon", b =>
@@ -296,7 +299,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Coupons", (string)null);
+                    b.ToTable("Coupons");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Customer", b =>
@@ -313,7 +316,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Inventory", b =>
@@ -334,7 +337,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Order", b =>
@@ -362,7 +365,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.OrderDetail", b =>
@@ -392,7 +395,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Product", b =>
@@ -435,7 +438,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.ProductCategory", b =>
@@ -458,7 +461,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("categoryId");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.ProductReview", b =>
@@ -493,7 +496,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReviews", (string)null);
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.BaseApplicationUser", b =>

@@ -19,7 +19,7 @@ namespace RookieEShopper.Infrastructure.Extension.CloudinaryDotNet
                 throw new ArgumentException("Please specify Cloudinary account details!");
             }
 
-            services.AddSingleton(new Cloudinary(new Account(cloudName, apiKey, apiSecret)));            
+            services.AddSingleton(new Cloudinary(new Account(cloudName, apiKey, apiSecret)));
         }
     }
 }

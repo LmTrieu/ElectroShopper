@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.Application.Repositories;
-using RookieEShopper.Application.Dto;
-using Microsoft.AspNetCore.Http;
-using RookieEShopper.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Repositories;
+using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.Infrastructure.Services;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -15,17 +14,19 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IBrandRepository _brandRepository;
         private readonly FileService _fileService;
 
         private string folderPath;
 
         public ProductRepository(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository,
-            FileService fileService, IWebHostEnvironment env)
+            FileService fileService, IWebHostEnvironment env, IBrandRepository brandRepository)
         {
             _context = context;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
             _fileService = fileService;
+            _brandRepository = brandRepository;
 
             folderPath = env.ContentRootPath + "\\wwwroot\\ProductImages\\";
         }
@@ -53,18 +54,24 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .ToListAsync();
             return product;
         }
-        public async Task<Product?> CreateProductAsync(ProductRequestBodyDto productdto)
-        {
-            var product = _mapper.Map<ProductRequestBodyDto, Product>(productdto);
-            product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);
 
+        public async Task<Product?> CreateProductAsync(CreateProductDto productdto)
+        {
+            var product = _mapper.Map<CreateProductDto, Product>(productdto);
+            product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);        
+            
             await _context.Products.AddAsync(product);
+
+            product.Brand = await _brandRepository.GetBrandByIdAsync(productdto.BrandId);
+            
+            //product.AppliableCoupons
+            
             await _context.SaveChangesAsync();
 
             return product;
         }
 
-        public async Task<Product?> UpdateProductAsync(int id, ProductRequestBodyDto productdto)
+        public async Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto)
         {
             Product? result = await _context.Products
                 .Include(p => p.Category)
@@ -94,7 +101,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             }
         }
 
-        public async Task UploadProductImage(int id,IFormFile image)
+        public async Task UploadProductImage(int id, IFormFile image)
         {
             folderPath += id;
 
@@ -103,16 +110,16 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 Directory.CreateDirectory(folderPath);
             }
 
-            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString()+ "_" + image.FileName;
+            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
 
             var product = await _context.Products.FindAsync(id);
 
             if (product is null)
-                throw new ArgumentNullException(product.ToString());            
+                throw new ArgumentNullException(product.ToString());
 
-            await _fileService.uploadImage(imagePath,image);
+            await _fileService.uploadImage(imagePath, image);
 
-            product.imagePath = imagePath.Replace(folderPath, "").TrimStart('\\');                
+            product.ImagePath = imagePath.Replace(folderPath, "").TrimStart('\\');
             await _context.SaveChangesAsync();
         }
     }

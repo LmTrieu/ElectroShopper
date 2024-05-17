@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RookieEShopper.Application.Dto;
-
 
 namespace RookieEShopper.Infrastructure.Extension.AutoMapper
 {
@@ -12,8 +10,8 @@ namespace RookieEShopper.Infrastructure.Extension.AutoMapper
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<IValidator<LoginRequestBodyDto>, LoginRequestBodyValidator>();
-            services.AddScoped<IValidator<ProductRequestBodyDto>, ProductRequestBodyDtoValidator>();
+            services.AddScoped<IValidator<LoginCustomerDto>, LoginCustomerValidator>();
+            services.AddScoped<IValidator<CreateProductDto>, CreateProductDtoValidator>();
         }
     }
 }

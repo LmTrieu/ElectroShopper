@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using RookieEShopper.Domain.Data.Entities;
 using Microsoft.IdentityModel.Tokens;
+using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Infrastructure.Services
 {
@@ -41,6 +40,7 @@ namespace RookieEShopper.Infrastructure.Services
 
             //context.SaveChangesAsync();
         }
+
         public static async Task<IdentityResult> AssignRoles(IServiceProvider services, string email, string[] roles)
         {
             UserManager<BaseApplicationUser> _userManager = services.GetService<UserManager<BaseApplicationUser>>();

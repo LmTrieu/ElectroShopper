@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RookieEShopper.Application.Dto
 {
-    public class LoginRequestBodyDto
+    public class LoginCustomerDto
     {
         public string? Email { get; set; }
 
@@ -11,9 +11,9 @@ namespace RookieEShopper.Application.Dto
         public string? Password { get; set; }
     }
 
-    public class LoginRequestBodyValidator : AbstractValidator<LoginRequestBodyDto>
+    public class LoginCustomerValidator : AbstractValidator<LoginCustomerDto>
     {
-        public LoginRequestBodyValidator()
+        public LoginCustomerValidator()
         {
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Email).EmailAddress();

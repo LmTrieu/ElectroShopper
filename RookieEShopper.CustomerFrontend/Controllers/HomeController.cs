@@ -12,6 +12,9 @@ namespace RookieEShopper.CustomerFrontend.Controllers
         private readonly ICategoryClient _categoryClient;
         private readonly IProductClient _productClient;
 
+        private HomePageVM homePageVM = new HomePageVM();
+
+
         public HomeController(ILogger<HomeController> logger, ICategoryClient categoryClient, IProductClient productClient)
         {
             _logger = logger;
@@ -19,20 +22,20 @@ namespace RookieEShopper.CustomerFrontend.Controllers
             _productClient = productClient;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            HomePageVM navData = new HomePageVM();
-            var categories = await _categoryClient.GetCategoriesAsync();
-            var products = await _productClient.GetProductsAsync();
+            homePageVM.Catergories = (await _categoryClient.GetCategoriesAsync()).ToList();
+            homePageVM.Products = (await _productClient.GetProductsAsync()).ToList();
+            ViewData["NavbarVM"] = homePageVM.Catergories;
 
-            navData.Catergories = categories.ToList();
-            navData.Products = products.ToList();
-
-            return View(navData);
+            return View(homePageVM.Products);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+            homePageVM.Catergories = (await _categoryClient.GetCategoriesAsync()).ToList();
+            ViewData["NavbarVM"] = homePageVM.Catergories;
+
             return View();
         }
 

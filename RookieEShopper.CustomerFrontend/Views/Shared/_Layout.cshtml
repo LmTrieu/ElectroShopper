@@ -1,7 +1,6 @@
 ﻿@using RookieEShopper.SharedViewModel
-@model HomePageVM
 @{
-    var categoryList = (ViewData["NavbarVM"] as List<CategoryVM>);
+    var categoryList = ViewData["NavbarVM"] as List<CategoryVM>;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +19,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#!">Start Bootstrap</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -33,9 +32,17 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#!">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                @foreach(var catergory in Model.Catergories)
+                                @{
+                                if(categoryList != null && categoryList.Count != 0)
+                                    foreach(var catergory in categoryList)
+                                    {
+                                        //Change href to BrandId//ProductId later
+                                        <li><a class="dropdown-item" href="@catergory.id">@catergory.cartegoryName</a></li>
+                                    }
+                                else
                                 {
-                                    <li><a class="dropdown-item" href="@catergory.id">@catergory.cartegoryName</a></li>
+                                    <li>No categories available</li>
+                                }
                                 }
                             </ul>
                         </li>

@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using RookieEShopper.Application.Dto;
+﻿using RookieEShopper.Application.Dto;
 
 namespace RookieEShopper.Application.Repositories
 {
     public interface ICustomAuthRepository
     {
-        Task<string> CreateJwtUserAccessToken(LoginRequestBodyDto loginRequestModel);
-        Task<bool> SignInUser(LoginRequestBodyDto loginRequestModel);
-        Task<IdentityResult> RegisterUser(LoginRequestBodyDto registerRequestBodyDto);
+        Task<string> CreateJwtUserAccessToken(LoginCustomerDto loginRequestModel);
 
+        Task<bool> SignInUser(LoginCustomerDto loginRequestModel);
+
+        Task<bool> RegisterUser(LoginCustomerDto registerRequestBodyDto);
+
+        Task<bool> IsEmailTaken(string username);
+
+        Task<bool> LogOutUser(string token);
     }
 }

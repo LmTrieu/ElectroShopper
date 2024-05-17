@@ -8,6 +8,7 @@ namespace RookieEShopper.Domain.Data.Entities
         public string LastName { get; set; } = string.Empty;
         public int Age { get; set; }
         public string? Address { get; set; }
+        public bool IsLocked { get; set; }
 
         public virtual Customer? Customer { get; set; }
     }

@@ -16,7 +16,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _mapper = mapper;
         }
 
-        public async Task<List<Category>> GetCategoriesAsync()
+        public async Task<List<Category>> GetAllCategoriesAsync()
         {
             return await _context.Categories.ToListAsync();
         }
@@ -44,6 +44,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         {
             throw new NotImplementedException();
         }
+
         public Task<Category> UpdateCategoryAsync(Category category)
         {
             throw new NotImplementedException();

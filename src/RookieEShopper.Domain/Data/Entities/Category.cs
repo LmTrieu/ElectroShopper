@@ -3,6 +3,7 @@
     public class Category
     {
         public int Id { get; set; }
-        public required string CartegoryName { get; set; }
+        public string CartegoryName { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

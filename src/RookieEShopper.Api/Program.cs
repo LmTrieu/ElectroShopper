@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.FileProviders;
 using RookieEShopper.Api;
 using RookieEShopper.Application;
 using RookieEShopper.Domain.Data.Entities;
@@ -17,9 +16,6 @@ builder.Services
     .AddPresentation()
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization();
 
