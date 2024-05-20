@@ -69,7 +69,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<bool> SignInUser(LoginCustomerDto loginRequestModel)
         {
             var signInResult = await _signInManager.PasswordSignInAsync(
-                loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: true);
+                loginRequestModel.Email, loginRequestModel.Password, false, lockoutOnFailure: false);
 
             return signInResult.Succeeded;
         }

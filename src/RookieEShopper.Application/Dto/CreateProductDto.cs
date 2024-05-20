@@ -13,9 +13,11 @@ namespace RookieEShopper.Application.Dto
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
         public IFormFile? ProductImage { get; set; }
-        public int NumOfProduct {  get; set; } = 0;
-        public int BrandId { get; set; } 
+        public int NumOfProduct {  get; set; } = 1;
+        public int BrandId { get; set; }
         public int[] AppliableCouponsId { get; set; } = Array.Empty<int>();
+        //[FromForm]
+        //public IList<IFormFile>? GalleryImages { get; set; }
     }
 
     public class CreateProductDtoValidator : AbstractValidator<CreateProductDto>

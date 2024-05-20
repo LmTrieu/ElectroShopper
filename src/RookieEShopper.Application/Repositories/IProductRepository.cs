@@ -11,15 +11,18 @@ namespace RookieEShopper.Application.Repositories
         Task<Product?> GetProductByIdAsync(int productId);
 
         Task<List<Product>> GetProductByNameAsync(string productName);
-
+        
         Task<Product?> CreateProductAsync(CreateProductDto productdto);
 
-        Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto);
+        Task<Product?> UpdateProduct(int id, CreateProductDto productdto);
 
         Task<bool> DeleteProductAsync(Product product);
 
-        Task<bool> IsProductExist(int id);
+        Task<bool> IsProductExistAsync(int id);
 
-        Task UploadProductImage(int id, IFormFile image);        
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
+
+        Task<string> UploadProductImageAsync(Product product, IFormFile image);
+
     }
 }

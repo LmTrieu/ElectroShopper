@@ -49,7 +49,7 @@ namespace RookieEShopper.Backend.Controllers
             ValidationResult validationResult = _validator.Validate(productdto);
             if (validationResult.IsValid)
             {
-                return Ok(await _productRepository.IsProductExist(id) ?
+                return Ok(await _productRepository.IsProductExistAsync(id) ?
                     new
                     {
                         Message = "Product updated successfully",
@@ -94,7 +94,7 @@ namespace RookieEShopper.Backend.Controllers
             //{
             //    return BadRequest(validationResult.ToDictionary().ToList());
             //}
-            await _productRepository.UploadProductImage(id, image);
+            //await _productRepository.UploadProductMainImage(id, image);
             return Ok();
         }
 

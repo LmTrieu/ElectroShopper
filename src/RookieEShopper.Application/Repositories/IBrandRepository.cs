@@ -1,4 +1,5 @@
-﻿using RookieEShopper.Domain.Data.Entities;
+﻿using RookieEShopper.Application.Dto;
+using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Application.Repositories
 {
@@ -10,10 +11,14 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Brand> GetBrandByNameAsync(string name);    
 
-        Task<Brand> CreateBrandAsync(Brand brand);
+        Task<Brand> CreateBrandAsync(CreateBrandDto brandDto);
 
-        Task SetBrandLockStatusAsync(Boolean IsLock);
+        Task SetBrandLockStatusAsync(int id,bool IsLock);
         
         Task<bool> IsBrandExistAsync(int id);
+
+        Task DeleteBrandAsync(int id);
+
+        Task UpdateBrandAsync(Brand brand);
     }
 }

@@ -14,6 +14,8 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Order> UpdateOrderAsync (Order order);
 
-        Task<Order> CancelOrderAsync (int id);
+        Task<IEnumerable<Order>> GetAllOrdersOfCustomer(int CustomerId);
+
+        Task CancelOrderAsync (int id);
     }
 }

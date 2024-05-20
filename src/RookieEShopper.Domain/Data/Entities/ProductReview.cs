@@ -1,4 +1,7 @@
-﻿namespace RookieEShopper.Domain.Data.Entities
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace RookieEShopper.Domain.Data.Entities
 {
     public class ProductReview
     {
@@ -7,6 +10,9 @@
         public Customer? Customer { get; set; }
         public Product? Product { get; set; }
         public string Feedback { get; set; } = string.Empty;
-        public int Rating { get; set; } = 0;
+        
+        [Precision(5,2)]
+        [Range(0,5)]
+        public decimal Rating { get; set; } = 0;
     }
 }

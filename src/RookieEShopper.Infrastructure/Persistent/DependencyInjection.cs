@@ -16,6 +16,7 @@ namespace RookieEShopper.Infrastructure.Persistent
         {
             services.AddPersitence(configuration);
             services.AddJwtAuthentication(configuration);
+            services.AddUserOptions();
             services.AddAutoMapperConfiguration();
 
             DbSeed.Initializer(services.BuildServiceProvider());
@@ -41,6 +42,7 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
 
             services.AddTransient<FileService>();
             return services;
@@ -51,12 +53,12 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequiredUniqueChars = 0;
             });
 
             return services;

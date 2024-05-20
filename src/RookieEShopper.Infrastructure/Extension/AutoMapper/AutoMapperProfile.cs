@@ -10,6 +10,9 @@ namespace RookieEShopper.Backend.Service
         {
             CreateMap<CreateProductDto, Product>();
             CreateMap<Product, Product>();
+
+            CreateMap<CreateBrandDto, Brand>();
+            CreateMap<UpdateBrandDto, Brand>();
         }
     }
 }

@@ -6,6 +6,7 @@ using RookieEShopper.Application.Dto;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -16,8 +17,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private readonly ICategoryRepository _categoryRepository;
         private readonly IBrandRepository _brandRepository;
         private readonly FileService _fileService;
+        private readonly IWebHostEnvironment _env;
 
-        private string folderPath;
 
         public ProductRepository(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository,
             FileService fileService, IWebHostEnvironment env, IBrandRepository brandRepository)
@@ -27,8 +28,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _categoryRepository = categoryRepository;
             _fileService = fileService;
             _brandRepository = brandRepository;
-
-            folderPath = env.ContentRootPath + "\\wwwroot\\ProductImages\\";
+            _env = env;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -58,14 +58,20 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<Product?> CreateProductAsync(CreateProductDto productdto)
         {
             var product = _mapper.Map<CreateProductDto, Product>(productdto);
-            product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);        
-            
-            await _context.Products.AddAsync(product);
+
+            product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);
 
             product.Brand = await _brandRepository.GetBrandByIdAsync(productdto.BrandId);
-            
-            //product.AppliableCoupons
-            
+
+            await _context.Products.AddAsync(product);
+
+            product.MainImagePath = await UploadProductImageAsync(product, productdto.ProductImage);
+
+            foreach (var image in productdto.GalleryImages)
+            {
+                product.ImageGallery.Add(await UploadProductImageAsync(product, image));
+            }
+
             await _context.SaveChangesAsync();
 
             return product;
@@ -83,9 +89,10 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return result;
         }
 
-        public async Task<bool> IsProductExist(int id)
+        public async Task<bool> IsProductExistAsync(int id)
         {
-            return await _context.Products.AnyAsync(e => e.Id == id);
+            return await _context.Products
+                .AnyAsync(e => e.Id == id);
         }
 
         public async Task<bool> DeleteProductAsync(Product product)
@@ -101,9 +108,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             }
         }
 
-        public async Task UploadProductImage(int id, IFormFile image)
+        public async Task<string> UploadProductImageAsync(Product product, IFormFile image)
         {
-            folderPath += id;
+            var folderPath = _env.ContentRootPath + "\\wwwroot\\ProductImages\\" + product.Id;
 
             if (!Directory.Exists(folderPath))
             {
@@ -112,15 +119,18 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
 
-            var product = await _context.Products.FindAsync(id);
-
-            if (product is null)
-                throw new ArgumentNullException(product.ToString());
-
             await _fileService.uploadImage(imagePath, image);
 
-            product.ImagePath = imagePath.Replace(folderPath, "").TrimStart('\\');
-            await _context.SaveChangesAsync();
+            return imagePath.Replace(folderPath, "").TrimStart('\\');
+
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        {
+            return await _context.Products
+                .Where(p => p.Category.Id == categoryId)
+                .ToListAsync();
+        }
+
     }
 }

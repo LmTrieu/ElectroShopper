@@ -11,10 +11,10 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<Inventory?> GetInventoryAsync(int id);
 
-        Task<Inventory> RemoveNumberOfStock(int id, int quantity);
+        Task<Inventory> RemoveNumberOfStockAsync(int id, int quantity);
 
-        Task<Inventory> AddNumberOfStock(int id, int quantity);
+        Task<Inventory> AddNumberOfStockAsync(int id, int quantity);
 
-        Task<Inventory> CreateInventoy(Inventory inventory, int productId);
+        Task<Inventory> CreateInventoryAsync(Inventory inventory, int productId);
     }
 }

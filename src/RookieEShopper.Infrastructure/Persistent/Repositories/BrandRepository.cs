@@ -1,36 +1,76 @@
-﻿using RookieEShopper.Application.Repositories;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.Infrastructure.Services;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
     public class BrandRepository : IBrandRepository
     {
-        public Task<Brand> CreateBrand(Brand brand)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;        
+
+        public BrandRepository(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<Brand> CreateBrandAsync(CreateBrandDto brandDto)
+        {
+            var brand = new Brand();
+            _mapper.Map(brandDto, brand);
+
+            var newBrandEntityEntry = await _context.Brands.AddAsync(brand);
+
+            await _context.SaveChangesAsync();
+
+            return newBrandEntityEntry.Entity;            
+        }
+
+        public Task DeleteBrandAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Brand> GetBrandById(int id)
+        public async Task<IEnumerable<Brand>> GetAllBrandAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Brands
+                .ToListAsync();            
         }
 
-        public Task<Brand> GetBrandByName(string name)
+        public async Task<Brand?> GetBrandByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Brands
+                .FindAsync(id);
         }
 
-        public Task<bool> IsBrandExist(int id)
+        public async Task<Brand?> GetBrandByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await _context.Brands
+                .Where(b => b.Name == name)
+                .FirstOrDefaultAsync();
         }
 
-        public Task SetBrandLockStatus(bool IsLock)
+        public async Task<bool> IsBrandExistAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Brands
+                .FindAsync(id) is null;
         }
 
-        Task<IEnumerable<Brand>> IBrandRepository.GetAllBrandAsync()
+        public async Task SetBrandLockStatusAsync(int id,bool IsLock)
+        {
+            var brand = await _context.Brands
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+
+            if(brand is not null)
+                brand.IsLocked = IsLock;                
+        }
+
+        public Task UpdateBrandAsync(Brand brand)
         {
             throw new NotImplementedException();
         }

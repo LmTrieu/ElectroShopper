@@ -11,7 +11,7 @@ namespace RookieEShopper.Domain.Data.Entities
         [Precision(18, 2)]
         public decimal Price { get; set; } = 0;
 
-        public string ImagePath { get; set; } = string.Empty;
+        public string MainImagePath { get; set; } = string.Empty;
         public IList<Coupon> AppliableCoupons { get; set; } = new List<Coupon>();
         public IList<string> ImageGallery { get; set; } = new List<string>();
 
