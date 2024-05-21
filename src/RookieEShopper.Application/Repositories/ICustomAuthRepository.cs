@@ -1,4 +1,4 @@
-﻿using RookieEShopper.Application.Dto;
+﻿using RookieEShopper.Application.Dto.Customer;
 
 namespace RookieEShopper.Application.Repositories
 {

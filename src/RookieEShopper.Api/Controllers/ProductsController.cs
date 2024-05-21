@@ -2,14 +2,13 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Backend.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -59,7 +58,7 @@ namespace RookieEShopper.Backend.Controllers
                     new
                     {
                         Message = "Product created successfully",
-                        Product = await _productRepository.CreateProductAsync(productdto)
+                        Product = await _productRepository.CreateProductAsync(productdto, null)
                     });
             }
             else
@@ -69,12 +68,12 @@ namespace RookieEShopper.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(CreateProductDto productdto)
+        public async Task<ActionResult<Product>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
         {
             ValidationResult validationResult = _validator.Validate(productdto);
             if (validationResult.IsValid)
             {
-                return Ok(await _productRepository.CreateProductAsync(productdto));
+                return Ok(await _productRepository.CreateProductAsync(productdto, galleryImages));
             }
             else
             {
@@ -82,21 +81,21 @@ namespace RookieEShopper.Backend.Controllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<Product>> PostProductImage(int id, IFormFile image)
-        {
-            //ValidationResult validationResult = _validator.Validate(productdto);
-            //if (validationResult.IsValid)
-            //{
-            //    return Ok(await _productRepository.UploadProductImage());
-            //}
-            //else
-            //{
-            //    return BadRequest(validationResult.ToDictionary().ToList());
-            //}
-            //await _productRepository.UploadProductMainImage(id, image);
-            return Ok();
-        }
+        //[HttpPost("{id}")]
+        //public async Task<ActionResult<Product>> PostProductImage(int id, IFormFile image)
+        //{
+        //    ValidationResult validationResult = _validator.Validate(productdto);
+        //    if (validationResult.IsValid)
+        //    {
+        //        return Ok(await _productRepository.UploadProductImage());
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(validationResult.ToDictionary().ToList());
+        //    }
+        //    await _productRepository.UploadProductMainImage(id, image);
+        //    return Ok();
+        //}
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]

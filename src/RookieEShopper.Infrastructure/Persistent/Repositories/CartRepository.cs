@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto.Cart;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 
@@ -65,7 +66,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Cart> RemoveItemAsync(int cartItemId, int quantity)
+        public async Task<Cart> RemoveItemAsync(int cartItemId)
         {
             var cartItem = await _context.CartItems
                 .FirstOrDefaultAsync(ci => ci.Id == cartItemId);
@@ -78,8 +79,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return cartItem.Cart; 
         }
 
-        public Task<Cart> UpdateCartItemAsync(CartItem cartItem)
+        public Task<Cart> UpdateCartItemQuantityAsync(UpdateCartItemDto cartItem)
         {
+
             throw new NotImplementedException();
         }
     }

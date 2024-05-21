@@ -1,4 +1,4 @@
-﻿using RookieEShopper.Application.Dto;
+﻿using RookieEShopper.Application.Dto.Brand;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Application.Repositories

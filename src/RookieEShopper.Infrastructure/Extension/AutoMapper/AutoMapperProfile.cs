@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Brand;
+using RookieEShopper.Application.Dto.CategoryGroup;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Backend.Service
@@ -13,6 +15,8 @@ namespace RookieEShopper.Backend.Service
 
             CreateMap<CreateBrandDto, Brand>();
             CreateMap<UpdateBrandDto, Brand>();
+
+            CreateMap<CreateCategoryGroupDto, CategoryGroup>();
         }
     }
 }

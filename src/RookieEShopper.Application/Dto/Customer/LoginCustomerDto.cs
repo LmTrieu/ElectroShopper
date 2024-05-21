@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.ComponentModel.DataAnnotations;
 
-namespace RookieEShopper.Application.Dto
+namespace RookieEShopper.Application.Dto.Customer
 {
     public class LoginCustomerDto
     {

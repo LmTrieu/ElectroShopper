@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto.CategoryGroup;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
@@ -12,11 +14,13 @@ namespace RookieEShopper.Backend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryGroupRepository _categoryGroupRepository;
 
-        public CategoriesController(ApplicationDbContext context, ICategoryRepository categoryRepository)
+        public CategoriesController(ApplicationDbContext context, ICategoryRepository categoryRepository, ICategoryGroupRepository categoryGroupRepository)
         {
             _context = context;
             _categoryRepository = categoryRepository;
+            _categoryGroupRepository = categoryGroupRepository;
         }
 
         // GET: api/Categories
@@ -69,6 +73,7 @@ namespace RookieEShopper.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
+            //To be change
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
@@ -90,6 +95,23 @@ namespace RookieEShopper.Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpPost]
+        [Route("CategoryGroup")]
+        public async Task<Results<CreatedAtRoute<CategoryGroup>, BadRequest<string>>> CreateCategoryGroup(CreateCategoryGroupDto createCategoryGroupDto)
+        {
+            CategoryGroup categoryGroup = await _categoryGroupRepository.CreateCategoryGroupAsync(createCategoryGroupDto);
+            return TypedResults.CreatedAtRoute(categoryGroup);
+        }
+
+        [HttpGet]
+        [Route("CategoryGroup")]
+        public async Task<Ok<IEnumerable<CategoryGroup>>> GetCategoryGroups()
+        {
+            var categoryGroups = await _categoryGroupRepository.GetCategoryGroupsAsync();
+            return TypedResults.Ok(categoryGroups);
+        }
+            
 
         private bool CategoryExists(int id)
         {

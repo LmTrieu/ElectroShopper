@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RookieEShopper.Infrastructure.Persistent;
 
@@ -11,9 +12,11 @@ using RookieEShopper.Infrastructure.Persistent;
 namespace RookieEShopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521031720_InitialCart")]
+    partial class InitialCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,9 +328,6 @@ namespace RookieEShopper.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CategoryGroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -336,30 +336,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("CategoryGroupId");
-
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.CategoryGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CategoryGroups");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Coupon", b =>
@@ -706,10 +683,6 @@ namespace RookieEShopper.Migrations
                     b.HasOne("RookieEShopper.Domain.Data.Entities.Brand", null)
                         .WithMany("Categories")
                         .HasForeignKey("BrandId");
-
-                    b.HasOne("RookieEShopper.Domain.Data.Entities.CategoryGroup", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("CategoryGroupId");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Coupon", b =>
@@ -832,11 +805,6 @@ namespace RookieEShopper.Migrations
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Cart", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.CategoryGroup", b =>
-                {
-                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Customer", b =>

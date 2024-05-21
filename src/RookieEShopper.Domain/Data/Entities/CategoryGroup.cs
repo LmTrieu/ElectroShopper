@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace RookieEShopper.Domain.Data.Entities
 {
-    public class CartItem
+    public class CategoryGroup
     {
         public int Id { get; set; }
-        public int Quantity { get; set; }
-
-        public Cart? Cart { get; set; }
-        public Product? Product { get; set; }
-        public Coupon? AppliedCoupon { get; set; }
+        public string Name { get; set; }
+        public IList<Category> Categories { get; set;}
+        public string Description { get; set; }
     }
 }

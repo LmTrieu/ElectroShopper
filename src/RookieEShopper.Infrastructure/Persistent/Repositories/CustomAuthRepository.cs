@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Customer;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Extension.JwtBearer;

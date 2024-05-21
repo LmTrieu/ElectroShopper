@@ -4,6 +4,6 @@ namespace RookieEShopper.CustomerFrontend.Services
 {
     public interface ICategoryClient
     {
-        Task<ICollection<CategoryVM>> GetCategoriesAsync();
+        Task<ICollection<CategoryGroupVM>> GetCategoriesAsync();
     }
 }

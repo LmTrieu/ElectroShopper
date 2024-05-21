@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RookieEShopper.Application.Dto
+namespace RookieEShopper.Application.Dto.Brand
 {
     public class UpdateBrandDto
     {

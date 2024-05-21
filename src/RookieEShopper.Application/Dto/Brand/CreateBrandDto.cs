@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace RookieEShopper.Application.Dto
+namespace RookieEShopper.Application.Dto.Brand
 {
     public class CreateBrandDto
     {

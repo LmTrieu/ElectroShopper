@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
-using RookieEShopper.Domain.Data.Entities;
-using System;
+using Microsoft.AspNetCore.Mvc;
 
-namespace RookieEShopper.Application.Dto
+namespace RookieEShopper.Application.Dto.Product
 {
     public class CreateProductDto
     {
@@ -13,11 +11,9 @@ namespace RookieEShopper.Application.Dto
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
         public IFormFile? ProductImage { get; set; }
-        public int NumOfProduct {  get; set; } = 1;
+        public int NumOfProduct { get; set; } = 1;
         public int BrandId { get; set; }
         public int[] AppliableCouponsId { get; set; } = Array.Empty<int>();
-        //[FromForm]
-        //public IList<IFormFile>? GalleryImages { get; set; }
     }
 
     public class CreateProductDtoValidator : AbstractValidator<CreateProductDto>

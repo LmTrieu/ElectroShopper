@@ -1,0 +1,34 @@
+﻿@using RookieEShopper.SharedViewModel;
+@model CategoryGroupVM
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                @{
+                    if (Model.Categories != null && Model.Categories.Count != 0)
+                        foreach (var catergory in Model.Categories)
+                        {
+                            //Change href to BrandId//ProductId later
+                            <li><a class="dropdown-item" href="@catergory.id">@catergory.cartegoryName</a></li>
+                        }
+                    else
+                    {
+                        <li>No categories available</li>
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+    <form class="d-flex">
+        <button class="btn btn-outline-dark" type="submit">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+    </form>
+</div>

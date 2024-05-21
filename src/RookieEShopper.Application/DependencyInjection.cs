@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Customer;
+using RookieEShopper.Application.Dto.Product;
 
 namespace RookieEShopper.Application
 {

@@ -13,7 +13,7 @@ namespace RookieEShopper.CustomerFrontend.Services
 
             _httpClient.BaseAddress = new Uri("https://localhost:7265");
         }
-        public async Task<ICollection<ProductVM>> GetProductsAsync()
+        public async Task<ICollection<ProductVM>?> GetProductsAsync()
         {
             var response = await _httpClient.GetAsync("/api/Products");
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Application.Repositories
@@ -12,9 +12,9 @@ namespace RookieEShopper.Application.Repositories
 
         Task<List<Product>> GetProductByNameAsync(string productName);
         
-        Task<Product?> CreateProductAsync(CreateProductDto productdto);
+        Task<Product?> CreateProductAsync(CreateProductDto productdto, IFormFileCollection galleryImages);
 
-        Task<Product?> UpdateProduct(int id, CreateProductDto productdto);
+        Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto);
 
         Task<bool> DeleteProductAsync(Product product);
 

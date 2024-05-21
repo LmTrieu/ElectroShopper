@@ -43,6 +43,8 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICategoryGroupRepository, CategoryGroupRepository>();
 
             services.AddTransient<FileService>();
             return services;

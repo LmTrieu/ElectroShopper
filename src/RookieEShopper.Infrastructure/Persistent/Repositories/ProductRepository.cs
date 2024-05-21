@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Services;
@@ -55,7 +55,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return product;
         }
 
-        public async Task<Product?> CreateProductAsync(CreateProductDto productdto)
+        public async Task<Product?> CreateProductAsync(CreateProductDto productdto, IFormFileCollection? galleryImages)
         {
             var product = _mapper.Map<CreateProductDto, Product>(productdto);
 
@@ -67,7 +67,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             product.MainImagePath = await UploadProductImageAsync(product, productdto.ProductImage);
 
-            foreach (var image in productdto.GalleryImages)
+            foreach (var image in galleryImages.ToList())
             {
                 product.ImageGallery.Add(await UploadProductImageAsync(product, image));
             }

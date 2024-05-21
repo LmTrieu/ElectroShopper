@@ -1,4 +1,5 @@
-﻿using RookieEShopper.Domain.Data.Entities;
+﻿using RookieEShopper.Application.Dto.Cart;
+using RookieEShopper.Domain.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,8 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Cart> AddItemAsync(int cartId, Product product, int quantity);
 
-        Task<Cart> RemoveItemAsync(int cartItemId, int quantity);
+        Task<Cart> RemoveItemAsync(int cartItemId);
 
-        Task<Cart> UpdateCartItemAsync(CartItem cartItem);
+        Task<Cart> UpdateCartItemQuantityAsync(UpdateCartItemDto cartItem);
     }
 }

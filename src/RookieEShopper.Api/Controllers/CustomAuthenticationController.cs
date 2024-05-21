@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using RookieEShopper.Application.Dto;
+using RookieEShopper.Application.Dto.Customer;
 using RookieEShopper.Application.Repositories;
 
 namespace RookieEShopper.Backend.Controllers

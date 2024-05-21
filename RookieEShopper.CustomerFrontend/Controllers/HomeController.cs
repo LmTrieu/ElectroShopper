@@ -24,18 +24,12 @@ namespace RookieEShopper.CustomerFrontend.Controllers
 
         public async Task<IActionResult> Index()
         {
-            homePageVM.Catergories = (await _categoryClient.GetCategoriesAsync()).ToList();
             homePageVM.Products = (await _productClient.GetProductsAsync()).ToList();
-            ViewData["NavbarVM"] = homePageVM.Catergories;
-
             return View(homePageVM.Products);
         }
 
         public async Task<IActionResult> Privacy()
         {
-            homePageVM.Catergories = (await _categoryClient.GetCategoriesAsync()).ToList();
-            ViewData["NavbarVM"] = homePageVM.Catergories;
-
             return View();
         }
 
