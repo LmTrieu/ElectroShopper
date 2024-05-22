@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BD4B64EC-DF8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Domain", "src\RookieEShopper.Domain\RookieEShopper.Domain.csproj", "{E6941434-014D-42FC-A382-3161EFF387C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.CustomerFrontend", "RookieEShopper.CustomerFrontend\RookieEShopper.CustomerFrontend.csproj", "{9B0D9BC4-E1B6-4608-90A5-08D1861C7B15}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Api", "src\RookieEShopper.Api\RookieEShopper.Api.csproj", "{48C997C2-9BD6-41FA-9393-E426367CD96E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Application", "src\RookieEShopper.Application\RookieEShopper.Application.csproj", "{80D20BD7-B1D4-46B9-947A-04F2EAFB95B7}"
@@ -16,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Infrastructure", "src\RookieEShopper.Infrastructure\RookieEShopper.Infrastructure.csproj", "{EF999D2E-56C6-4F7B-AF3C-BC594976EDB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.SharedViewModel", "src\RookieEShopper.ShardViewModel\RookieEShopper.SharedViewModel.csproj", "{D758438A-F8CC-4C6F-830C-FE594540AEF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.CustomerFrontend", "RookieEShopper.CustomerFrontend\RookieEShopper.CustomerFrontend.csproj", "{75405132-C397-48C7-A588-411EA183FFC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{E6941434-014D-42FC-A382-3161EFF387C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6941434-014D-42FC-A382-3161EFF387C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6941434-014D-42FC-A382-3161EFF387C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B0D9BC4-E1B6-4608-90A5-08D1861C7B15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B0D9BC4-E1B6-4608-90A5-08D1861C7B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B0D9BC4-E1B6-4608-90A5-08D1861C7B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B0D9BC4-E1B6-4608-90A5-08D1861C7B15}.Release|Any CPU.Build.0 = Release|Any CPU
 		{48C997C2-9BD6-41FA-9393-E426367CD96E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48C997C2-9BD6-41FA-9393-E426367CD96E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48C997C2-9BD6-41FA-9393-E426367CD96E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{D758438A-F8CC-4C6F-830C-FE594540AEF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D758438A-F8CC-4C6F-830C-FE594540AEF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D758438A-F8CC-4C6F-830C-FE594540AEF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75405132-C397-48C7-A588-411EA183FFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75405132-C397-48C7-A588-411EA183FFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75405132-C397-48C7-A588-411EA183FFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75405132-C397-48C7-A588-411EA183FFC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

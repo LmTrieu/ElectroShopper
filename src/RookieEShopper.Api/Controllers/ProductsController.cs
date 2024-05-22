@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
@@ -96,6 +97,15 @@ namespace RookieEShopper.Backend.Controllers
         //    await _productRepository.UploadProductMainImage(id, image);
         //    return Ok();
         //}
+        [HttpGet]
+        [Route("Category/{categoryId}")]
+        public async Task<Results<Ok<IEnumerable<Product>>,NotFound<string>>> GetProductsByCategory(int categoryId)
+        {
+            var product = await _productRepository.GetProductsByCategoryAsync(categoryId);
+
+            return product.Count() is 0 ?
+                TypedResults.NotFound("Product not found with the specified ID.") : TypedResults.Ok(product);
+        }
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
@@ -106,11 +116,12 @@ namespace RookieEShopper.Backend.Controllers
             {
                 return NotFound("Product not found with the specified ID.");
             }
-
-            return Ok(new
-            {
-                Message = "Product deleted successfully"
-            });
+            if(await _productRepository.DeleteProductAsync(product))
+                return Ok(new
+                {
+                    Message = "Product deleted successfully"
+                });
+            return BadRequest();
         }
     }
 }
