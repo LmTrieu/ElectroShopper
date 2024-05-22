@@ -24,8 +24,7 @@ namespace RookieEShopper.CustomerFrontend.Controllers
 
         public async Task<IActionResult> Index()
         {
-            homePageVM.Products = (await _productClient.GetProductsAsync()).ToList();
-            return View(homePageVM.Products);
+            return View();
         }
 
         public async Task<IActionResult> Privacy()

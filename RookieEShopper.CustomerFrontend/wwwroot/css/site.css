@@ -20,3 +20,12 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+.icon-hover:hover {
+    border-color: #3b71ca !important;
+    background-color: white !important;
+}
+
+    .icon-hover:hover i {
+        color: #3b71ca !important;
+    }

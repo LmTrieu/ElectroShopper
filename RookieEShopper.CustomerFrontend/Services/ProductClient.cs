@@ -23,5 +23,16 @@ namespace RookieEShopper.CustomerFrontend.Services
 
             return JsonSerializer.Deserialize<IList<ProductVM>>(content);
         }
+
+        public async Task<ICollection<ProductVM>?> GetProductsByCategoryAsync(int categoryId)
+        {
+            var response = await _httpClient.GetAsync("/api/Products/Category/"+categoryId);
+
+            response.EnsureSuccessStatusCode();
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<IList<ProductVM>>(content);
+        }
     }
 }

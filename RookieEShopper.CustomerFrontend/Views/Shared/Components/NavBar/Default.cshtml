@@ -1,34 +1,210 @@
 ﻿@using RookieEShopper.SharedViewModel;
-@model CategoryGroupVM
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                @{
-                    if (Model.Categories != null && Model.Categories.Count != 0)
-                        foreach (var catergory in Model.Categories)
-                        {
-                            //Change href to BrandId//ProductId later
-                            <li><a class="dropdown-item" href="@catergory.id">@catergory.cartegoryName</a></li>
-                        }
-                    else
-                    {
-                        <li>No categories available</li>
-                    }
-                }
-            </ul>
-        </li>
-    </ul>
-    <form class="d-flex">
-        <button class="btn btn-outline-dark" type="submit">
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-        </button>
-    </form>
-</div>
+@model List<CategoryGroupVM>
+<header>
+    <div class="mg-header-outer">
+        <div class="container">
+            <div class="row gx-0 gx-md-2 align-items-center">
+                <div class="col-md-3 col-lg-3 col-5">
+                    <div class="header-logo">
+                        <a class="mg-logo text-decoration-none" href="index.html">MG WIREZ.</a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-lg-6 col-2 order-3 order-md-0 d-flex d-md-block justify-content-end justify-content-md-start text-end">
+                    <div>
+                        <div class="mg-menu-overlay"></div>
+                        <nav class="mg-menu" id="menu">
+                            <div class="menu-mobile-header">
+                                <button type="button" class="menu-mobile-arrow"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                                <div class="menu-mobile-title"></div>
+                                <button type="button" class="menu-mobile-close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            </div>
+                            <ul class="menu-section mg-menu-outer">
+                                <li class="menu-item-has-children">
+                                    <a class="active-menu" href="javascript:void(0);">HOME <i class="fa-solid fa-caret-down"></i></a>
+                                    <div class="mg-sub-menu-outer">
+                                        <div class="menu-subs">
+                                            <ul>
+                                                <li class="sub-menu-active"><a href="index.html">Home 1</a></li>
+                                                <li><a href="home2.html">Home 2</a></li>
+                                                <li><a href="home3.html">Home 3</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="javascript:void(0);">SHOP <i class="fa-solid fa-caret-down"></i></a>
+                                    <div class="mg-sub-menu-outer">
+                                        <div class="menu-subs">
+                                            <ul>
+                                                <li><a href="shop.html">New Arrivals</a></li>
+                                                <li><a href="shop.html">Top Trending</a></li>
+                                                <li><a href="shop.html">Winter Collection</a></li>
+                                                <li><a href="shop.html">Summer Collection</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="javascript:void(0);">PAGES <i class="fa-solid fa-caret-down"></i></a>
+                                    <div class="mg-sub-menu-outer">
+                                        <div class="menu-subs">
+                                            <ul>
+                                                <li><a href="shop.html">Collection</a></li>
+                                                <li><a href="single-product.html">Product</a></li>
+                                                <li><a href="cart.html">Cart</a></li>
+                                                <li><a href="checkout.html">Checkout</a></li>
+                                                <li><a href="thank-you.html">Thank you</a></li>
+                                                <li><a href="profile.html">Profile</a></li>
+                                                <li><a href="my-orders.html">My orders</a></li>
+                                                <li><a href="wishlist.html">Wishlist</a></li>
+                                                <li><a href="blogs.html">Blog</a></li>
+                                                <li><a href="single-blog.html">Single blog</a></li>
+                                                <li><a href="about-us.html">About us</a></li>
+                                                <li><a href="privacy-policy.html">Privacy policy</a></li>
+                                                <li><a href="my-account.html">My account</a></li>
+                                                <li><a href="login.html">Login/Register</a></li>
+                                                <li><a href="faq.html">FAQs</a></li>
+                                                <li><a href="404.html">404 Page</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="menu-item"><a href="blogs.html">BLOG</a></li>
+                                <li class="menu-item"><a href="contact-us.html">CONATCT</a></li>
+                            </ul>
+                        </nav>
+                        <div>
+                            <button type="button" class="menu-mobile-toggle mg-burger-menu-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3 col-5 text-end">
+                    <div class="row">
+                        <div class="col-12 col-lg-12 col-md-12">
+                            <div class="header-icons-outer">
+                                <ul>
+                                    <li class="mg-login-box">
+                                        <div class="mg-login">
+                                            <a class="mg-login-link" href="login.html">LOGIN</a> <span>/</span>
+                                            <a class="" href="login.html">SIGNUP</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="wishlist.html">
+                                            <img src="~/images/icons/heart.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="cart.html">
+                                            <img src="~/images/icons/Icon-feather-shopping-bag.svg" alt=""><span class="mg-header-icon-counter">2</span>
+                                        </a>
+                                    </li>
+                                    <li class="mg-profile-icon">
+                                        <a href="profile.html">
+                                            <img src="~/images/icons/profile-icon.svg" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--header filter start here-->
+    <div class="mg-header-filter-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-sm-8 col-8">
+                    <div class="mg-category-filter">
+                        <div class="dropdown">
+                            <a class="mg-dropdown-btn btn btn-dark dropdown-toggle" href="javascript:void(0);" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-bars"></i>
+                                <span>All Department</span>
+                            </a>
+
+                            <ul class="dropdown-menu mg-dropdown-list" aria-labelledby="dropdownMenuLink">
+                                @if (Model.FirstOrDefault().categories != null && Model.FirstOrDefault().categories.Count != 0)
+                                    foreach (var categoryGroup in Model)
+                                    {
+                                        <li>
+                                            <h3 class="dropdown-header mg-font-style">
+                                                @categoryGroup.name
+                                            </h3>
+                                            @foreach (var category in categoryGroup.categories)
+                                            {
+                                                <a class="dropdown-item mg-font-style" 
+                                                    asp-controller="Product"
+                                                    asp-route-categoryId="@category.id"
+                                                    asp-route-categoryName="@category.cartegoryName">
+                                                    <span>@category.cartegoryName</span>
+                                                </a>
+                                            }                                         
+                                        </li>
+                                    }
+                                else
+                                {
+                                    <li>No categories</li>
+                                }                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-sm-3 d-none d-md-block">
+                    <div class="mg-search-bar-box">
+                        <div class="mg-search-filed">
+                            <form class="d-flex">
+                                <div class="mg-search-bar-dropdwon">
+                                    <select class="form-select mg-font-style">
+                                        <option hidden selected>Category</option>
+                                        @if (Model.FirstOrDefault().categories != null && Model.FirstOrDefault().categories.Count != 0)
+                                            foreach (var catergory in Model.FirstOrDefault().categories)
+                                            {
+                                                <option value="@catergory.id">@catergory.cartegoryName</option>
+                                            }
+                                        else
+                                        {
+                                            <li>No categories</li>
+                                        } 
+                                    </select>
+                                </div>
+                                <input class="form-control" type="text" placeholder="What do you need..." aria-label="Search">
+                                <button class="btn btn d-flex justify-content-center align-items-center" type="submit">
+                                    <img src="~/images/icons/Icon-feather-search.svg" alt="">
+                                    <span class="ms-2">Search</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3 d-none d-md-block">
+                    <div class="mg-contact-box d-flex align-items-center justify-content-end">
+                        <div class="mg-cotact-icon">
+                            <img src="~/images/icons/headphones.svg" alt="">
+                        </div>
+                        <div class="mg-contact-info">
+                            <div class="mg-contact-info-sub-heading">Call us 24/7</div>
+                            <a href="tel:+911234567890">+1 (234) 456 789</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-4 d-flex d-md-none justify-content-end">
+                    <div class="mg-contact-search-icon">
+                        <div class="mg-mobile-icons">
+                            <a class="mg-mobile-search-icon" href="#" data-bs-toggle="modal" data-bs-target="#search-popup"><img src="~/images/icons/Icon-feather-search-dark.svg" alt=""></a>
+                        </div>
+                        <div class="mg-mobile-icons">
+                            <a href="tel:+911234567890"><img src="~/images/icons/headphones.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--header filter end here-->
+</header>

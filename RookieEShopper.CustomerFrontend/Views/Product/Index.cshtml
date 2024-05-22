@@ -1,0 +1,366 @@
+﻿@using RookieEShopper.SharedViewModel;
+@using System.Globalization
+@model List<ProductVM>
+
+<script src="~/libs/jquery-ui-1.13.2.custom/jquery-ui.min.js"></script>
+<script src="~/js/jquery.ui.touch-punch.min.js"></script>
+
+<!--page header start here-->
+<div class="mg-page-header-section mg-page-header-style">
+    <div class="mg-page-header-inner">
+        <div class="container">
+            <div class="mg-page-header-text">
+                <div class="mg-page-header-heading">
+                    <h3>@ViewData["CategoryName"]</h3>
+                </div>
+                <div class="mg-breadcrumb">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Shop</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--page header end here-->
+<!--Quick view modal start here-->
+<div class="modal fade mg-quick-view-modal" id="mg-quick-view-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="mg-close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+                <div class="mg-product-deatils-section">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 p-0">
+                                <div class="mg-product-slider">
+                                    <div class="mg-slide-img-main mg-quick-view-slider">
+                                        <div class="mg-slide-img">
+                                            <img src="~/images/product-slider/product-slider1.jpg" alt="">
+                                        </div>
+                                        <div class="mg-slide-img">
+                                            <img src="~/images/product-slider/product-slider1.jpg" alt="">
+                                        </div>
+                                        <div class="mg-slide-img">
+                                            <img src="~/images/product-slider/product-slider1.jpg" alt="">
+                                        </div>
+                                        <div class="mg-slide-img">
+                                            <img src="~/images/product-slider/product-slider1.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="mg-qv-next-pre-btn"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mg-product-details-box">
+                                    <div class="mg-product-heading">
+                                        <span>Urban P47 Wireless Headphone</span>
+                                    </div>
+                                    <div class="mg-product-rating">
+                                        <div class="mg-rating">
+                                            <span><i class="fa-solid fa-star"></i></span>
+                                            <span><i class="fa-solid fa-star"></i></span>
+                                            <span><i class="fa-solid fa-star"></i></span>
+                                            <span><i class="fa-solid fa-star"></i></span>
+                                            <span><i class="fa-solid fa-star"></i></span>
+                                            <span class="mg-review">(4.7) Reviews</span>
+                                        </div>
+                                    </div>
+                                    <div class="mg-discount-heading">
+                                        <span>Get 40% Discount</span>
+                                    </div>
+                                </div>
+                                <div class="mg-product-details-list">
+                                    <div class="mg-price-tax-box">
+                                        <div class="mg-price">
+                                            <span>Price $200.0</span>
+                                        </div>
+                                        <div class="mg-tax-rate">
+                                            <span> (5% Tax Included)</span>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li>Lorem Ipsum is simply dummy text of the printing </li>
+                                        <li>It is a long established fact that a reader</li>
+                                        <li>The point of using Lorem Ipsum The point of using Lorem Ipsum </li>
+                                        <li>It has survived not only five centuries not only five centuries</li>
+                                    </ul>
+                                </div>
+                                <div class="mg-feature-option-box">
+                                    <div>
+                                        <div class="mg-selection-title">
+                                            <span>Quantity</span>
+                                        </div>
+                                        <div class="mg-quanitity-option-section d-flex">
+                                            <div class="mg-quanlity-option">
+                                                <form>
+                                                    <input class="mg-qty-number" value="1" type="text">
+                                                </form>
+                                            </div>
+                                            <div class="mg-quanlity-option-btn">
+                                                <button class="mg-qty-plus-btn"><i class="fa-solid fa-plus"></i></button>
+                                                <button class="mg-qty-minus-btn"><i class="fa-solid fa-minus"></i></button>
+                                            </div>
+                                            <div class="mg-ad-cart-btn ms-3">
+                                                <a class="mg-shop-btn btn btn-default" href="#">ADD TO CART <i class="fa-solid fa-angle-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mg-additional-info">
+                                    <div class="mg-product-details">
+                                        <div class="mg-product-details-text"><strong>SKU:</strong>  <span>APIPAD-16GB</span></div>
+                                        <div class="mg-product-details-text"><strong>Categories:</strong> <span>Smartphone, Electronic</span></div>
+                                        <div class="mg-product-details-text"><strong>Tag:</strong> <span>Electronic</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Quick view modal end here-->
+<!--grid filter section start here-->
+<div class="mg-grid-filter-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 col-sm-12 col-12 mb-sm-1 mt-sm-1">
+                <div class="mg-select-range">
+                    <select class="form-select mg-font-style" aria-label="Default select example">
+                        <option selected>PRICE: LOW TO HIGH</option>
+                        <option value="PRICE:HIGH TO LOW">PRICE: HIGH TO LOW</option>
+                        <option value="POPULARITY">POPULARITY</option>
+                        <option value="NEWEST">NEWEST</option>
+                        <option value="RELEVANCE">RELEVANCE</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5 col-sm-6 col-12 mb-sm-1 mt-sm-2">
+                <div class="mg-grid-filter-inner">
+                    <form>
+                        <div class="mg-filter-main">
+                            <div class="mg-range-slide">
+                                <div class="mg-range-heading">
+                                    <span>Filter by price</span>
+                                </div>
+                                <div class="mg-range-bar">
+                                    <div class="mg-price-filter-range"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-6 col-12 mb-sm-1 mt-sm-2">
+                <div class="mg-price-grid-main">
+                    <div class="mg-range-price mg-font-style">
+                        <span class="mg-rp-heading">Price:</span>
+                        <span class="mg-min-price">$25k</span>
+                        <span>-</span>
+                        <span class="mg-max-price">$30k</span>
+                    </div>
+                    <div class="mg-grid-icons">
+                        <a href="shop-list.html">
+                            <img src="~/images/icons/list-view.jpg" alt="">
+                        </a>
+                        <a href="shop.html">
+                            <img src="~/images/icons/grid-view.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--grid filter section end here-->
+<!--grid section start here-->
+<div class="mg-grid-section">
+    <div class="container">
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 col-sm-6 col-6">
+                    <div class="mg-tab-grid-box">
+                        <div class="mg-tab-img-box">
+                            <div class="mg-tabs-img">
+                                <a  asp-controller="Product"
+                                    asp-action="Details"
+                                    asp-route-productId="@product.id">
+                                    <img src="https://localhost:7265/ProductImages/@product.id/@product.mainImagePath" alt="@product.name">
+                                </a>
+                            </div>
+                            <div class="mg-overlay">
+                                <div class="mg-overlay-icon-box">
+                                    <div class="mg-overlay-icon text-end">
+                                        <a class="mg-quick-view-modal-btn" href="javascript:void(0);">
+                                            <img src="~/images/icons/Icon-material-remove-red-eye.svg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="mg-overlay-icon text-end">
+                                        <a href="javascript:void(0);">
+                                            <img src="~/images/icons/Icon-material-compare-arrows.svg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mg-atc-overlay">
+                                <a href="cart.html">
+                                    <div class="mg-cart-box">
+                                        ADD TO CART
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mg-tab-text mt-3">
+                            <div class="mg-tab-text-top d-flex justify-content-between align-items-center">
+                                <div class="mg-small-heading">
+                                    <a class="text-decoration-none" href="shop.htm"><span>@ViewData["CategoryName"]</span></a>
+                                </div>
+                                <div class="mg-wishlist-icon">
+                                    <a href="javascript:void(0);">
+                                        <img src="~/images/icons/heart.svg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <a class="text-decoration-none" href="single-product.html"><h5>@product.name</h5></a>
+                            <div class="mg-pricing">@product.price.ToString("C", CultureInfo.GetCultureInfo(1066))</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--grid section end here-->
+<!--pagination section start here-->
+<div class="mg-pagination-section">
+    <div class="container">
+        <div class="mg-pagination-inner">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+                            <span class="mg-font-style" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="javascript:void(0);">1</a></li>
+                    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" aria-label="Next">
+                            <span class="mg-font-style" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<!--pagination section end here-->
+<!--Category top rated products and text overlay section start here-->
+<div>
+    <div class="container">
+        <div class="mg-custom-section2">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-5 col-12">
+                    <div class="mg-category">
+                        <div class="mg-category-heading">
+                            <h5>Category</h5>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="javascript:void(0);">Headphones (33)</a></li>
+                            <li class="list-group-item"><a href="javascript:void(0);">Video Game (10)</a></li>
+                            <li class="list-group-item"><a href="javascript:void(0);">Bluetooth Speaker (5)</a></li>
+                            <li class="list-group-item"><a href="javascript:void(0);">CCTV Camera (8)</a></li>
+                            <li class="list-group-item"><a href="javascript:void(0);">Computer / Laptop (15)</a></li>
+                            <li class="list-group-item"><a href="javascript:void(0);">DSLR Camera (4)</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-7 col-12">
+                    <div class="mg-toprated-grid2">
+                        <div class="mg-toprated-heading">
+                            <h5>Top Rated Products</h5>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <div class="mg-toprated-grid">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-3">
+                                                <div class="mg-toprated-thumb-img">
+                                                    <a href="single-product.html"><img src="~/images/gallery/small-thumb-1.jpg" alt=""></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8 col-9 ps-0 mt-2 mt-md-0 mt-sm-1">
+                                                <div class="mg-toprated-text">
+                                                    <a href="shop.html"><span>TABLET</span></a>
+                                                    <a class="text-decoration-none" href="single-product.html"><h6>APPLE iPad (9th Gen)</h6></a>
+                                                    <div class="mg-pricing">$20.03</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <div class="mg-toprated-grid">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-3">
+                                                <div class="mg-toprated-thumb-img">
+                                                    <a href="single-product.html"><img src="~/images/gallery/small-thumb-2.jpg" alt=""></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8 col-9 ps-0 mt-2 mt-md-0 mt-sm-1">
+                                                <div class="mg-toprated-text">
+                                                    <a href="shop.html"><span>SMART WATCH</span></a>
+                                                    <a class="text-decoration-none" href="single-product.html"><h6>Noise Smartwatch</h6></a>
+                                                    <div class="mg-pricing">$20.03</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <div class="mg-toprated-grid">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-3">
+                                                <div class="mg-toprated-thumb-img">
+                                                    <a href="single-product.html"><img src="~/images/gallery/small-thumb-3.jpg" alt=""></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8 col-9 ps-0 mt-2 mt-md-0 mt-sm-1">
+                                                <div class="mg-toprated-text">
+                                                    <a href="shop.html"><span>VIDEO GAME</span></a>
+                                                    <a class="text-decoration-none" href="single-product.html"><h6>Redgear Pro Gamepad</h6></a>
+                                                    <div class="mg-pricing">$20.03</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div class="mg-text-bg-style3 mg-text-bg-image3">
+                        <div class="mg-img-bg-text">
+                            <div>
+                                <span>TOP DEALS</span>
+                                <h6>APPLE 2022<br> MacBook AIR M2</h6>
+                                <a class="btn btn-lg" href="shop.html">SHOP NOW  <i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Category top rated products and text overlay section end here-->
