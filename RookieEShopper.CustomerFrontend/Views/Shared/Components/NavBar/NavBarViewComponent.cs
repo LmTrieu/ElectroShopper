@@ -2,7 +2,7 @@
 using RookieEShopper.CustomerFrontend.Services;
 using RookieEShopper.SharedViewModel;
 
-namespace RookieEShopper.CustomerFrontend.ViewComponents.Common
+namespace RookieEShopper.CustomerFrontend.Views.Shared.Components.NavBar
 {
     public class NavBarViewComponent : ViewComponent
     {

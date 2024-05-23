@@ -6,5 +6,6 @@ namespace RookieEShopper.CustomerFrontend.Services
     {
         Task<ICollection<ProductVM>> GetProductsAsync();
         Task<ICollection<ProductVM>> GetProductsByCategoryAsync(int categoryId);
+        Task<ProductVM> GetProductDetailById(int productId);
     }
 }

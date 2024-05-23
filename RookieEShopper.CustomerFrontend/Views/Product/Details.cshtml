@@ -1,0 +1,532 @@
+﻿@using RookieEShopper.SharedViewModel;
+@using System.Globalization
+@model ProductVM
+<!--product details section start here-->
+<div class="mg-product-deatils-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="mg-product-slider">
+                    <div class="mg-slide-img-main">
+                        <div class="mg-slide-img">
+                            <img src="https://localhost:7265/ProductImages/@Model.id/@Model.mainImagePath" alt="">
+                        </div>  
+                        @if(Model.imageGallery.Count != 0){
+                            foreach(var product in Model.imageGallery){
+                               <div class="mg-slide-img">
+                                    <img src="https://localhost:7265/ProductImages/@Model.id/@product" alt="">
+                                </div>    
+                            }
+                        }                
+                    </div>
+                    <div class="mg-product-slider-nav">
+                        <div class="mg-slide-nav-img">
+                            <img src="assets/images/product-slider/product-slider-thumb1.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="mg-product-details-box">
+                    <div class="mg-product-heading">
+                        <span>@Model.name<br></span>
+                    </div>
+                    <div class="mg-product-rating">
+                        <div class="mg-rating">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span class="mg-review">(4.7) Reviews</span>
+                        </div>
+                        <div class="mg-add-reviews">
+                            <a class="mg-add-review-btn" href="javascript:void(0);"><span>Add Reviews</span></a>
+                        </div>
+                    </div>
+                    <div class="mg-discount-heading">
+                        <span>Get 40% Discount</span>
+                    </div>
+                </div>
+                <div class="mg-product-details-list">
+                    <div class="mg-price-tax-box">
+                        <div class="mg-price">
+                            <span>@Model.price.ToString("#,###", CultureInfo.GetCultureInfo("vi-VN").NumberFormat) VND</span>
+                        </div>
+                        <div class="mg-tax-rate">
+                            <span> (5% Tax Included)</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>@Model.description</li>                        
+                    </ul>
+                </div>
+                <div class="mg-feature-option-box">
+                    <div class="mg-option-lable1">
+                        <div class="mg-selection">
+                            <div class="mg-selection-title">
+                                <span>Storage:</span>
+                            </div>
+                            <form>
+                                <div class="d-flex">
+                                    <div class="mg-radio-input">
+                                        <input class="form-check-input" type="radio" name="mg-ram" id="mg-ram-16">
+                                        <label class="form-check-label" for="mg-ram-16">16 GB</label>
+                                    </div>
+                                    <div class="mg-radio-input">
+                                        <input class="form-check-input" type="radio" name="mg-ram" id="mg-ram-32" checked>
+                                        <label class="form-check-label" for="mg-ram-32">32 GB</label>
+                                    </div>
+                                    <div class="mg-radio-input">
+                                        <input class="form-check-input" type="radio" name="mg-ram" id="mg-ram-64" checked>
+                                        <label class="form-check-label" for="mg-ram-64">64 GB</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mg-feature">
+                            <div class="mg-selection-title">
+                                <span>Connectivity:</span>
+                            </div>
+                            <div class="mg-option-info">
+                                <span>Wi-Fi Only</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-option-lable2">
+                        <div class="mg-selection">
+                            <div class="mg-selection-title">
+                                <span>Color:</span>
+                            </div>
+                            <form>
+                                <div class="d-flex">
+                                    <div class="mg-radio-clr-input">
+                                        <input class="form-check-input" type="radio" name="mg-color" id="mg-color-1">
+                                        <label class="form-check-label" style="background-color: #d5e6d2;" for="mg-color-1"></label>
+                                    </div>
+                                    <div class="mg-radio-clr-input">
+                                        <input class="form-check-input" type="radio" name="mg-color" id="mg-color-2" checked>
+                                        <label class="form-check-label" style="background-color: #fbd4cd;" for="mg-color-2"></label>
+                                    </div>
+                                    <div class="mg-radio-clr-input">
+                                        <input class="form-check-input" type="radio" name="mg-color" id="mg-color-3">
+                                        <label class="form-check-label" style="background-color: #dedede;" for="mg-color-3"></label>
+                                    </div>
+                                    <div class="mg-radio-clr-input">
+                                        <input class="form-check-input" type="radio" name="mg-color" id="mg-color-4">
+                                        <label class="form-check-label" style="background-color: #d2deea;" for="mg-color-4"></label>
+                                    </div>
+                                    <div class="mg-radio-clr-input">
+                                        <input class="form-check-input" type="radio" name="mg-color" id="mg-color-5">
+                                        <label class="form-check-label" style="background-color: #6c6c70;" for="mg-color-5"></label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mg-selection-title">
+                            <span>Quantity</span>
+                        </div>
+                        <div class="mg-quanitity-option-section d-flex">
+                            <div class="mg-quanlity-option">
+                                <form>
+                                    <input class="mg-qty-number" value="1" type="text">
+                                </form>
+                            </div>
+                            <div class="mg-quanlity-option-btn">
+                                <button class="mg-qty-plus-btn"><i class="fa-solid fa-plus"></i></button>
+                                <button class="mg-qty-minus-btn"><i class="fa-solid fa-minus"></i></button>
+                            </div>
+                            <div class="mg-ad-cart-btn ms-3">
+                                <a class="mg-shop-btn btn btn-default" href="cart.html">ADD TO CART <i class="fa-solid fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-feature-section-style3">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4 col-sm-4 col-4">
+                            <div class="mg-feature-info-box">
+                                <div class="mg-feature-info-img">
+                                    <img src="assets/images/icons/Icon-material-payment.svg" alt="">
+                                </div>
+                                <div class="mg-feature-info-text ms-2 ms-md-1 ms-lg-2">
+                                    <span>Safe Payment</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-4 col-4">
+                            <div class="mg-feature-info-box">
+                                <div class="mg-feature-info-img">
+                                    <img src="assets/images/icons/Icon-feather-shopping-bag.svg" alt="">
+                                </div>
+                                <div class="mg-feature-info-text ms-2 ms-md-1 ms-lg-2">
+                                    <span>Shop With Confidence</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-4 col-4">
+                            <div class="mg-feature-info-box">
+                                <div class="mg-feature-info-img">
+                                    <img src="assets/images/icons/delivery-truck.svg" alt="">
+                                </div>
+                                <div class="mg-feature-info-text ms-2 ms-md-1 ms-lg-2">
+                                    <span>Worldwide Delivery</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-additional-info">
+                    <div class="mg-product-details">
+                        <div class="mg-product-details-text"><strong>SKU:</strong>  <span>APIPAD-16GB</span></div>
+                        <div class="mg-product-details-text"><strong>Categories:</strong> <span>Smartphone, Electronic</span></div>
+                        <div class="mg-product-details-text"><strong>Tag:</strong> <span>Electronic</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--product details section end here-->
+<!--Description  tab section start here-->
+<div class="mg-description-tab-section">
+    <div class="container">
+        <div class="mg-tabs-box mt-3">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link ms-0 active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-selected="true">DESCRIPTION</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="products-details-tab" data-bs-toggle="tab" data-bs-target="#products-details" type="button" role="tab" aria-selected="false">PRODUCT DETAILS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-rate" type="button" role="tab" aria-selected="false">REVIEWS</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="description" role="tabpanel">
+                    <div class="mg-product-description">
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                            It has survived not only five centuries, but also the leap into electronic typesetting,
+                            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum and more recently with desktop publishing.
+                        </p>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                            It has survived not only five centuries, but also the leap into electronic typesetting,
+                            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum and more recently with desktop publishing.
+                        </p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="products-details" role="tabpanel">
+                    <div class="mg-product-details">
+                        <div class="mg-product-details-text"><strong>Weight:</strong> <span>250g</span></div>
+                        <div class="mg-product-details-text"><strong>Dimensions:</strong> <span>10 x 10 x 15</span></div>
+                        <div class="mg-product-details-text"><strong>Material:</strong> <span>60% cotton, 40% polyester</span></div>
+                        <div class="mg-product-details-text"><strong>Other info:</strong> <span>American heirloom jean short pug seitan letterpress</span></div>
+                    </div>
+                    <div class="mg-product-description">
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                            It has survived not only five centuries, but also the leap into electronic typesetting,
+                            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum and more recently with desktop publishing.
+                        </p>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="reviews-rate" role="tabpanel">
+                    <div class="mg-review-form">
+                        <div class="mg-form-section">
+                            <div class="container">
+                                <div class="mg-comment-form">
+                                    <form>
+                                        <div><h5>RATE US</h5></div>
+                                        <div class="mg-form-main">
+                                            <div class="mg-review-star-rating-form">
+                                                <div class="mg-review-star-rating-form-inner">
+                                                    <input type="radio" name="rate" id="star5" value="1">
+                                                    <label for="star5"></label>
+                                                    <input type="radio" name="rate" id="star4" value="2">
+                                                    <label for="star4"></label>
+                                                    <input type="radio" name="rate" id="star3" value="3">
+                                                    <label for="star3"></label>
+                                                    <input type="radio" name="rate" id="star2" value="4">
+                                                    <label for="star2"></label>
+                                                    <input type="radio" name="rate" id="star1" value="5">
+                                                    <label for="star1"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <div class="mg-form-input-field">
+                                                        <input type="text" placeholder="Name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <div class="mg-form-input-field">
+                                                        <input type="text" placeholder="Email">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="mg-form-textarea">
+                                                        <textarea placeholder="Your Review"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mg-form-submit-btn">
+                                                <button class="btn">POST A REVIEW</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-reviews">
+                        <div class="mg-reviews-box">
+                            <div class="row">
+                                <div class="col-lg-1 col-sm-2 col-2">
+                                    <div class="mg-reviewer-img">
+                                        <img src="assets/images/gallery/reviewer-img.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-11 col-sm-10 col-10">
+                                    <div class="mg-review-text-box">
+                                        <div class="mg-review-text">
+                                            <div class="mg-reviewer-name me-2">
+                                                <span>Carolina Martinez</span>
+                                            </div>
+                                            <div class="mg-rating">
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-reviews-box">
+                            <div class="row">
+                                <div class="col-lg-1 col-sm-2 col-2">
+                                    <div class="mg-reviewer-img">
+                                        <img src="assets/images/gallery/reviewer-img.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-11 col-sm-10 col-10">
+                                    <div class="mg-review-text-box">
+                                        <div class="mg-review-text">
+                                            <div class="mg-reviewer-name me-2">
+                                                <span>Carolina Martinez</span>
+                                            </div>
+                                            <div class="mg-rating">
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-reviews-box">
+                            <div class="row">
+                                <div class="col-lg-1 col-sm-2 col-2">
+                                    <div class="mg-reviewer-img">
+                                        <img src="assets/images/gallery/reviewer-img.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-11 col-sm-10 col-10">
+                                    <div class="mg-review-text-box">
+                                        <div class="mg-review-text">
+                                            <div class="mg-reviewer-name me-2">
+                                                <span>Carolina Martinez</span>
+                                            </div>
+                                            <div class="mg-rating">
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Description  tab section end here-->
+<!--products grid section start here-->
+<div class="mg-product-grid">
+    <div class="container">
+        <div class="mg-section-heading text-start">
+            <h5>Top Deals Of the Day</h5>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-6">
+                <div class="mg-tab-grid-box">
+                    <div class="mg-tab-img-box">
+                        <div class="mg-tabs-img">
+                            <a href="single-product.html"><img src="assets/images/products/product-9.jpg" alt=""></a>
+                        </div>
+                        <div class="mg-overlay">
+                            <div class="mg-overlay-icon-box">
+                                <div class="mg-overlay-icon text-end">
+                                    <a class="mg-quick-view-modal-btn" href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-remove-red-eye.svg" alt="">
+                                    </a>
+                                </div>
+                                <div class="mg-overlay-icon text-end">
+                                    <a href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-compare-arrows.svg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-atc-overlay">
+                            <div class="mg-cart-box">
+                                <a href="cart.html">ADD TO CART</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-tab-text mt-3">
+                        <div class="mg-tab-text-top d-flex justify-content-between align-items-center">
+                            <div class="mg-small-heading">
+                                <a class="text-decoration-none" href="shop.html"><span>DRONE</span></a>
+                            </div>
+                            <div class="mg-wishlist-icon">
+                                <a href="javascript:void(0);">
+                                    <img src="assets/images/icons/heart.svg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <a class="text-decoration-none" href="single-product.html"><h5>Apple iPhone 13 Pro SmartPhone</h5></a>
+                        <div class="mg-pricing">$20.03 <span><s>$30.03</s></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-6">
+                <div class="mg-tab-grid-box">
+                    <div class="mg-tab-img-box">
+                        <div class="mg-tabs-img">
+                            <a href="single-product.html"><img src="assets/images/products/product-10.jpg" alt=""></a>
+                        </div>
+                        <div class="mg-overlay">
+                            <div class="mg-overlay-icon-box">
+                                <div class="mg-overlay-icon text-end">
+                                    <a class="mg-quick-view-modal-btn" href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-remove-red-eye.svg" alt="">
+                                    </a>
+                                </div>
+                                <div class="mg-overlay-icon text-end">
+                                    <a href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-compare-arrows.svg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-atc-overlay">
+                            <div class="mg-cart-box">
+                                <a href="cart.html">ADD TO CART</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-tab-text mt-3">
+                        <div class="mg-tab-text-top d-flex justify-content-between align-items-center">
+                            <div class="mg-small-heading">
+                                <a class="text-decoration-none" href="shop.html"><span>HEADPHONES</span></a>
+                            </div>
+                            <div class="mg-wishlist-icon">
+                                <a href="javascript:void(0);">
+                                    <img src="assets/images/icons/heart.svg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <a class="text-decoration-none" href="single-product.html"><h5>Uborn P47 Wireless Headphone</h5></a>
+                        <div class="mg-pricing">$20.03 <span><s>$30.03</s></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-6">
+                <div class="mg-tab-grid-box">
+                    <div class="mg-tab-img-box">
+                        <div class="mg-tabs-img">
+                            <a href="single-product.html"><img src="assets/images/products/product-11.jpg" alt=""></a>
+                        </div>
+                        <div class="mg-overlay">
+                            <div class="mg-overlay-icon-box">
+                                <div class="mg-overlay-icon text-end">
+                                    <a class="mg-quick-view-modal-btn" href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-remove-red-eye.svg" alt="">
+                                    </a>
+                                </div>
+                                <div class="mg-overlay-icon text-end">
+                                    <a href="javascript:void(0);">
+                                        <img src="assets/images/icons/Icon-material-compare-arrows.svg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-atc-overlay">
+                            <div class="mg-cart-box">
+                                <a href="cart.html">ADD TO CART</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-tab-text mt-3">
+                        <div class="mg-tab-text-top d-flex justify-content-between align-items-center">
+                            <div class="mg-small-heading">
+                                <a class="text-decoration-none" href="shop.html"><span>CAMARA</span></a>
+                            </div>
+                            <div class="mg-wishlist-icon">
+                                <a href="javascript:void(0);">
+                                    <img src="assets/images/icons/heart.svg" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <a class="text-decoration-none" href="single-product.html"><h5>NIKON Z 50 Mirrorless Camera</h5></a>
+                        <div class="mg-pricing">$20.03 <span><s>$30.03</s></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--products grid section end here-->

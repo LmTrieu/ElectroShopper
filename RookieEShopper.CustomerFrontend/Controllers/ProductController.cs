@@ -12,7 +12,7 @@ namespace RookieEShopper.CustomerFrontend.Controllers
             _productClient = productClient;
         }
 
-        // GET: Shop/1
+        // GET: Shop/
         [Route("Shop")]
         public async Task<ActionResult> Index(int categoryId, string categoryName)
         {
@@ -23,72 +23,11 @@ namespace RookieEShopper.CustomerFrontend.Controllers
 
         // GET: Shop/Details/5
         [Route("Shop/Details")]
-        public ActionResult Details(int productId)
+        public async Task<ActionResult> Details(int productId)
         {
-            return View();
+            var product = await _productClient.GetProductDetailById(productId);
+            return View(product);
         }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProductController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
