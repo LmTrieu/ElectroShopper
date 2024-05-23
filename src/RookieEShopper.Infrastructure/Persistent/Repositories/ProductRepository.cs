@@ -38,7 +38,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Product?> GetProductByIdAsync(int productId)
+        public async Task<Product?> GetDomainProductByIdAsync(int productId)
         {
             var product = await _context.Products
                 .Include(p => p.Category)
@@ -132,5 +132,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ResponseProductDto?> GetProductByIdAsync(int productId)
+        {
+            ResponseProductDto product = new ResponseProductDto();
+
+            _mapper.Map(await _context.Products.FindAsync(productId),product);
+            return product;
+        }
     }
 }

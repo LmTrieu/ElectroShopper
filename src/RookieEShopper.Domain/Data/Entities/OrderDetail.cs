@@ -10,5 +10,6 @@ namespace RookieEShopper.Domain.Data.Entities
         public Order? Order { get; set; }
         public Product? Product { get; set; }
         public Coupon? AppliedCoupon { get; set; }
+        public ProductReview? ProductReview { get; set; }
     }
 }

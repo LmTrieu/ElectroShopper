@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RookieEShopper.Domain\RookieEShopper.Domain.csproj" />
+    <ProjectReference Include="..\RookieEShopper.ShardViewModel\RookieEShopper.SharedViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

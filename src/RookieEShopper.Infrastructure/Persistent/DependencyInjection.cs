@@ -45,6 +45,9 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICategoryGroupRepository, CategoryGroupRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             services.AddTransient<FileService>();
             return services;

@@ -85,7 +85,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     Email = registerRequestBodyDto.Email,
                     NormalizedEmail = _normalizer.NormalizeEmail(registerRequestBodyDto.Email),
                     UserName = registerRequestBodyDto.Email,
-                    NormalizedUserName = _normalizer.NormalizeName(registerRequestBodyDto.Email)
+                    NormalizedUserName = _normalizer.NormalizeName(registerRequestBodyDto.Email),
+                    Customer = new Customer { EWallet = 0 }
                 },
                 registerRequestBodyDto.Password);
 

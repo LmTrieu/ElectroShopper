@@ -47,10 +47,10 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         {
             var customer = await _context.Customers.FindAsync(customerId);
 
-            customer.ShoppingCart = new Cart();
+            customer.Cart = new Cart();
             await _context.SaveChangesAsync();
 
-            return customer.ShoppingCart;
+            return customer.Cart;
         }
 
         public async Task<Cart?> GetCartByIdAsync(int id)
@@ -59,11 +59,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .FindAsync(id);
         }
 
-        public async Task<IEnumerable<Cart>> GetCartsByCustomerAsync(int customerId)
+        public IEnumerable<Cart> GetCartsByCustomerAsync(int customerId)
         {
-            return await _context.Carts
-                .Where(c => c.Customer.Id == customerId)
-                .ToListAsync();
+            //return await _context.Carts
+            //    .Where(c => c.Customer.Id == customerId)
+            //    .ToListAsync();
+            throw new NotImplementedException();
         }
 
         public async Task<Cart> RemoveItemAsync(int cartItemId)

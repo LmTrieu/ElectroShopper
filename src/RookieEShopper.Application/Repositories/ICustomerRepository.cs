@@ -1,16 +1,19 @@
-﻿using RookieEShopper.Domain.Data.Entities;
+﻿using RookieEShopper.Application.Dto.Customer;
+using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Application.Repositories
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<Customer>> GetAllCustomerAsync();
+        Task<IEnumerable<ResponseCustomerDto?>> GetAllCustomerAsync();
 
-        Task<Customer> GetCustomerByIdAsync(int id);
+        Task<ResponseCustomerDto?> GetCustomerByIdAsync(int id);
 
-        Task<Customer> GetCustomerByNameAsync(string name);
+        Task<Customer?> GetDomainCustomerByIdAsync(int id);
 
-        Task<Customer> CreateCustomerAsync (Customer customer);
+        Task<ResponseCustomerDto?> GetCustomerByNameAsync(string name);
+
+        Task<ResponseCustomerDto?> CreateCustomerAsync (CreateCustomerDto customer);
 
         Task LockCustomerAsync(int id);
 

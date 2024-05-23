@@ -16,10 +16,6 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Cart?> GetCartByIdAsync(int id);
 
-        Task<IEnumerable<Cart>> GetCartsByCustomerAsync(int customerId);
-
-        Task<Cart> CreateCartAsync(int customerId);
-
         Task<Cart> AddItemAsync(int cartId, Product product, int quantity);
 
         Task<Cart> RemoveItemAsync(int cartItemId);

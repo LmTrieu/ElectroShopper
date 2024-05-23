@@ -9,6 +9,6 @@ namespace RookieEShopper.Domain.Data.Entities
 
         [Precision(18, 2)]
         public decimal EWallet { get; set; } = 0;
-        public Cart? ShoppingCart { get; set; } 
+        public Cart Cart { get; set; } = new Cart(); 
     }
 }

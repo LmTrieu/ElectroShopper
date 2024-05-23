@@ -11,10 +11,9 @@ namespace RookieEShopper.Domain.Data.Entities
     {
         public int Id { get; set; }
         public int? CustomerId { get; set; }
-        public Customer? Customer { get; set; } = null!;
         [Precision(18,2)]
         public decimal Total { get; set; }
-        public List<CartItem> Items { get; set; }
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }

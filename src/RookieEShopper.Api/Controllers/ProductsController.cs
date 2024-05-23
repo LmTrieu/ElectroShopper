@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto.Product;
+using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 
@@ -14,12 +15,18 @@ namespace RookieEShopper.Backend.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IValidator<CreateProductDto> _validator;
+        private readonly IReviewRepository _reviewRepository;
+        private readonly IValidator<CreateProductDto> _productValidator;
+        private readonly IValidator<CreateProductReviewDto> _productReviewValidator;
 
-        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator)
+
+        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator, IReviewRepository reviewRepository,
+                                IValidator<CreateProductReviewDto> productReviewValidator)
         {
             _productRepository = productRepository;
-            _validator = validator;
+            _productValidator = validator;
+            _reviewRepository = reviewRepository;
+            _productReviewValidator = productReviewValidator;
         }
 
         // GET: api/Products
@@ -35,7 +42,7 @@ namespace RookieEShopper.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetDomainProductByIdAsync(id);
 
             return product is null ?
                 NotFound("Product not found with the specified ID.") : Ok(product);
@@ -46,7 +53,7 @@ namespace RookieEShopper.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, CreateProductDto productdto)
         {
-            ValidationResult validationResult = _validator.Validate(productdto);
+            ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
             {
                 return Ok(await _productRepository.IsProductExistAsync(id) ?
@@ -71,7 +78,7 @@ namespace RookieEShopper.Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
         {
-            ValidationResult validationResult = _validator.Validate(productdto);
+            ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
             {
                 return Ok(await _productRepository.CreateProductAsync(productdto, galleryImages));
@@ -99,7 +106,7 @@ namespace RookieEShopper.Backend.Controllers
         //}
         [HttpGet]
         [Route("Category/{categoryId}")]
-        public async Task<Results<Ok<IEnumerable<Product>>,NotFound<string>>> GetProductsByCategory(int categoryId)
+        public async Task<Results<Ok<IEnumerable<Product>>, NotFound<string>>> GetProductsByCategory(int categoryId)
         {
             var product = await _productRepository.GetProductsByCategoryAsync(categoryId);
 
@@ -111,17 +118,33 @@ namespace RookieEShopper.Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetDomainProductByIdAsync(id);
             if (product is null)
             {
                 return NotFound("Product not found with the specified ID.");
             }
-            if(await _productRepository.DeleteProductAsync(product))
+            if (await _productRepository.DeleteProductAsync(product))
                 return Ok(new
                 {
                     Message = "Product deleted successfully"
                 });
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("Review")]
+        public async Task<Results<Ok<ResponseProductReviewDto>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProductReview(CreateProductReviewDto createProductReviewDto)
+        {
+            ValidationResult validationResult = _productReviewValidator.Validate(createProductReviewDto);
+            if (validationResult.IsValid)
+            {
+
+                return TypedResults.Ok(await _reviewRepository.CreateReviewAsync(createProductReviewDto));
+            }
+            else
+            {
+                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
+            }
         }
     }
 }

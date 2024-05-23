@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RookieEShopper.Application.Dto.Customer;
 using RookieEShopper.Application.Dto.Product;
+using RookieEShopper.Application.Dto.Review;
 
 namespace RookieEShopper.Application
 {
@@ -11,6 +12,7 @@ namespace RookieEShopper.Application
         {
             services.AddScoped<IValidator<LoginCustomerDto>, LoginCustomerValidator>();
             services.AddScoped<IValidator<CreateProductDto>, CreateProductDtoValidator>();
+            services.AddScoped<IValidator<CreateProductReviewDto>, CreateProductReviewDtoValidator>();
 
             return services;
         }

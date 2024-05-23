@@ -12,6 +12,7 @@ namespace RookieEShopper.Backend.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
+        //Context is to be removed
         private readonly ApplicationDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryGroupRepository _categoryGroupRepository;

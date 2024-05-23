@@ -8,7 +8,9 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
 
-        Task<Product?> GetProductByIdAsync(int productId);
+        Task<ResponseProductDto?> GetProductByIdAsync(int productId);
+
+        Task<Product?> GetDomainProductByIdAsync(int productId);
 
         Task<List<Product>> GetProductByNameAsync(string productName);
         

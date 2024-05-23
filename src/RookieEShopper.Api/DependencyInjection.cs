@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace RookieEShopper.Api
 {

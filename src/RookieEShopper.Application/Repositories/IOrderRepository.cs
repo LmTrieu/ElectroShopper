@@ -6,15 +6,14 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync();
 
-        Task<Order> GetOrderByIdAsync(int id);
+        Task<Order?> GetOrderByIdAsync(int id);
+        Task<OrderDetail?> GetOrderDetailByIdAsync(int id);
 
-        Task<Order> GetOrderByNameAsync(string name);
+        Task<Order?> CreateOrderAsync (Order order);
 
-        Task<Order> CreateOrderAsync (Order order);
+        Task<Order?> UpdateOrderAsync (Order order);
 
-        Task<Order> UpdateOrderAsync (Order order);
-
-        Task<IEnumerable<Order>> GetAllOrdersOfCustomer(int CustomerId);
+        Task<IEnumerable<Order?>> GetAllOrdersOfCustomer(int CustomerId);
 
         Task CancelOrderAsync (int id);
     }
