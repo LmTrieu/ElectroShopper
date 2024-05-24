@@ -5,8 +5,19 @@ using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "ReactAdmin";
 
 // Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7266",
+                                              "https://localhost:7267");
+                      });
+});
 
 builder.Services.AddIdentityApiEndpoints<BaseApplicationUser>()
     .AddRoles<IdentityRole>()
@@ -32,6 +43,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseStaticFiles();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapIdentityApi<BaseApplicationUser>();
 

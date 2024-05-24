@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RookieEShopper.CustomerFrontend.Services;
+using RookieEShopper.CustomerFrontend.Models;
+using RookieEShopper.CustomerFrontend.Services.Product;
+using RookieEShopper.SharedViewModel;
 
 namespace RookieEShopper.CustomerFrontend.Controllers
 {
@@ -25,8 +27,19 @@ namespace RookieEShopper.CustomerFrontend.Controllers
         [Route("Shop/Details")]
         public async Task<ActionResult> Details(int productId)
         {
-            var product = await _productClient.GetProductDetailById(productId);
-            return View(product);
+            ProductDetailPageVM productDetail = new ProductDetailPageVM();
+            productDetail.Product = await _productClient.GetProductDetailById(productId);
+            productDetail.Reviews = await _productClient.GetProductReviewsAsync(productId);
+
+            var viewModel = (productDetail, new CreateProductReviewDto());
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateProductReview(CreateProductReviewDto createProductReviewVM)
+        {
+            await _productClient.PostProductReviewAsync(createProductReviewVM);
+            return RedirectToAction("Details",new {productId = createProductReviewVM.ProductId});
         }
 
     }

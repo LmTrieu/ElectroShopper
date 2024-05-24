@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RookieEShopper.CustomerFrontend.Services;
+using RookieEShopper.CustomerFrontend.Services.Product;
 
 namespace RookieEShopper.CustomerFrontend.Controllers
 {

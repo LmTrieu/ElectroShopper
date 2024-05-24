@@ -1,5 +1,6 @@
 using Microsoft.Net.Http.Headers;
-using RookieEShopper.CustomerFrontend.Services;
+using RookieEShopper.CustomerFrontend.Services.Category;
+using RookieEShopper.CustomerFrontend.Services.Product;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<ICategoryClient, CategoryClient>();
 builder.Services.AddHttpClient<IProductClient, ProductClient>();
-
+ 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -5,6 +5,7 @@ using RookieEShopper.Application.Dto.Customer;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedViewModel;
 
 namespace RookieEShopper.Backend.Service
 {
@@ -25,6 +26,7 @@ namespace RookieEShopper.Backend.Service
             CreateMap<UpdateBrandDto, Brand>();
 
             CreateMap<CreateCategoryGroupDto, CategoryGroup>();
+            CreateMap<Category, CategoryVM>();
 
             CreateMap<Customer, ResponseCustomerDto>();
             CreateMap<BaseApplicationUser, ResponseCustomerDto>();

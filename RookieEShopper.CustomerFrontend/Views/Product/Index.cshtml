@@ -192,8 +192,8 @@
                             <div class="mg-tabs-img">
                                 <a  asp-controller="Product"
                                     asp-action="Details"
-                                    asp-route-productId="@product.id">
-                                    <img src="https://localhost:7265/ProductImages/@product.id/@product.mainImagePath" alt="@product.name">
+                                    asp-route-productId="@product.Id">
+                                    <img src="https://localhost:7265/ProductImages/@product.Id/@product.MainImagePath" alt="@product.Name">
                                 </a>
                             </div>
                             <div class="mg-overlay">
@@ -229,8 +229,8 @@
                                     </a>
                                 </div>
                             </div>
-                            <a class="text-decoration-none" href="single-product.html"><h5>@product.name</h5></a>
-                            <div class="mg-pricing">@product.price.ToString("C", CultureInfo.GetCultureInfo(1066))</div>
+                            <a class="text-decoration-none" href="single-product.html"><h5>@product.Name</h5></a>
+                            <div class="mg-pricing">@product.Price.ToString("C", CultureInfo.GetCultureInfo(1066))</div>
                         </div>
                     </div>
                 </div>

@@ -2,12 +2,12 @@
 {
     public class ProductVM
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public decimal price { get; set; }
-        public string mainImagePath { get; set; } = string.Empty;
-        public string description { get; set; } = string.Empty;
-        public IList<string> imageGallery = new List<string>();
-        public CategoryVM category { get; set; } = new CategoryVM();
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string MainImagePath { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public IList<string> ImageGallery = new List<string>();
+        public CategoryVM Category { get; set; } = new CategoryVM();
     }
 }

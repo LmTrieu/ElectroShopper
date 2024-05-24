@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace RookieEShopper.SharedViewModel
 {
-    public class CategoryGroupVM
+    public class ProductReviewVM
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public IList<CategoryVM>? Categories { get; set; }
+        public string Feedback { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public int Rating { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using RookieEShopper.SharedViewModel;
 
-namespace RookieEShopper.CustomerFrontend.Services
+namespace RookieEShopper.CustomerFrontend.Services.Category
 {
     public interface ICategoryClient
     {

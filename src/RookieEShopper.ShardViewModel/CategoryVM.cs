@@ -2,8 +2,8 @@
 {
     public class CategoryVM
     {
-        public int id { get; set; }
-        public string cartegoryName { get; set; }
-        public string? description { get; set; }
+        public int Id { get; set; }
+        public string CartegoryName { get; set; }
+        public string? Description { get; set; }
     }
 }

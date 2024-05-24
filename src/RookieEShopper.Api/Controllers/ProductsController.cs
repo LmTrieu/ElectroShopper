@@ -15,18 +15,12 @@ namespace RookieEShopper.Backend.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IReviewRepository _reviewRepository;
         private readonly IValidator<CreateProductDto> _productValidator;
-        private readonly IValidator<CreateProductReviewDto> _productReviewValidator;
 
-
-        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator, IReviewRepository reviewRepository,
-                                IValidator<CreateProductReviewDto> productReviewValidator)
+        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator)
         {
             _productRepository = productRepository;
             _productValidator = validator;
-            _reviewRepository = reviewRepository;
-            _productReviewValidator = productReviewValidator;
         }
 
         // GET: api/Products
@@ -129,22 +123,6 @@ namespace RookieEShopper.Backend.Controllers
                     Message = "Product deleted successfully"
                 });
             return BadRequest();
-        }
-
-        [HttpPost]
-        [Route("Review")]
-        public async Task<Results<Ok<ResponseProductReviewDto>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProductReview(CreateProductReviewDto createProductReviewDto)
-        {
-            ValidationResult validationResult = _productReviewValidator.Validate(createProductReviewDto);
-            if (validationResult.IsValid)
-            {
-
-                return TypedResults.Ok(await _reviewRepository.CreateReviewAsync(createProductReviewDto));
-            }
-            else
-            {
-                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
-            }
-        }
+        }        
     }
 }

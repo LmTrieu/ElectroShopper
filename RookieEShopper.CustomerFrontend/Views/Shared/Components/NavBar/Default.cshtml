@@ -129,20 +129,20 @@
                             </a>
 
                             <ul class="dropdown-menu mg-dropdown-list" aria-labelledby="dropdownMenuLink">
-                                @if (Model.FirstOrDefault().categories != null && Model.FirstOrDefault().categories.Count != 0)
+                                @if (Model.FirstOrDefault().Categories != null && Model.FirstOrDefault().Categories.Count != 0)
                                     foreach (var categoryGroup in Model)
                                     {
                                         <li>
                                             <h3 class="dropdown-header mg-font-style">
-                                                @categoryGroup.name
+                                                @categoryGroup.Name
                                             </h3>
-                                            @foreach (var category in categoryGroup.categories)
+                                            @foreach (var category in categoryGroup.Categories)
                                             {
                                                 <a class="dropdown-item mg-font-style" 
                                                     asp-controller="Product"
-                                                    asp-route-categoryId="@category.id"
-                                                    asp-route-categoryName="@category.cartegoryName">
-                                                    <span>@category.cartegoryName</span>
+                                                    asp-route-categoryId="@category.Id"
+                                                    asp-route-categoryName="@category.CartegoryName">
+                                                    <span>@category.CartegoryName</span>
                                                 </a>
                                             }                                         
                                         </li>
@@ -162,10 +162,10 @@
                                 <div class="mg-search-bar-dropdwon">
                                     <select class="form-select mg-font-style">
                                         <option hidden selected>Category</option>
-                                        @if (Model.FirstOrDefault().categories != null && Model.FirstOrDefault().categories.Count != 0)
-                                            foreach (var catergory in Model.FirstOrDefault().categories)
+                                        @if (Model.FirstOrDefault().Categories != null && Model.FirstOrDefault().Categories.Count != 0)
+                                            foreach (var catergory in Model.FirstOrDefault().Categories)
                                             {
-                                                <option value="@catergory.id">@catergory.cartegoryName</option>
+                                                <option value="@catergory.Id">@catergory.CartegoryName</option>
                                             }
                                         else
                                         {

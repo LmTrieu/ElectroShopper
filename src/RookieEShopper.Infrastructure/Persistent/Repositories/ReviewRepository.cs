@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RookieEShopper.Application.Dto.Customer;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.SharedViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -18,15 +11,13 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
-        private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productReposity;
         private readonly ICustomerRepository _customerRepository;
-        public ReviewRepository(IMapper mapper, ApplicationDbContext context, IOrderRepository orderRepository,
+        public ReviewRepository(IMapper mapper, ApplicationDbContext context,
                                 IProductRepository productReposity, ICustomerRepository customerRepository) 
         {
             _mapper = mapper;
             _context = context;
-            _orderRepository = orderRepository;
             _productReposity = productReposity;
             _customerRepository = customerRepository;
         }
@@ -37,7 +28,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             if (productReviewDto.ProductId != 0)            
                 productReview.Product = 
-                    await _productReposity.GetDomainProductByIdAsync(productReviewDto.CustomerId);
+                    await _productReposity.GetDomainProductByIdAsync(productReviewDto.ProductId);
             
             if (productReviewDto.CustomerId != 0)
                 productReview.Customer = 
@@ -46,11 +37,16 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 productReview.Customer =
                     await _context.Customers.FindAsync(1);
 
-            var entityEntry= await _context.ProductReviews.AddAsync(productReview);
+            var entityEntry = await _context.ProductReviews.AddAsync(productReview);
 
-            await _context.SaveChangesAsync();           
+            await _context.SaveChangesAsync();
 
-            throw new Exception();
+            ResponseProductReviewDto response = _mapper.Map<ResponseProductReviewDto>(productReview);
+
+            response.Product = await _productReposity.GetProductByIdAsync((int)entityEntry.Entity.ProductId);
+            response.Customer = await _customerRepository.GetCustomerByIdAsync((int)entityEntry.Entity.CustomerId);
+
+            return response;
         }
 
         public async Task<ICollection<ResponseProductReviewDto>?> GetAllReviewsAsync()
@@ -83,14 +79,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .Where(r => r.Id == id)
                 .FirstOrDefaultAsync();
 
-            ResponseProductReviewDto response = new ResponseProductReviewDto();
+            ResponseProductReviewDto response = new();
 
-            _mapper.Map(productReview
-                , new ResponseProductReviewDto()
-                {
-                    Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
-                    Customer = await _customerRepository.GetCustomerByIdAsync((int)productReview.CustomerId)
-                });
+            response = _mapper.Map<ResponseProductReviewDto>(productReview);
+
+            response.Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId);
+            response.Customer = await _customerRepository.GetCustomerByIdAsync((int)productReview.CustomerId);
 
             return response;
         }

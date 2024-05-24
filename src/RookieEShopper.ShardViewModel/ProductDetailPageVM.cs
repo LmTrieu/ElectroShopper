@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace RookieEShopper.SharedViewModel
 {
-    public class CategoryGroupVM
+    public class ProductDetailPageVM
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public IList<CategoryVM>? Categories { get; set; }
+        public ProductVM Product { get; set; }
+        public ICollection<ProductReviewVM> Reviews { get; set; } 
     }
 }

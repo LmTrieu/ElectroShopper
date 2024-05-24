@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
-using RookieEShopper.Domain.Data.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,9 +14,10 @@ namespace RookieEShopper.Api.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IReviewRepository _reviewRepository;
-
-        public ReviewController(IReviewRepository reviewRepository) 
+        private readonly IValidator<CreateProductReviewDto> _productReviewValidator;
+        public ReviewController(IReviewRepository reviewRepository, IValidator<CreateProductReviewDto> productReviewValidator) 
         {
+            _productReviewValidator = productReviewValidator;
             _reviewRepository = reviewRepository;
         }
         // GET: api/<ReviewController>
@@ -52,8 +54,17 @@ namespace RookieEShopper.Api.Controllers
 
         // POST api/<ReviewController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Results<Ok<ResponseProductReviewDto>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProductReview(CreateProductReviewDto createProductReviewDto)
         {
+            ValidationResult validationResult = _productReviewValidator.Validate(createProductReviewDto);
+            if (validationResult.IsValid)
+            {
+                return TypedResults.Ok(await _reviewRepository.CreateReviewAsync(createProductReviewDto));
+            }
+            else
+            {
+                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
+            }
         }
 
         // PUT api/<ReviewController>/5
