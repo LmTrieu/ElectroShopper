@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto.Category;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedViewModel;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -33,16 +35,20 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return category is null ? throw new ArgumentException("Category not found with the specified ID.") : category.CartegoryName;
         }
 
-        public async Task<Category> CreateCategoryAsync(string categoryName)
+        public async Task<Category> CreateCategoryAsync(CategoryDto category)
         {
             var entityEntry =
-                await _context.Categories.AddAsync(new Category { CartegoryName = categoryName });
+                await _context.Categories.AddAsync(new Category { CartegoryName = category.Name, Description = category.Description });
+            await _context.SaveChangesAsync();
             return entityEntry.Entity;
         }
 
-        public Task<bool> DeleteCategoryAsync(Category category)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
+           
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
         public Task<Category> UpdateCategoryAsync(Category category)
@@ -51,11 +57,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         }
 
         public Task<bool> IsCategoryExistAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Category> CreateCategoryAsync(Category category)
         {
             throw new NotImplementedException();
         }

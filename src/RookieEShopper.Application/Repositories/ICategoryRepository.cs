@@ -1,4 +1,6 @@
-﻿using RookieEShopper.Domain.Data.Entities;
+﻿using RookieEShopper.Application.Dto.Category;
+using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedViewModel;
 
 namespace RookieEShopper.Application.Repositories
 {
@@ -12,9 +14,9 @@ namespace RookieEShopper.Application.Repositories
 
         Task<bool> IsCategoryExistAsync(int id);
 
-        Task<bool> DeleteCategoryAsync(Category category);
+        Task<bool> DeleteCategoryAsync(int id);
 
-        Task<Category> CreateCategoryAsync(Category category);
+        Task<Category> CreateCategoryAsync(CategoryDto category);
 
         Task<Category> UpdateCategoryAsync(Category category);
     }

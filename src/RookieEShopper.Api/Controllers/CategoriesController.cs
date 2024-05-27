@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RookieEShopper.Application.Dto.Category;
 using RookieEShopper.Application.Dto.CategoryGroup;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
+using RookieEShopper.SharedViewModel;
 
 namespace RookieEShopper.Backend.Controllers
 {
@@ -12,14 +14,11 @@ namespace RookieEShopper.Backend.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        //Context is to be removed
-        private readonly ApplicationDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryGroupRepository _categoryGroupRepository;
 
-        public CategoriesController(ApplicationDbContext context, ICategoryRepository categoryRepository, ICategoryGroupRepository categoryGroupRepository)
+        public CategoriesController(ICategoryRepository categoryRepository, ICategoryGroupRepository categoryGroupRepository)
         {
-            _context = context;
             _categoryRepository = categoryRepository;
             _categoryGroupRepository = categoryGroupRepository;
         }
@@ -38,63 +37,26 @@ namespace RookieEShopper.Backend.Controllers
             return await _categoryRepository.GetCategoryByIdAsync(id);
         }
 
-        // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
-        {
-            if (id != category.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<Results<Ok<Category>,BadRequest>> PostCategory(CategoryDto categoryDto)
         {
-            //To be change
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var category =  await _categoryRepository.CreateCategoryAsync(categoryDto);
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            if(category is not null)             
+                return TypedResults.Ok(category);
+
+            return TypedResults.BadRequest();
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<Results<Ok, BadRequest>> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            if(await _categoryRepository.DeleteCategoryAsync(id))
+                return TypedResults.Ok();
+            return TypedResults.BadRequest();
         }
 
         [HttpPost]
@@ -114,9 +76,9 @@ namespace RookieEShopper.Backend.Controllers
         }
             
 
-        private bool CategoryExists(int id)
+        private async Task<bool> CategoryExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return await _categoryRepository.IsCategoryExistAsync(id);
         }
     }
 }
