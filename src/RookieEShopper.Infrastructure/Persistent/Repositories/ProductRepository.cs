@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Services;
+using RookieEShopper.SharedLibrary.HelperClasses;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
@@ -31,11 +34,11 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _env = env;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<PagedList<ResponseProductDto>> GetAllProductsAsync(QueryParameters query)
         {
-            return await _context.Products
-                .Include(p => p.Category)
-                .ToListAsync();
+            return await PagedList<ResponseProductDto>.ToPagedList(_context.Products.ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider),
+                    query.PageNumber,
+                    query.PageSize);
         }
 
         public async Task<Product?> GetDomainProductByIdAsync(int productId)
@@ -125,11 +128,17 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,int categoryId)
         {
-            return await _context.Products
-                .Where(p => p.Category.Id == categoryId)
-                .ToListAsync();
+            return await PagedList<ResponseProductDto>.ToPagedList(_context.Products
+                .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
+                .Where(p => p.category.Id == categoryId),
+            query.PageNumber,
+            query.PageSize);
+
+            //return await _context.Products
+            //    .Where(p => p.Category.Id == categoryId)
+            //    .ToListAsync();
         }
 
         public async Task<ResponseProductDto?> GetProductByIdAsync(int productId)

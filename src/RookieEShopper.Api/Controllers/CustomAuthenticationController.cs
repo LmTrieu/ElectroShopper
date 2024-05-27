@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Dto.Customer;
 using RookieEShopper.Application.Repositories;
 
-namespace RookieEShopper.Backend.Controllers
+namespace RookieEShopper.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

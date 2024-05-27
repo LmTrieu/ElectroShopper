@@ -1,4 +1,4 @@
-﻿using RookieEShopper.SharedViewModel;
+﻿using RookieEShopper.SharedLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

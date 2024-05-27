@@ -1,6 +1,7 @@
 ﻿using RookieEShopper.Application.Dto.Category;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.HelperClasses;
 
 namespace RookieEShopper.Application.Repositories
 {
@@ -10,7 +11,7 @@ namespace RookieEShopper.Application.Repositories
 
         Task<string> GetCategoryNameByIdAsync(int id);
 
-        Task<List<Category>> GetAllCategoriesAsync();
+        Task<PagedList<ResponseCategoryDto>> GetAllCategoriesAsync(QueryParameters query);
 
         Task<bool> IsCategoryExistAsync(int id);
 

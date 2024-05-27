@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using RookieEShopper.Application.Dto.Product;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedLibrary.HelperClasses;
 
 namespace RookieEShopper.Application.Repositories
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<PagedList<ResponseProductDto>> GetAllProductsAsync(QueryParameters query);
 
         Task<ResponseProductDto?> GetProductByIdAsync(int productId);
 
@@ -22,7 +24,7 @@ namespace RookieEShopper.Application.Repositories
 
         Task<bool> IsProductExistAsync(int id);
 
-        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);
+        Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId);
 
         Task<string> UploadProductImageAsync(Product product, IFormFile image);
 

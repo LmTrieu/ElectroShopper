@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.CategoryGroup;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedLibrary.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -44,11 +49,13 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<CategoryGroup>> GetCategoryGroupsAsync()
+        public async Task<PagedList<ResponseCategoryGroupDto>> GetCategoryGroupsAsync(QueryParameters query)
         {
-            return await _context.CategoryGroups
+            return await PagedList<ResponseCategoryGroupDto>.ToPagedList(_context.CategoryGroups
                 .Include(cg => cg.Categories)
-                .ToListAsync();
+                .ProjectTo<ResponseCategoryGroupDto>(_mapper.ConfigurationProvider),
+                    query.PageNumber,
+                    query.PageSize);
         }
 
         public async Task<CategoryGroup?> UpdateCategoryListAsync(int id, UpdateCategoryListDto updateCategoryList)

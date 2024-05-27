@@ -1,4 +1,4 @@
-﻿namespace RookieEShopper.SharedViewModel
+﻿namespace RookieEShopper.SharedLibrary.ViewModels
 {
     public class HomePageVM
     {

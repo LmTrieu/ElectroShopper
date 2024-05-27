@@ -3,12 +3,16 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using RookieEShopper.Api.Dto;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedLibrary.HelperClasses;
 
-namespace RookieEShopper.Backend.Controllers
+namespace RookieEShopper.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,63 +27,81 @@ namespace RookieEShopper.Backend.Controllers
             _productValidator = validator;
         }
 
-        // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductDto>>,NotFound<string>>> GetProducts([FromQuery] QueryParameters query)
         {
-            var result = await _productRepository.GetAllProductsAsync();
-            return result is null ?
-                NotFound("No product is available at the moment, try again later") : Ok(result);
+            var result = await _productRepository.GetAllProductsAsync(query);
+            
+            if(result.Count > 0)
+            {
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+                Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return TypedResults.Ok(new ApiListObjectResponse<ResponseProductDto> { Data = result, Message = "Products fetched successfully", Total = result.Count() });
+            }   
+            return TypedResults.NotFound("No product is available at the moment, try again later");
         }
 
-        // GET: api/Products/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        [HttpGet]
+        [Route("Detail/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, NotFound<string>>> GetProduct(int id)
         {
             var product = await _productRepository.GetDomainProductByIdAsync(id);
 
             return product is null ?
-                NotFound("Product not found with the specified ID.") : Ok(product);
+                TypedResults.NotFound("No product is available at the moment, try again later") : 
+                TypedResults.Ok(new ApiSingleObjectResponse<Product> { Data = product, Message = "Products fetched successfully"});
         }
 
-        // PUT: api/Products/5
-        // Fix this shi
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, CreateProductDto productdto)
+        [HttpPut]
+        [Route("Put/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PutProduct(int id, CreateProductDto productdto)
         {
             ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
             {
-                return Ok(await _productRepository.IsProductExistAsync(id) ?
-                    new
+                return TypedResults.Ok(await _productRepository.IsProductExistAsync(id) ?
+                    new ApiSingleObjectResponse<Product>
                     {
                         Message = "Product updated successfully",
-                        Product = await _productRepository.UpdateProductAsync(id, productdto)
+                        Data = await _productRepository.UpdateProductAsync(id, productdto)
                     }
                     :
-                    new
+                    new ApiSingleObjectResponse<Product>
                     {
                         Message = "Product created successfully",
-                        Product = await _productRepository.CreateProductAsync(productdto, null)
+                        Data = await _productRepository.CreateProductAsync(productdto, null)
                     });
             }
             else
             {
-                return BadRequest(validationResult.ToDictionary().ToList());
+                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
+        [Route("Post")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
         {
             ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
             {
-                return Ok(await _productRepository.CreateProductAsync(productdto, galleryImages));
+                return TypedResults.Ok(new ApiSingleObjectResponse<Product>{
+                    Message = "Product posted successfully",
+                    Data = await _productRepository.CreateProductAsync(productdto, galleryImages) 
+                });
             }
             else
             {
-                return BadRequest(validationResult.ToDictionary().ToList());
+                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
             }
         }
 
@@ -98,18 +120,34 @@ namespace RookieEShopper.Backend.Controllers
         //    await _productRepository.UploadProductMainImage(id, image);
         //    return Ok();
         //}
-        [HttpGet]
-        [Route("Category/{categoryId}")]
-        public async Task<Results<Ok<IEnumerable<Product>>, NotFound<string>>> GetProductsByCategory(int categoryId)
-        {
-            var product = await _productRepository.GetProductsByCategoryAsync(categoryId);
 
-            return product.Count() is 0 ?
-                TypedResults.NotFound("Product not found with the specified ID.") : TypedResults.Ok(product);
+        [HttpGet]
+        [Route("Category/{id}")]
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductDto>>, NotFound<string>>> GetProductsByCategory([FromQuery] QueryParameters query, int id)
+        {
+            var result = await _productRepository.GetProductsByCategoryAsync(query, id);
+
+            if (result.Count > 0)
+            {
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+                Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return TypedResults.Ok(new ApiListObjectResponse<ResponseProductDto> { Data = result, Message = "Products fetched successfully", Total = result.Count() });
+            }
+            return
+                TypedResults.NotFound("Product not found with the specified ID.");
         }
 
-        // DELETE: api/Products/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _productRepository.GetDomainProductByIdAsync(id);
@@ -123,6 +161,6 @@ namespace RookieEShopper.Backend.Controllers
                     Message = "Product deleted successfully"
                 });
             return BadRequest();
-        }        
+        }
     }
 }
