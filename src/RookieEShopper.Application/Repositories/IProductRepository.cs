@@ -12,7 +12,7 @@ namespace RookieEShopper.Application.Repositories
 
         Task<ResponseProductDto?> GetProductByIdAsync(int productId);
 
-        Task<Product?> GetDomainProductByIdAsync(int productId);
+        Task<ResponseDomainProductDto?> GetProductDetailByIdAsync(int productId);
 
         Task<List<Product>> GetProductByNameAsync(string productName);
         
@@ -20,13 +20,15 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto);
 
-        Task<bool> DeleteProductAsync(Product product);
+        Task<bool> DeleteProductAsync(int id);
 
         Task<bool> IsProductExistAsync(int id);
 
         Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId);
 
         Task<string> UploadProductImageAsync(Product product, IFormFile image);
+
+        Task<ResponseProductDto> UpdateProductInventoryAsync(int productId, int numOfProduct);
 
     }
 }

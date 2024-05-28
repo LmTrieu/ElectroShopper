@@ -3,13 +3,14 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Services;
 using RookieEShopper.SharedLibrary.HelperClasses;
-using static System.Net.Mime.MediaTypeNames;
+using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -36,15 +37,57 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         public async Task<PagedList<ResponseProductDto>> GetAllProductsAsync(QueryParameters query)
         {
-            return await PagedList<ResponseProductDto>.ToPagedList(_context.Products.ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider),
+            var result = _context.Products
+                .Join(
+                    _context.Inventories,
+                    p => p.Id,
+                    i => i.Product.Id,
+                    (p, i) => new
+                    {
+                        product = p,
+                        numOfProduct = i.StockAmmount,
+                    })
+                .Select(p => new ResponseProductDto
+                {
+                    id = p.product.Id,
+                    description = p.product.Description,
+                    name = p.product.Name,
+                    price = p.product.Price,
+                    mainImagePath = p.product.MainImagePath,
+                    category = _mapper.Map<CategoryVM>(p.product.Category),
+                    numOfProduct = p.numOfProduct
+                });
+
+            return await PagedList<ResponseProductDto>.ToPagedList(result,
                     query.PageNumber,
                     query.PageSize);
         }
 
-        public async Task<Product?> GetDomainProductByIdAsync(int productId)
+        public async Task<ResponseDomainProductDto?> GetProductDetailByIdAsync(int productId)
         {
             var product = await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.ProductReviews)
+                .Join(
+                    _context.Inventories,
+                    p => p.Id,
+                    i => i.Product.Id,
+                    (p, i) => new
+                    {
+                        product = p,
+                        numOfProduct = i.StockAmmount,
+                    })
+                    .Select(p => new ResponseDomainProductDto
+                        {
+                            Id = p.product.Id,
+                            Name = p.product.Name,
+                            Price = p.product.Price,
+                            MainImagePath = p.product.MainImagePath,
+                            ImageGallery = p.product.ImageGallery,
+                            Description = p.product.Description,
+                            ProductReviews = p.product.ProductReviews.Select(pr =>pr.Id).ToList(),
+                            NumOfProduct = p.numOfProduct
+                        })
                 .FirstOrDefaultAsync(p => p.Id == productId);
             return product;
         }
@@ -63,20 +106,16 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             var product = _mapper.Map<CreateProductDto, Product>(productdto);
 
             product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);
-
             product.Brand = await _brandRepository.GetBrandByIdAsync(productdto.BrandId);
 
             await _context.Products.AddAsync(product);
-
-            product.MainImagePath = await UploadProductImageAsync(product, productdto.ProductImage);
-
-            foreach (var image in galleryImages.ToList())
-            {
-                product.ImageGallery.Add(await UploadProductImageAsync(product, image));
-            }
-
             await _context.SaveChangesAsync();
 
+            await CreateInventoryAsync(product, productdto.NumOfProduct);            
+
+            await InitialUploadImageLogic(product, productdto.ProductImage, galleryImages);
+
+            await _context.SaveChangesAsync();
             return product;
         }
 
@@ -85,6 +124,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             Product? result = await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+            await UpdateInventoryAsync(id, productdto.NumOfProduct);
 
             _mapper.Map(productdto, result);
 
@@ -98,12 +139,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .AnyAsync(e => e.Id == id);
         }
 
-        public async Task<bool> DeleteProductAsync(Product product)
+        public async Task<bool> DeleteProductAsync(int id)
         {
             try
             {
-                _context.Products.Remove(product);
-                return await _context.SaveChangesAsync() is 1;
+                _context.Products.Remove(await _context.Products.FindAsync(id));
+                return await _context.SaveChangesAsync() > 0;
             }
             catch
             {
@@ -130,15 +171,31 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,int categoryId)
         {
-            return await PagedList<ResponseProductDto>.ToPagedList(_context.Products
-                .ProjectTo<ResponseProductDto>(_mapper.ConfigurationProvider)
-                .Where(p => p.category.Id == categoryId),
+            var result = _context.Products
+                .Where(p => p.Category.Id == categoryId)
+                .Join(
+                    _context.Inventories,
+                    p => p.Id,
+                    i => i.Product.Id,
+                    (p, i) => new
+                    {
+                        product = p,
+                        numOfProduct = i.StockAmmount,
+                    })
+                .Select(p => new ResponseProductDto
+                {
+                    id = p.product.Id,
+                    description = p.product.Description,
+                    name = p.product.Name,
+                    price = p.product.Price,
+                    mainImagePath = p.product.MainImagePath,
+                    category = _mapper.Map<CategoryVM>(p.product.Category),
+                    numOfProduct = p.numOfProduct
+                });
+
+            return await PagedList<ResponseProductDto>.ToPagedList(result,
             query.PageNumber,
             query.PageSize);
-
-            //return await _context.Products
-            //    .Where(p => p.Category.Id == categoryId)
-            //    .ToListAsync();
         }
 
         public async Task<ResponseProductDto?> GetProductByIdAsync(int productId)
@@ -148,5 +205,64 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _mapper.Map(await _context.Products.FindAsync(productId),product);
             return product;
         }
+
+        public async Task<ResponseProductDto> UpdateProductInventoryAsync(int productId, int numOfProduct)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (await GetInventoryAsync(productId) is not null)
+                await UpdateInventoryAsync(productId, numOfProduct);
+            else if(product is not null)
+                await CreateInventoryAsync(product, numOfProduct);
+
+            return new ResponseProductDto();
+        }
+
+        //--- Service function starts here ---
+
+        private async Task InitialUploadImageLogic(Product product,IFormFile? MainImage, IFormFileCollection? galleryImages)
+        {
+            if (MainImage is not null)
+            {
+                product.MainImagePath = await UploadProductImageAsync(product, MainImage);
+            }
+            if (galleryImages is not null)
+            {
+                foreach (var image in galleryImages.ToList())
+                {
+                    product.ImageGallery.Add(await UploadProductImageAsync(product, image));
+                }
+            }
+        }
+
+        private async Task<Inventory?> GetInventoryAsync(int productId)
+        {
+            return await _context.Inventories
+                .Where(i => i.Product.Id == productId)
+                .Include(i => i.Product)
+                .FirstOrDefaultAsync();
+        }
+
+        private async Task CreateInventoryAsync(Product product, int numOfProduct)
+        {
+            await _context.Inventories.AddAsync(
+                new Inventory
+                {
+                    Product = product,
+                    StockAmmount = numOfProduct
+                });
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task UpdateInventoryAsync(int productId, int numOfProduct)
+        {
+            var inventory = await GetInventoryAsync(productId);
+
+            inventory.StockAmmount = numOfProduct;
+
+            _context.Inventories.Update(inventory);
+        }
+
+
     }
 }

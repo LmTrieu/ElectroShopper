@@ -246,7 +246,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Cart", b =>
@@ -276,7 +276,7 @@ namespace RookieEShopper.Migrations
                         .IsUnique()
                         .HasFilter("[CustomerId] IS NOT NULL");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.CartItem", b =>
@@ -307,7 +307,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Category", b =>
@@ -321,12 +321,12 @@ namespace RookieEShopper.Migrations
                     b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CartegoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CategoryGroupId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -338,7 +338,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("CategoryGroupId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.CategoryGroup", b =>
@@ -359,7 +359,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryGroups");
+                    b.ToTable("CategoryGroups", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Coupon", b =>
@@ -386,7 +386,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Coupons");
+                    b.ToTable("Coupons", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Customer", b =>
@@ -403,7 +403,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Inventory", b =>
@@ -427,7 +427,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Inventories");
+                    b.ToTable("Inventories", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Order", b =>
@@ -455,7 +455,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.OrderDetail", b =>
@@ -491,7 +491,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductReviewId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.Product", b =>
@@ -534,7 +534,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.ProductCategory", b =>
@@ -557,7 +557,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.ProductReview", b =>
@@ -588,7 +588,7 @@ namespace RookieEShopper.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReviews");
+                    b.ToTable("ProductReviews", (string)null);
                 });
 
             modelBuilder.Entity("RookieEShopper.Domain.Data.Entities.BaseApplicationUser", b =>

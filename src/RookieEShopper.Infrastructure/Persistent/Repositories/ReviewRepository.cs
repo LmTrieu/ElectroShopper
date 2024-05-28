@@ -27,8 +27,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _mapper.Map(productReviewDto, productReview);           
 
             if (productReviewDto.ProductId != 0)            
-                productReview.Product = 
-                    await _productReposity.GetDomainProductByIdAsync(productReviewDto.ProductId);
+                productReview.ProductId = (productReviewDto.ProductId);
             
             if (productReviewDto.CustomerId != 0)
                 productReview.Customer = 

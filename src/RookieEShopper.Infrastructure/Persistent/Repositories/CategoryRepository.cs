@@ -37,13 +37,13 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<string> GetCategoryNameByIdAsync(int id)
         {
             var category = await _context.Categories.FindAsync(id);
-            return category is null ? throw new ArgumentException("Category not found with the specified ID.") : category.CartegoryName;
+            return category is null ? throw new ArgumentException("Category not found with the specified ID.") : category.Name;
         }
 
         public async Task<Category> CreateCategoryAsync(CategoryDto category)
         {
             var entityEntry =
-                await _context.Categories.AddAsync(new Category { CartegoryName = category.Name, Description = category.Description });
+                await _context.Categories.AddAsync(new Category { Name = category.Name, Description = category.Description });
             await _context.SaveChangesAsync();
             return entityEntry.Entity;
         }

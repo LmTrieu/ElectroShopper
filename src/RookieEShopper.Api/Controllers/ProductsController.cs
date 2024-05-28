@@ -52,13 +52,13 @@ namespace RookieEShopper.Api.Controllers
 
         [HttpGet]
         [Route("Detail/{id}")]
-        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, NotFound<string>>> GetProduct(int id)
+        public async Task<Results<Ok<ApiSingleObjectResponse<ResponseDomainProductDto>>, NotFound<string>>> GetProduct(int id)
         {
-            var product = await _productRepository.GetDomainProductByIdAsync(id);
+            var product = await _productRepository.GetProductDetailByIdAsync(id);
 
             return product is null ?
                 TypedResults.NotFound("No product is available at the moment, try again later") : 
-                TypedResults.Ok(new ApiSingleObjectResponse<Product> { Data = product, Message = "Products fetched successfully"});
+                TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully"});
         }
 
         [HttpPut]
@@ -84,6 +84,24 @@ namespace RookieEShopper.Api.Controllers
             else
             {
                 return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
+            }
+        }
+
+        [HttpPut]
+        [Route("Put/Stock/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<ResponseProductDto>>, BadRequest>> PutProductStock(int id, int numOfProduct)
+        {
+            if(await _productRepository.IsProductExistAsync(id))
+            {
+                return TypedResults.Ok(new ApiSingleObjectResponse<ResponseProductDto>
+                {
+                    Message = "Product updated successfully",
+                    Data = await _productRepository.UpdateProductInventoryAsync(id, numOfProduct)
+                });
+            }
+            else
+            {
+                return TypedResults.BadRequest();
             }
         }
 
@@ -150,12 +168,11 @@ namespace RookieEShopper.Api.Controllers
         [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _productRepository.GetDomainProductByIdAsync(id);
-            if (product is null)
+            if (await _productRepository.IsProductExistAsync(id))
             {
                 return NotFound("Product not found with the specified ID.");
             }
-            if (await _productRepository.DeleteProductAsync(product))
+            if (await _productRepository.DeleteProductAsync(id))
                 return Ok(new
                 {
                     Message = "Product deleted successfully"
