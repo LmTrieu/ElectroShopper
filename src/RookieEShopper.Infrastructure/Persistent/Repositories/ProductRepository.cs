@@ -86,8 +86,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                             ImageGallery = p.product.ImageGallery,
                             Description = p.product.Description,
                             ProductReviews = p.product.ProductReviews.Select(pr =>pr.Id).ToList(),
-                            NumOfProduct = p.numOfProduct
-                        })
+                            NumOfProduct = p.numOfProduct,
+                            Category = _mapper.Map<CategoryVM>(p.product.Category)
+                    })
                 .FirstOrDefaultAsync(p => p.Id == productId);
             return product;
         }

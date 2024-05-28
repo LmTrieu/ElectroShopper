@@ -10,6 +10,7 @@ using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent.Repositories;
 using RookieEShopper.SharedLibrary.HelperClasses;
+using RookieEShopper.SharedLibrary.ViewModels;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RookieEShopper.Api.Controllers
@@ -52,10 +53,15 @@ namespace RookieEShopper.Api.Controllers
         }
 
         // GET: api/Categories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        [HttpGet]
+        [Route("Detail/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, NotFound<string>>> GetCategory(int id)
         {
-            return await _categoryRepository.GetCategoryByIdAsync(id);
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+
+            return category is null ?
+                TypedResults.NotFound("No product is available at the moment, try again later") :
+                TypedResults.Ok(new ApiSingleObjectResponse<Category> { Data = category, Message = "Products fetched successfully" });
         }
 
         // POST: api/Categories

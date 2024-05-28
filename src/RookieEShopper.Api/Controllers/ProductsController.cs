@@ -61,9 +61,9 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully"});
         }
 
-        [HttpPut]
-        [Route("Put/{id}")]
-        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PutProduct(int id, CreateProductDto productdto)
+        [HttpPatch]
+        [Route("Patch/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PatchProduct(int id, CreateProductDto productdto)
         {
             ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
@@ -88,7 +88,7 @@ namespace RookieEShopper.Api.Controllers
         }
 
         [HttpPut]
-        [Route("Put/Stock/{id}")]
+        [Route("Patch/Stock/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<ResponseProductDto>>, BadRequest>> PutProductStock(int id, int numOfProduct)
         {
             if(await _productRepository.IsProductExistAsync(id))
