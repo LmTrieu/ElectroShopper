@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.ViewModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

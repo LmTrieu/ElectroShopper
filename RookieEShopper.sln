@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.Infrastructure", "src\RookieEShopper.Infrastructure\RookieEShopper.Infrastructure.csproj", "{EF999D2E-56C6-4F7B-AF3C-BC594976EDB6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.SharedViewModel", "src\RookieEShopper.ShardViewModel\RookieEShopper.SharedViewModel.csproj", "{D758438A-F8CC-4C6F-830C-FE594540AEF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.SharedLibrary", "src\RookieEShopper.ShardViewModel\RookieEShopper.SharedLibrary.csproj", "{D758438A-F8CC-4C6F-830C-FE594540AEF1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.CustomerFrontend", "RookieEShopper.CustomerFrontend\RookieEShopper.CustomerFrontend.csproj", "{75405132-C397-48C7-A588-411EA183FFC6}"
 EndProject

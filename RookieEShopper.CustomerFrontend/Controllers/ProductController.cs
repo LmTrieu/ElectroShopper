@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.CustomerFrontend.Models;
 using RookieEShopper.CustomerFrontend.Services.Product;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.CustomerFrontend.Controllers
 {

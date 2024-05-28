@@ -1,5 +1,5 @@
 ﻿using RookieEShopper.CustomerFrontend.Models;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.CustomerFrontend.Services.Product
 {

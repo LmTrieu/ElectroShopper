@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RookieEShopper.CustomerFrontend.Models;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.ViewModels;
 using System.Net.Http;
 using System.Text;
 

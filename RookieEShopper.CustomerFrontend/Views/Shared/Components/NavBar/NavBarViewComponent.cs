@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.CustomerFrontend.Services.Category;
-using RookieEShopper.SharedViewModel;
+using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.CustomerFrontend.Views.Shared.Components.NavBar
 {
