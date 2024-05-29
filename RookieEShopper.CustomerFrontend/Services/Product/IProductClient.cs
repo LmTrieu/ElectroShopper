@@ -1,4 +1,4 @@
-﻿using RookieEShopper.CustomerFrontend.Models;
+﻿using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.CustomerFrontend.Services.Product

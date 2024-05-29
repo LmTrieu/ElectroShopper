@@ -6,7 +6,7 @@
             <div class="row gx-0 gx-md-2 align-items-center">
                 <div class="col-md-3 col-lg-3 col-5">
                     <div class="header-logo">
-                        <a class="mg-logo text-decoration-none" href="index.html">MG WIREZ.</a>
+                        <a class="mg-logo text-decoration-none" href="/">MG WIREZ.</a>
                     </div>
                 </div>
                 <div class="col-md-5 col-lg-6 col-2 order-3 order-md-0 d-flex d-md-block justify-content-end justify-content-md-start text-end">
@@ -19,18 +19,6 @@
                                 <button type="button" class="menu-mobile-close"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
                             <ul class="menu-section mg-menu-outer">
-                                <li class="menu-item-has-children">
-                                    <a class="active-menu" href="javascript:void(0);">HOME <i class="fa-solid fa-caret-down"></i></a>
-                                    <div class="mg-sub-menu-outer">
-                                        <div class="menu-subs">
-                                            <ul>
-                                                <li class="sub-menu-active"><a href="index.html">Home 1</a></li>
-                                                <li><a href="home2.html">Home 2</a></li>
-                                                <li><a href="home3.html">Home 3</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
                                 <li class="menu-item-has-children">
                                     <a href="javascript:void(0);">SHOP <i class="fa-solid fa-caret-down"></i></a>
                                     <div class="mg-sub-menu-outer">
@@ -140,9 +128,10 @@
                                             {
                                                 <a class="dropdown-item mg-font-style" 
                                                     asp-controller="Product"
+                                                    asp-action="Index"
                                                     asp-route-categoryId="@category.Id"
-                                                    asp-route-categoryName="@category.CategoryName">
-                                                    <span>@category.CategoryName</span>
+                                                    asp-route-categoryName="@category.Name">
+                                                    <span>@category.Name</span>
                                                 </a>
                                             }                                         
                                         </li>
@@ -165,7 +154,7 @@
                                         @if (Model.FirstOrDefault().Categories != null && Model.FirstOrDefault().Categories.Count != 0)
                                             foreach (var catergory in Model.FirstOrDefault().Categories)
                                             {
-                                                <option value="@catergory.Id">@catergory.CategoryName</option>
+                                                <option value="@catergory.Id">@catergory.Name</option>
                                             }
                                         else
                                         {

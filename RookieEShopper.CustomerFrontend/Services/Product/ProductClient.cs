@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
-using RookieEShopper.CustomerFrontend.Models;
+using RookieEShopper.Api.Dto;
+using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.SharedLibrary.ViewModels;
 using System.Net.Http;
 using System.Text;
@@ -42,18 +43,18 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
             string content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<ICollection<ProductReviewVM>>(content);
+            return JsonConvert.DeserializeObject<ApiListObjectResponse<ProductReviewVM>>(content)?.Data;
         }
 
         public async Task<ProductVM?> GetProductDetailById(int productId)
         {
-            var response = await _httpClient.GetAsync("/api/Products/" + productId);
+            var response = await _httpClient.GetAsync("/api/Products/Detail/" + productId);
 
             response.EnsureSuccessStatusCode();
 
             string content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<ProductVM>(content);
+            return JsonConvert.DeserializeObject<ApiSingleObjectResponse<ProductVM>>(content)?.Data;
         }
 
         public async Task<ICollection<ProductVM>?> GetProductsAsync()
@@ -64,7 +65,7 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
             string content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<IList<ProductVM>>(content);
+            return JsonConvert.DeserializeObject<ApiListObjectResponse<ProductVM>>(content)?.Data;
         }
 
         public async Task<ICollection<ProductVM>?> GetProductsByCategoryAsync(int categoryId)
@@ -75,7 +76,7 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
             string content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<IList<ProductVM>>(content);
+            return JsonConvert.DeserializeObject<ApiListObjectResponse<ProductVM>>(content)?.Data;
         }
     }
 }

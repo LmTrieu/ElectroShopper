@@ -1,6 +1,8 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using RookieEShopper.Api.Dto;
 using RookieEShopper.SharedLibrary.ViewModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,7 +27,7 @@ namespace RookieEShopper.CustomerFrontend.Services.Category
 
             string content = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<IList<CategoryGroupVM>>(content);
+            return JsonConvert.DeserializeObject<ApiListObjectResponse<CategoryGroupVM>>(content)?.Data;
         }
 
     }

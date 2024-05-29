@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RookieEShopper.CustomerFrontend.Models;
+using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.CustomerFrontend.Services.Product;
 using RookieEShopper.SharedLibrary.ViewModels;
 

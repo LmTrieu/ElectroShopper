@@ -1,4 +1,4 @@
-﻿namespace RookieEShopper.CustomerFrontend.Models
+﻿namespace RookieEShopper.CustomerFrontend.Models.Dto
 {
     public class CreateProductReviewDto
     {
