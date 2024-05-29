@@ -5,7 +5,13 @@ import { Form, Input, Select, InputNumber } from "antd";
 export const ProductCreate = () => {
   const { formProps, saveButtonProps } = useForm({
     action: "create",
-    resource: "products", 
+    resource: "products",
+    meta: {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      hasBody: false
+    } 
   });
 
   const { selectProps: categorySelectProps } = useSelect({

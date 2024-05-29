@@ -1,5 +1,5 @@
-import { GitHubBanner, Refine } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { Refine } from "@refinedev/core";
+import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
@@ -80,7 +80,7 @@ function App() {
                         Title={({ collapsed }) => (
                           <ThemedTitleV2
                             collapsed={collapsed}
-                            text="Refine Project"
+                            text="RookieECommerce Admin Page"
                             icon={<AppIcon />}
                           />
                         )}

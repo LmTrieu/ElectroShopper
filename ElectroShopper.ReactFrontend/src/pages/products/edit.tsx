@@ -3,7 +3,14 @@ import MDEditor from "@uiw/react-md-editor";
 import { Form, Input, InputNumber, Select } from "antd";
 
 export const ProductEdit = () => {
-  const { formProps, saveButtonProps, queryResult, formLoading } = useForm({});
+  const { formProps, saveButtonProps, queryResult, formLoading } = useForm({
+    meta: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      hasBody: false
+    },
+  });
 
   const productData = queryResult?.data?.data;
 

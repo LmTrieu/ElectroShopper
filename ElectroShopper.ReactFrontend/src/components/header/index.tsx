@@ -4,12 +4,10 @@ import {
   Avatar,
   Layout as AntdLayout,
   Space,
-  Switch,
   theme,
   Typography,
 } from "antd";
 import React, { useContext } from "react";
-import { ColorModeContext } from "../../contexts/color-mode";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -25,7 +23,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 }) => {
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
-  const { mode, setMode } = useContext(ColorModeContext);
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -44,13 +41,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
-      <Space>
-        <Switch
-          checkedChildren="🌛"
-          unCheckedChildren="🔆"
-          onChange={() => setMode(mode === "light" ? "dark" : "light")}
-          defaultChecked={mode === "dark"}
-        />
+      <Space>        
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
           {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}

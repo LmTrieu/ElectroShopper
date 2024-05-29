@@ -3,7 +3,7 @@ import type { DataProvider } from "@refinedev/core";
 const API_URL = "https://localhost:7265/api";
 
 export const dataProvider: DataProvider = {
-    getOne: async ({ resource, id, meta }) => {
+    getOne: async ({ resource, id }) => {
         const response = await fetch(`${API_URL}/${resource}/detail/${id}`);
 
         if (response.status < 200 || response.status > 299) throw response;
@@ -13,20 +13,32 @@ export const dataProvider: DataProvider = {
 
         return { data: extractedData };
     },
-    update: async ({ resource, id, variables }) => {
+    update: async ({ resource, id, variables, meta }) => {        
         const params = new URLSearchParams();
+        const { headers, hasBody } = meta;
 
-        Object.entries(variables).forEach(
-          ([key, value]) => 
-            params.append(key, value)
-        );
-        
-        const response = await fetch(`${API_URL}/${resource}/patch/${id}?${params}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        let response;
+        if(!hasBody){
+          Object.entries(variables).forEach(
+            ([key, value]) => 
+              params.append(key, value)
+          );
+          response = await fetch(`${API_URL}/${resource}/patch/${id}?${params}`, {
+            method: "PATCH",
+            headers: {
+              ...headers
+            },
+          });
+        }
+        else{
+          response = await fetch(`${API_URL}/${resource}/patch/${id}?${params}`, {
+            method: "PATCH",
+            body: JSON.stringify(variables),
+            headers: {
+              ...headers
+            },
+          });
+        }        
     
         if (response.status < 200 || response.status > 299) throw response;
     
@@ -35,7 +47,7 @@ export const dataProvider: DataProvider = {
     
         return { data: extractedData };
     },
-    getList: async ({ resource, pagination, filters, sorters, meta }) => {
+    getList: async ({ resource, pagination}) => {
       const params = new URLSearchParams();
 
       if (pagination) {
@@ -55,18 +67,33 @@ export const dataProvider: DataProvider = {
         total: 0, 
       };
     },
-    create: async ({ resource, variables }) => {
+    create: async ({ resource, variables, meta }) => {
+      const { headers, hasBody } = meta;
+
       const params = new URLSearchParams();
-      Object.entries(variables).forEach(
-        ([key, value]) => 
-          params.append(key, value)
-      );
-      const response = await fetch(`${API_URL}/${resource}/Post?${params}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      let response;
+      if(!hasBody){
+        Object.entries(variables).forEach(
+          ([key, value]) => 
+            params.append(key, value)
+        );
+        response = await fetch(`${API_URL}/${resource}/Post?${params}`, {
+          method: "POST",
+          headers: {
+            ...headers
+          },
+        });
+      }
+      else{
+        response = await fetch(`${API_URL}/${resource}/Post`, {
+          method: "POST",
+          body: JSON.stringify(variables),
+          headers: {
+            ...headers
+          },
+        });
+      }
+      
   
       if (response.status < 200 || response.status > 299) throw response;
   
@@ -75,8 +102,16 @@ export const dataProvider: DataProvider = {
 
       return { data: extractedData };
     },
-    deleteOne: () => {
-        throw new Error("Not implemented");
+    deleteOne: async ({ resource, id }) => {
+      const response = await fetch(`${API_URL}/${resource}/delete/${id}`,{
+        method: "DELETE",          
+      });
+
+      if (response.status < 200 || response.status > 299) throw response;
+
+      const data = await response.json();
+
+      return { data };    
     },
     getApiUrl: () => API_URL,
 };
