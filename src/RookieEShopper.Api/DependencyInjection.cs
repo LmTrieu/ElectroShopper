@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using RookieEShopper.Api.Middlewares;
 using System.Text.Json.Serialization;
 
 namespace RookieEShopper.Api
@@ -37,6 +38,8 @@ namespace RookieEShopper.Api
                     }
                 });
             });
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
             return services;
         }
     }

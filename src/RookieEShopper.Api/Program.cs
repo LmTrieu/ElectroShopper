@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using RookieEShopper.Api;
+using RookieEShopper.Api.Middlewares;
 using RookieEShopper.Application;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
@@ -41,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
