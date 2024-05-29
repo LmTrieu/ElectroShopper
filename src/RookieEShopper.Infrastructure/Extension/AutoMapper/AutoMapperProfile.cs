@@ -30,6 +30,7 @@ namespace RookieEShopper.Infrastructure.Extension.AutoMapper
             CreateMap<CategoryGroup, ResponseCategoryGroupDto>();
             CreateMap<Category, CategoryVM>();
             CreateMap<Category, ResponseCategoryDto>();
+            CreateMap<CategoryDto, Category>();
 
             CreateMap<Customer, ResponseCustomerDto>();
             CreateMap<BaseApplicationUser, ResponseCustomerDto>();

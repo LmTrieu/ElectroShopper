@@ -56,9 +56,17 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public Task<Category> UpdateCategoryAsync(Category category)
+        public async Task<Category> UpdateCategoryAsync(int id, CategoryDto categorydto)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FindAsync(id);
+    
+            _mapper.Map(categorydto,category);
+
+            var entityEntry = _context.Categories.Update(category);
+
+            await _context.SaveChangesAsync();
+
+            return entityEntry.Entity;
         }
 
         public Task<bool> IsCategoryExistAsync(int id)

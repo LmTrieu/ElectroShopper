@@ -168,7 +168,7 @@ namespace RookieEShopper.Api.Controllers
         [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            if (await _productRepository.IsProductExistAsync(id))
+            if (!await _productRepository.IsProductExistAsync(id))
             {
                 return NotFound("Product not found with the specified ID.");
             }

@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using RookieEShopper.Api.Dto;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
 
@@ -22,26 +23,38 @@ namespace RookieEShopper.Api.Controllers
         }
         // GET: api/<ReviewController>
         [HttpGet]
-        public async Task<Results<Ok<ICollection<ResponseProductReviewDto>>,BadRequest>> GetProductReviewsAsync()
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>,BadRequest>> GetProductReviewsAsync()
         {
             var productReviews = await _reviewRepository.GetAllReviewsAsync();
-            return TypedResults.Ok(productReviews);
+            return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto> { 
+                Data = productReviews.ToList(), Message = "Products fetched successfully", Total = productReviews.Count() 
+            });
         }
 
         [HttpGet]
         [Route("Customer/{customerId}")]
-        public async Task<Results<Ok<ICollection<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByCustomerAsync(int customerId)
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByCustomerAsync(int customerId)
         {
             var productReviews = await _reviewRepository.GetReviewsByCustomerAsync(customerId);
-            return TypedResults.Ok(productReviews);
+            return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto>
+            {
+                Data = productReviews.ToList(),
+                Message = "Products fetched successfully",
+                Total = productReviews.Count()
+            });
         }
 
         [HttpGet]
         [Route("Product/{productId}")]
-        public async Task<Results<Ok<ICollection<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByProductAsync(int productId)
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByProductAsync(int productId)
         {
             var productReviews = await _reviewRepository.GetReviewsByProductAsync(productId);
-            return TypedResults.Ok(productReviews);
+            return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto>
+            {
+                Data = productReviews.ToList(),
+                Message = "Products fetched successfully",
+                Total = productReviews.Count()
+            });
         }
 
         // GET api/<ReviewController>/5

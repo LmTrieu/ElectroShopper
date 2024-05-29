@@ -28,7 +28,6 @@ namespace RookieEShopper.Api.Controllers
             _categoryGroupRepository = categoryGroupRepository;
         }
 
-        // GET: api/Categories
         [HttpGet]
         public async Task<Results<Ok<ApiListObjectResponse<ResponseCategoryDto>>, NotFound<string>>> GetCategories([FromQuery] QueryParameters query)
         {
@@ -52,7 +51,6 @@ namespace RookieEShopper.Api.Controllers
             return TypedResults.NotFound("No product is available at the moment, try again later");
         }
 
-        // GET: api/Categories/5
         [HttpGet]
         [Route("Detail/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, NotFound<string>>> GetCategory(int id)
@@ -64,30 +62,51 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.Ok(new ApiSingleObjectResponse<Category> { Data = category, Message = "Products fetched successfully" });
         }
 
-        // POST: api/Categories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<Results<Ok<Category>, BadRequest>> PostCategory(CategoryDto categoryDto)
+        [Route("Post")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, BadRequest<string>>> PostCategory(CategoryDto categoryDto)
         {
             var category = await _categoryRepository.CreateCategoryAsync(categoryDto);
 
             if (category is not null)
-                return TypedResults.Ok(category);
+                return TypedResults.Ok(new ApiSingleObjectResponse<Category>
+                {
+                    Data = category,
+                    Message = "Category created"
+                });
 
-            return TypedResults.BadRequest();
+            return TypedResults.BadRequest("Something went wrong    ");
         }
 
-        // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<Results<Ok, BadRequest>> DeleteCategory(int id)
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<Results<Ok<string>, BadRequest<string>>> DeleteCategory(int id)
         {
             if (await _categoryRepository.DeleteCategoryAsync(id))
-                return TypedResults.Ok();
-            return TypedResults.BadRequest();
+                return TypedResults.Ok("Category Deleted");
+            return TypedResults.BadRequest("Something went wrong");
         }
 
+        [HttpPatch]
+        [Route("Patch/{id}")]
+        public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, BadRequest<string>>> PatchCategory(int id, CategoryDto categoryDto)
+        {
+            var category = await _categoryRepository.UpdateCategoryAsync(id, categoryDto);
+
+            if (category is not null)
+                return TypedResults.Ok(new ApiSingleObjectResponse<Category>
+                {
+                    Data = category,
+                    Message = "Category updated"
+                });
+
+            return TypedResults.BadRequest("Something went wrong");
+        }
+
+        //-- CategoryGroup entities enpoints starts here --
+
         [HttpPost]
-        [Route("CategoryGroup")]
+        [Route("CategoryGroup/Post")]
         public async Task<Results<CreatedAtRoute<CategoryGroup>, BadRequest<string>>> CreateCategoryGroup(CreateCategoryGroupDto createCategoryGroupDto)
         {
             CategoryGroup categoryGroup = await _categoryGroupRepository.CreateCategoryGroupAsync(createCategoryGroupDto);

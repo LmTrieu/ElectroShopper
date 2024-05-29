@@ -53,7 +53,7 @@ namespace RookieEShopper.Infrastructure.Persistent
             return services;
         }
 
-        private static IServiceCollection AddUserOptions(this IServiceCollection services) 
+        private static IServiceCollection AddUserOptions(this IServiceCollection services)
         {
             services.Configure<IdentityOptions>(options =>
             {

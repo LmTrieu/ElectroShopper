@@ -19,6 +19,6 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Category> CreateCategoryAsync(CategoryDto category);
 
-        Task<Category> UpdateCategoryAsync(Category category);
+        Task<Category> UpdateCategoryAsync(int id, CategoryDto category);
     }
 }
