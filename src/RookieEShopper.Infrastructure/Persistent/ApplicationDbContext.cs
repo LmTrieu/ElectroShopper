@@ -4,7 +4,7 @@ using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Infrastructure.Persistent
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<BaseApplicationUser>
     {
         public ApplicationDbContext()
         { }

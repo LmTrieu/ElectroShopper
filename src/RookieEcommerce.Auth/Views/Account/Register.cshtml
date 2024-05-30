@@ -1,0 +1,40 @@
+﻿@model LoginCustomerDto;
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="mg-login-reg-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="mg-login-form mg-login-form-js">
+                    <div class="mg-login-form-heading">
+                        <span>Register</span>
+                        <p>
+                            Register here
+                        </p>
+                    </div>
+                    <form asp-action="Register" method="post">
+                        <div class="mg-form-main">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="mg-form-input-field">
+                                        <input asp-for="Email" type="email" placeholder="Email address">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="mg-form-input-field">
+                                        <input asp-for="Password" type="password" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="mg-form-submit-btn">
+                                    <button class="btn">REGISTER</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
