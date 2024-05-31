@@ -260,8 +260,11 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             var inventory = await GetInventoryAsync(productId);
 
             inventory.StockAmmount = numOfProduct;
+            inventory.LastUpdated = DateTime.Now;
 
             _context.Inventories.Update(inventory);
+
+            await _context.SaveChangesAsync();
         }
 
 
