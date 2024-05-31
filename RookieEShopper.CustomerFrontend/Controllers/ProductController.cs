@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.CustomerFrontend.Services.Product;
@@ -35,6 +36,7 @@ namespace RookieEShopper.CustomerFrontend.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateProductReview(CreateProductReviewDto createProductReviewVM)
         {

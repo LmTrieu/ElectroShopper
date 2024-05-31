@@ -76,16 +76,15 @@ var identityServerBuilder = builder.Services.AddIdentityServer(options =>
     options.Events.RaiseInformationEvents = true;
     options.Events.RaiseFailureEvents = true;
     options.Events.RaiseSuccessEvents = true;
-    options.EmitStaticAudienceClaim = true;
+    options.EmitStaticAudienceClaim = false;
 })
     .AddInMemoryIdentityResources(Config.IdentityResources)
+    .AddInMemoryApiScopes(Config.GetApiScopes())
     .AddInMemoryApiResources(Config.Apis)
     .AddInMemoryClients(Config.Clients)
-    .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<BaseApplicationUser>();
 
 identityServerBuilder.AddDeveloperSigningCredential();
-
 
 //builder.Services.AddAuthentication()
 //    .AddGoogle(options =>

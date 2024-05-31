@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using RookieEcommerce.Auth.Services;
@@ -14,29 +15,47 @@ namespace RookieEcommerce.Auth
                     new List<IdentityResource>
                     {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
-                    };
+                new IdentityResources.Profile(),
+                new IdentityResource(
+         name: "roles",
+         userClaims: new[] {JwtClaimTypes.Role})
+                   };
 
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
             {
-                new ApiResource("api.rookie", "RookieEcommerce API")
+                new ApiResource("rookie.admin")
                 {
                     Scopes = {
-                        "read",
-                        "write",
-                        "delete"
+                        "manage"
+                    },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Role
+                    }
+                },
+                new ApiResource("rookie.customer", "RookieEcommerce API for customer")
+                {
+                    Scopes = {
+                        "customer.read",
+                        "customer.write"
+                    },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Role
                     }
                 }
             };
-
-        public static IEnumerable<ApiScope> ApiScopes =>        
-            new List<ApiScope>
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
             {
-                new ApiScope(name: "read",   displayName: "Read your data."),
-                new ApiScope(name: "write",  displayName: "Write your data."),
-                new ApiScope(name: "delete", displayName: "Delete your data.")
+                new ApiScope(name: "manage",   displayName: "Manage your data."),
+
+                new ApiScope(name: "customer.read",    displayName: "Reads you customers information."),
+                new ApiScope(name: "customer.write", displayName: "Allows customer inputs."),
             };
+        }       
 
         public static IEnumerable<Client> Clients =>
             new List<Client>
@@ -44,20 +63,28 @@ namespace RookieEcommerce.Auth
                 new() {
                     ClientId = "mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    
+                    RequirePkce = true,
 
-                    RedirectUris = { ReadConfig.clientUrls["mvc"] +"/signin-oidc" },
+                    RedirectUris = 
+                    {
+                        ReadConfig.clientUrls["mvc"] +"/signin-oidc"
+                    },
                     FrontChannelLogoutUri = ReadConfig.clientUrls["mvc"] +"/signout-callback-oidc",
                     PostLogoutRedirectUris = { ReadConfig.clientUrls["mvc"] +"/signout-callback-oidc" },
 
-                    AllowedScopes = new List<string>
+                    AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
+                    AllowAccessTokensViaBrowser = true,
+
+                    AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api.rookie"
+                        "rookie.customer",
+                        "customer.read",
+                        "customer.write"
                     }                
                 },
                 new() {
@@ -65,7 +92,7 @@ namespace RookieEcommerce.Auth
                     ClientName = "React app",
                     ClientUri = ReadConfig.clientUrls["react"],
 
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.Implicit,
                     RequireClientSecret = false,
 
                     RedirectUris =
@@ -75,16 +102,15 @@ namespace RookieEcommerce.Auth
                     FrontChannelLogoutUri = ReadConfig.clientUrls["react"]+ "/signout-oidc",
                     PostLogoutRedirectUris = { ReadConfig.clientUrls["react"]+"/signout-callback-oidc" },
                     AllowedCorsOrigins = { ReadConfig.clientUrls["react"] },
+                    AllowAccessTokensViaBrowser = true,
 
-                    AllowedScopes = new List<string>
+                    AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api.rookie",
-                        "read",
-                        "write",
-                        "delete"
+                        "rookie.admin",
+                        "manage"
                     }
                 },
                 new() {
@@ -93,7 +119,7 @@ namespace RookieEcommerce.Auth
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
-                    RequireConsent = true,
+                    RequireConsent = false,
                     RequirePkce = true,
 
                     RedirectUris = { ReadConfig.clientUrls["swagger"] +"/swagger/oauth2-redirect.html" },
@@ -101,15 +127,12 @@ namespace RookieEcommerce.Auth
                     PostLogoutRedirectUris = { ReadConfig.clientUrls["swagger"] +"/signout-callback-oidc" },
                     AllowedCorsOrigins = { ReadConfig.clientUrls["swagger"] },
 
-                    AllowedScopes = new List<string>
+                    AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api.rookie",
-                        "read",
-                        "write",
-                        "delete"
+                        "rookie.admin",
+                        "manage"
                     }
                 }
             };

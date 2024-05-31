@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Api.Dto;
@@ -67,6 +68,7 @@ namespace RookieEShopper.Api.Controllers
 
         // POST api/<ReviewController>
         [HttpPost]
+        [Authorize]
         public async Task<Results<Ok<ResponseProductReviewDto>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProductReview(CreateProductReviewDto createProductReviewDto)
         {
             ValidationResult validationResult = _productReviewValidator.Validate(createProductReviewDto);

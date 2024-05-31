@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -34,30 +35,40 @@ namespace RookieEShopper.Infrastructure.Extension.JwtBearer
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Bearer";
-                options.DefaultChallengeScheme = "oidc";
             })
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = "https://localhost:8899";
 
-                    options.Audience = "api.rookie";
                     options.SaveToken = true;
 
-                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                })
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = "https://localhost:8899";
-
-                    options.ClientId = "swagger";
-                    options.ClientSecret = "secret";
-                    options.ResponseType = "code";
-
-                    options.Scope.Add("profile");
-                    options.GetClaimsFromUserInfoEndpoint = true;
-
-                    options.SaveTokens = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudiences = new List<string>
+                            {"rookie.admin","rookie.customer"},
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                    };
                 });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("GodScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", new List<string>{
+                        "manage"
+                    });
+                });
+                options.AddPolicy("CustomerScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", new List<string>{
+                        "customer.read"
+                    });
+                });
+            });
         }
     }
 }

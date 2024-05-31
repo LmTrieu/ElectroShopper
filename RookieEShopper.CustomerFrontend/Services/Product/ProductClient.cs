@@ -9,12 +9,19 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 {
     public class ProductClient : IProductClient
     {
-        private readonly HttpClient _httpClient;
-        public ProductClient(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
+        //private readonly HttpClient _httpClient;
+        //public ProductClient(HttpClient httpClient)
+        //{
+        //    _httpClient = httpClient;
 
-            _httpClient.BaseAddress = new Uri("https://localhost:7265");
+        //    _httpClient.BaseAddress = new Uri("https://localhost:7265");
+        //}
+
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public ProductClient(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task PostProductReviewAsync(CreateProductReviewDto createProductReviewVM)
@@ -28,8 +35,9 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
                     rating = createProductReviewVM.Rating
                 }),
                 Encoding.UTF8,"application/json");
+            var client = _httpClientFactory.CreateClient("apiClient");
 
-            using HttpResponseMessage response = await _httpClient
+            using HttpResponseMessage response = await client
                 .PostAsync("/api/Review", jsonContent);
 
             response.EnsureSuccessStatusCode();
@@ -37,7 +45,9 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
         public async Task<ICollection<ProductReviewVM>?> GetProductReviewsAsync(int productId)
         {
-            var response = await _httpClient.GetAsync("/api/Review/Product/" + productId);
+            var client = _httpClientFactory.CreateClient("apiClient");
+
+            var response = await client.GetAsync("/api/Review/Product/" + productId);
 
             response.EnsureSuccessStatusCode();
 
@@ -48,7 +58,9 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
         public async Task<ProductVM?> GetProductDetailById(int productId)
         {
-            var response = await _httpClient.GetAsync("/api/Products/Detail/" + productId);
+            var client = _httpClientFactory.CreateClient("apiClient");
+
+            var response = await client.GetAsync("/api/Products/Detail/" + productId);
 
             response.EnsureSuccessStatusCode();
 
@@ -59,7 +71,9 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
         public async Task<ICollection<ProductVM>?> GetProductsAsync()
         {
-            var response = await _httpClient.GetAsync("/api/Products");
+            var client = _httpClientFactory.CreateClient("apiClient");
+
+            var response = await client.GetAsync("/api/Products");
 
             response.EnsureSuccessStatusCode();
 
@@ -70,7 +84,9 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
 
         public async Task<ICollection<ProductVM>?> GetProductsByCategoryAsync(int categoryId)
         {
-            var response = await _httpClient.GetAsync("/api/Products/Category/" + categoryId);
+            var client = _httpClientFactory.CreateClient("apiClient");
+
+            var response = await client.GetAsync("/api/Products/Category/" + categoryId);
 
             response.EnsureSuccessStatusCode();
 

@@ -144,7 +144,6 @@ namespace RookieEShopper.Api.Controllers
         //    return Ok();
         //}
 
-        [Authorize]
         [HttpGet]
         [Route("Category/{id}")]
         public async Task<Results<Ok<ApiListObjectResponse<ResponseProductDto>>, NotFound<string>>> GetProductsByCategory([FromQuery] QueryParameters query, int id)
@@ -170,7 +169,7 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.NotFound("Product not found with the specified ID.");
         }
 
-        [Authorize]
+        [Authorize(Policy = "GodScope")]
         [HttpDelete]
         [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
