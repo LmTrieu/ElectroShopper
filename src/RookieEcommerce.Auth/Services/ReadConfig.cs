@@ -14,6 +14,7 @@
                 {
                     ["react"] = configuration["ClientUrls:react"],
                     ["mvc"] = configuration["ClientUrls:mvc"],
+                    ["swagger"] = configuration["ClientUrls:swagger"],
                 };
             }
             catch (Exception)

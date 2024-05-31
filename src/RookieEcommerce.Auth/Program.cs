@@ -1,4 +1,6 @@
-﻿using IdentityServer4;
+﻿//Will clean this later after every things checks out
+
+using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,21 +12,38 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "Everyone";
 
 // Configure Serilog
-//Log.Logger = new LoggerConfiguration()
-//    .MinimumLevel.Debug()
-//    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-//    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-//    .MinimumLevel.Override("System", LogEventLevel.Warning)
-//    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-//    .Enrich.FromLogContext()
-//    .WriteTo.Console(
-//        outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-//        theme: AnsiConsoleTheme.Code)
-//    .CreateLogger();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+        theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
 
-//builder.Host.UseSerilog();
+builder.Host.UseSerilog();
+
+
+//builder.Services.AddCors(options =>
+//{
+//    //Will set policy later
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//                      policy =>
+//                      {
+//                          policy.WithOrigins("https://localhost:7266",
+//                                              "https://localhost:7267",
+//                                              "https://localhost:5184",
+//                                              ReadConfig.clientUrls["swagger"])
+//                                .AllowAnyMethod()
+//                                .AllowAnyHeader();
+//                      });
+//});
 
 builder.Services.AddControllersWithViews();
 
@@ -62,9 +81,11 @@ var identityServerBuilder = builder.Services.AddIdentityServer(options =>
     .AddInMemoryIdentityResources(Config.IdentityResources)
     .AddInMemoryApiResources(Config.Apis)
     .AddInMemoryClients(Config.Clients)
+    .AddInMemoryApiScopes(Config.ApiScopes)
     .AddAspNetIdentity<BaseApplicationUser>();
 
 identityServerBuilder.AddDeveloperSigningCredential();
+
 
 //builder.Services.AddAuthentication()
 //    .AddGoogle(options =>
@@ -84,8 +105,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
+
 app.UseRouting();
 app.UseIdentityServer();
+//app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 app.MapDefaultControllerRoute();
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace RookieEShopper.Infrastructure.Extension.JwtBearer
@@ -14,27 +15,49 @@ namespace RookieEShopper.Infrastructure.Extension.JwtBearer
             configuration.Bind(nameof(jwtOptions), jwtOptions);
             services.AddSingleton(jwtOptions);
 
+            //services.AddAuthentication("Bearer")
+            //.AddJwtBearer("Bearer", options =>
+            //{
+            //    options.Authority = "https://localhost:8899";
+
+            //    options.Audience = "api.rookie";
+            //    options.SaveToken = true;
+
+            //    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            //});
+        }
+
+        public static void AddIdentityServer(this IServiceCollection services, IConfiguration configuration)
+        {
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = "Bearer";
+                options.DefaultChallengeScheme = "oidc";
             })
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer("Bearer", options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+                    options.Authority = "https://localhost:8899";
+
+                    options.Audience = "api.rookie";
+                    options.SaveToken = true;
+
+                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                })
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:8899";
+
+                    options.ClientId = "swagger";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
+
+                    options.Scope.Add("profile");
+                    options.GetClaimsFromUserInfoEndpoint = true;
+
+                    options.SaveTokens = true;
+                });
         }
     }
 }

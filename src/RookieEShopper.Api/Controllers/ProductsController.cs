@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -61,6 +62,8 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully"});
         }
 
+        [Authorize]
+        [EnableCors]
         [HttpPatch]
         [Route("Patch/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PatchProduct(int id, CreateProductDto productdto)
@@ -87,6 +90,7 @@ namespace RookieEShopper.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("Patch/Stock/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<ResponseProductDto>>, BadRequest>> PutProductStock(int id, int numOfProduct)
@@ -105,6 +109,7 @@ namespace RookieEShopper.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Post")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
@@ -139,6 +144,7 @@ namespace RookieEShopper.Api.Controllers
         //    return Ok();
         //}
 
+        [Authorize]
         [HttpGet]
         [Route("Category/{id}")]
         public async Task<Results<Ok<ApiListObjectResponse<ResponseProductDto>>, NotFound<string>>> GetProductsByCategory([FromQuery] QueryParameters query, int id)
@@ -164,6 +170,7 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.NotFound("Product not found with the specified ID.");
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)

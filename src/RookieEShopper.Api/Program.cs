@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using RookieEShopper.Api;
 using RookieEShopper.Api.Middlewares;
 using RookieEShopper.Application;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "ReactAdmin";
@@ -15,8 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:7266",
-                                              "https://localhost:7267")
+                          policy.AllowAnyOrigin()
                                 .AllowAnyMethod()
                                 .AllowAnyHeader();
                       });
@@ -38,7 +39,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.OAuthClientId("swagger");
+        options.OAuthClientSecret("secret");
+        options.OAuthUsePkce();
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "RookieEcommerce API v1");
+    });
 }
 
 app.UseHttpsRedirection();
@@ -51,7 +58,7 @@ app.UseStaticFiles();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.MapIdentityApi<BaseApplicationUser>();
+//app.MapIdentityApi<BaseApplicationUser>();
 
 app.MapControllers();
 

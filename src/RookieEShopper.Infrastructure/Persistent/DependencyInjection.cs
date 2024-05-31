@@ -16,6 +16,7 @@ namespace RookieEShopper.Infrastructure.Persistent
         {
             services.AddPersitence(configuration);
             services.AddJwtAuthentication(configuration);
+            services.AddIdentityServer(configuration);
             services.AddUserOptions();
             services.AddAutoMapperConfiguration();
 
@@ -39,15 +40,7 @@ namespace RookieEShopper.Infrastructure.Persistent
                     providerOptions.EnableRetryOnFailure().CommandTimeout(60);
                 }));
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
-            services.AddScoped<IBrandRepository, BrandRepository>();
-            services.AddScoped<ICartRepository, CartRepository>();
-            services.AddScoped<ICategoryGroupRepository, CategoryGroupRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IReviewRepository, ReviewRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddRepositories();
 
             services.AddTransient<FileService>();
             return services;
@@ -68,5 +61,20 @@ namespace RookieEShopper.Infrastructure.Persistent
 
             return services;
         }
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICustomAuthRepository, CustomAuthRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICategoryGroupRepository, CategoryGroupRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            return services;
+        }
+
     }
 }

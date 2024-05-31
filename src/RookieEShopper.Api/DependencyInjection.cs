@@ -12,32 +12,40 @@ namespace RookieEShopper.Api
             services.AddAuthorization();
 
             services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "RookieEcommerce API", Version = "v1" });
+
+                options.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
                 {
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Description = "Bearer Authentication with JWT Token",
-                    Type = SecuritySchemeType.Http
+                    Type = SecuritySchemeType.OpenIdConnect,
+                    OpenIdConnectUrl = new Uri("https://localhost:8899/.well-known/openid-configuration"),
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("https://localhost:8899/connect/authorize"),
+                            TokenUrl = new Uri("https://localhost:8899/connect/token"), 
+                            Scopes = new Dictionary<string, string>
+                            {
+                                {"api.rookie", "RookieEcommerce API"}
+                            }
+                        }
+                    }
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Bearer",
-                                Type = ReferenceType.SecurityScheme
-                            }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oidc" }
                         },
-                        new List<string>()
+                        new List<string>{ "api.rookie" }
                     }
                 });
             });
+
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             return services;

@@ -14,13 +14,28 @@ namespace RookieEcommerce.Auth
                     new List<IdentityResource>
                     {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
                     };
 
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
             {
                 new ApiResource("api.rookie", "RookieEcommerce API")
+                {
+                    Scopes = {
+                        "read",
+                        "write",
+                        "delete"
+                    }
+                }
+            };
+
+        public static IEnumerable<ApiScope> ApiScopes =>        
+            new List<ApiScope>
+            {
+                new ApiScope(name: "read",   displayName: "Read your data."),
+                new ApiScope(name: "write",  displayName: "Write your data."),
+                new ApiScope(name: "delete", displayName: "Delete your data.")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -29,6 +44,7 @@ namespace RookieEcommerce.Auth
                 new() {
                     ClientId = "mvc",
                     ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
@@ -65,7 +81,35 @@ namespace RookieEcommerce.Auth
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api.rookie"
+                        "api.rookie",
+                        "read",
+                        "write",
+                        "delete"
+                    }
+                },
+                new() {
+                    ClientId = "swagger",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    RequireConsent = true,
+                    RequirePkce = true,
+
+                    RedirectUris = { ReadConfig.clientUrls["swagger"] +"/swagger/oauth2-redirect.html" },
+                    FrontChannelLogoutUri = ReadConfig.clientUrls["swagger"] +"/signout-callback-oidc",
+                    PostLogoutRedirectUris = { ReadConfig.clientUrls["swagger"] +"/signout-callback-oidc" },
+                    AllowedCorsOrigins = { ReadConfig.clientUrls["swagger"] },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "api.rookie",
+                        "read",
+                        "write",
+                        "delete"
                     }
                 }
             };
