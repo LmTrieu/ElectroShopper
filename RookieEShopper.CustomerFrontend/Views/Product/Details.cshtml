@@ -255,7 +255,7 @@
                         <div class="mg-form-section">
                             <div class="container">
                                 <div class="mg-comment-form">
-                                    <form asp-controller="Product" asp-action="CreateProductReview" method="post">
+                                    <form asp-controller="Product" asp-action="CreateProductReview" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
                                         <input hidden asp-for="postReview.ProductId" name="@nameof(Model.postReview.ProductId)" value="@Model.productDetail.Product.Id" />
                                         <input hidden asp-for="postReview.CustomerId" name="@nameof(Model.postReview.CustomerId)" value="1" />
                                         <div><h5>RATE US</h5></div>

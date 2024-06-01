@@ -1,5 +1,4 @@
-﻿@using RookieEShopper.SharedLibrary.ViewModels;
-@model List<CategoryGroupVM>
+﻿@model List<CategoryGroupVM>
 <header>
     <div class="mg-header-outer">
         <div class="container">
@@ -75,12 +74,26 @@
                         <div class="col-12 col-lg-12 col-md-12">
                             <div class="header-icons-outer">
                                 <ul>
-                                    <li class="mg-login-box">
-                                        <div class="mg-login">
-                                            <a class="mg-login-link" href="login.html">LOGIN</a> <span>/</span>
-                                            <a class="" href="login.html">SIGNUP</a>
-                                        </div>
-                                    </li>
+                                    @if (User.Claims.Any()){
+                                        <li class="mg-login-box">
+                                            <div class="mg-login">
+                                                <a>@User.Claims.Where(c => c.Type == "name").Select(c => c.Value).FirstOrDefault()</a>
+                                                <br />
+                                                <a>Logout</a>
+
+                                            </div>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="mg-login-box">
+                                            <div class="mg-login">
+                                                <a class="mg-login-link" href="login.html">LOGIN</a> <span>/</span>
+                                                <a class="" href="login.html">SIGNUP</a>
+                                            </div>
+                                        </li>
+                                    }
+                                    
                                     <li>
                                         <a href="wishlist.html">
                                             <img src="~/images/icons/heart.svg" alt="">

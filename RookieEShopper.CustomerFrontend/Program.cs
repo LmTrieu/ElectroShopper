@@ -6,6 +6,7 @@ using RookieEShopper.CustomerFrontend.Services.Category;
 using RookieEShopper.CustomerFrontend.Services.Product;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,14 +40,33 @@ builder.Services.AddAuthentication(options =>
          options.Events = new OpenIdConnectEvents
          {
 
-             OnTokenResponseReceived = ctx =>
+             OnRedirectToIdentityProvider = async n =>
              {
-                 var accessToken = ctx.TokenEndpointResponse.AccessToken;
-
-                 var idToken = ctx.TokenEndpointResponse.IdToken;
-
-                 return Task.CompletedTask;
+                //save url to state
+                n.ProtocolMessage.State = n.HttpContext.Request.Path.Value.ToString();
              },
+
+             OnTokenValidated = ctx =>
+             {
+                var url = ctx.ProtocolMessage.GetParameter("state");
+                var claims = new List<Claim>
+                {
+                    new Claim("myurl", url)
+                };
+                var appIdentity = new ClaimsIdentity(claims);
+
+                //add url to claims
+                ctx.Principal.AddIdentity(appIdentity);
+
+                return Task.CompletedTask;
+             },
+
+             OnTicketReceived = ctx =>
+             {
+                var url = ctx.Principal.FindFirst("myurl").Value;
+                ctx.ReturnUri = url;
+                return Task.CompletedTask;
+             }
          };
      });
 
