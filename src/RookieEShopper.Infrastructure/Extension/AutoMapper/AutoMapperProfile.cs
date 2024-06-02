@@ -14,7 +14,11 @@ namespace RookieEShopper.Infrastructure.Extension.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<CreateProductDto, Product>();
+            CreateMap<ProductDto, Product>()
+                .ForAllMembers(opts =>
+                {
+                    opts.Condition((src, dest, srcMember) => srcMember != default);
+                });
             CreateMap<Product, Product>();
             CreateMap<Product, ResponseProductDto>();
 

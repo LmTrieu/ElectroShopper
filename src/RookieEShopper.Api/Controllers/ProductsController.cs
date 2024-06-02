@@ -20,9 +20,9 @@ namespace RookieEShopper.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IValidator<CreateProductDto> _productValidator;
+        private readonly IValidator<ProductDto> _productValidator;
 
-        public ProductsController(IProductRepository productRepository, IValidator<CreateProductDto> validator)
+        public ProductsController(IProductRepository productRepository, IValidator<ProductDto> validator)
         {
             _productRepository = productRepository;
             _productValidator = validator;
@@ -62,35 +62,27 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully"});
         }
 
-        [Authorize]
-        [EnableCors]
+        //[Authorize]
         [HttpPatch]
         [Route("Patch/{id}")]
-        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PatchProduct(int id, CreateProductDto productdto)
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<string>>> PatchProduct(int id, ProductDto productdto)
         {
-            ValidationResult validationResult = _productValidator.Validate(productdto);
-            if (validationResult.IsValid)
+            if(await _productRepository.IsProductExistAsync(id))
             {
-                return TypedResults.Ok(await _productRepository.IsProductExistAsync(id) ?
+                return TypedResults.Ok(
                     new ApiSingleObjectResponse<Product>
                     {
                         Message = "Product updated successfully",
                         Data = await _productRepository.UpdateProductAsync(id, productdto)
-                    }
-                    :
-                    new ApiSingleObjectResponse<Product>
-                    {
-                        Message = "Product created successfully",
-                        Data = await _productRepository.CreateProductAsync(productdto, null)
                     });
             }
             else
             {
-                return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
+                return TypedResults.BadRequest("Product not found");                
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut]
         [Route("Patch/Stock/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<ResponseProductDto>>, BadRequest>> PutProductStock(int id, int numOfProduct)
@@ -109,17 +101,17 @@ namespace RookieEShopper.Api.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [Route("Post")]
-        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(CreateProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(ProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
         {
             ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
             {
                 return TypedResults.Ok(new ApiSingleObjectResponse<Product>{
                     Message = "Product posted successfully",
-                    Data = await _productRepository.CreateProductAsync(productdto, galleryImages) 
+                    Data = await _productRepository.CreateProductAsync(productdto, galleryImages)
                 });
             }
             else

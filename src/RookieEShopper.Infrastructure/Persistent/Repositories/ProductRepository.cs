@@ -102,9 +102,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return product;
         }
 
-        public async Task<Product?> CreateProductAsync(CreateProductDto productdto, IFormFileCollection? galleryImages)
+        public async Task<Product?> CreateProductAsync(ProductDto productdto, IFormFileCollection? galleryImages)
         {
-            var product = _mapper.Map<CreateProductDto, Product>(productdto);
+            var product = _mapper.Map<ProductDto, Product>(productdto);
 
             product.Category = await _categoryRepository.GetCategoryByIdAsync(productdto.CategoryId);
             product.Brand = await _brandRepository.GetBrandByIdAsync(productdto.BrandId);
@@ -120,23 +120,34 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             return product;
         }
 
-        public async Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto)
+        public async Task<Product?> UpdateProductAsync(int id, ProductDto productdto)
         {
             Product? result = await _context.Products
+                .Where(p => p.Id == id)
                 .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync();
 
-            await UpdateInventoryAsync(id, productdto.NumOfProduct);
+            if (productdto.Price == 0)
+                productdto.Price = result.Price;    
 
             _mapper.Map(productdto, result);
 
-            result.Category = await _context.Categories
-                .FirstOrDefaultAsync(p => p.Id == productdto.CategoryId);
+            if (productdto.NumOfProduct > 0)
+                await UpdateInventoryAsync(id, productdto.NumOfProduct);
 
-            result.Brand = await _context.Brands
-                .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
+            if (productdto.CategoryId != 0)
+                result.Category = await _context.Categories
+                    .FirstOrDefaultAsync(p => p.Id == productdto.CategoryId);
+            
+            if (productdto.BrandId!= 0)
+                result.Brand = await _context.Brands
+                    .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
+
+            if (productdto.ProductImage!= null)
+                result.MainImagePath = await UploadProductImageAsync(result, productdto.ProductImage);
 
             await _context.SaveChangesAsync();
+
             return result;
         }
 
@@ -162,11 +173,20 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<string> UploadProductImageAsync(Product product, IFormFile image)
         {
             var folderPath = _env.ContentRootPath + "\\wwwroot\\ProductImages\\" + product.Id;
-
+            
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
+            //else
+            //{                
+            //    var existingFiles = Directory.GetFiles(folderPath);
+            //    foreach (var file in existingFiles)
+            //    {
+            //        if (file.Contains(product.MainImagePath))
+            //            File.Delete(file);
+            //    }
+            //}
 
             var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
 

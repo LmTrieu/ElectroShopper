@@ -16,9 +16,9 @@ namespace RookieEShopper.Application.Repositories
 
         Task<List<Product>> GetProductByNameAsync(string productName);
         
-        Task<Product?> CreateProductAsync(CreateProductDto productdto, IFormFileCollection galleryImages);
+        Task<Product?> CreateProductAsync(ProductDto productdto, IFormFileCollection galleryImages);
 
-        Task<Product?> UpdateProductAsync(int id, CreateProductDto productdto);
+        Task<Product?> UpdateProductAsync(int id, ProductDto productdto);
 
         Task<bool> DeleteProductAsync(int id);
 

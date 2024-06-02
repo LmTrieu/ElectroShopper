@@ -11,7 +11,7 @@ namespace RookieEShopper.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<IValidator<LoginCustomerDto>, LoginCustomerValidator>();
-            services.AddScoped<IValidator<CreateProductDto>, CreateProductDtoValidator>();
+            services.AddScoped<IValidator<ProductDto>, CreateProductDtoValidator>();
             services.AddScoped<IValidator<CreateProductReviewDto>, CreateProductReviewDtoValidator>();
 
             return services;

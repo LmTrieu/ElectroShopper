@@ -80,10 +80,6 @@ builder.Services.AddHttpClient("apiClient", client =>
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 }).AddHttpMessageHandler<AccessTokenHandler>();
 
-// Add services to the container.
-//builder.Services.AddHttpClient<ICategoryClient, CategoryClient>();
-//builder.Services.AddHttpClient<IProductClient, ProductClient>();
-
 builder.Services.AddScoped<ICategoryClient, CategoryClient>();
 builder.Services.AddScoped<IProductClient, ProductClient>();
 
