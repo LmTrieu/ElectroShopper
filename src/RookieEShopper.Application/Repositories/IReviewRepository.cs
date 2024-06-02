@@ -8,7 +8,7 @@ namespace RookieEShopper.Application.Repositories
         public Task<ResponseProductReviewDto?> GetReviewByIdAsync(int id);
         public Task<ICollection<ResponseProductReviewDto>?> GetAllReviewsAsync();
         public Task<ICollection<ResponseProductReviewDto>?> GetReviewsByProductAsync(int productId);
-        public Task<ICollection<ResponseProductReviewDto>?> GetReviewsByCustomerAsync(int customerId);
+        public Task<ICollection<ResponseProductReviewDto>?> GetReviewsByCustomerAsync(Guid customerId);
         public Task<ResponseProductReviewDto?> CreateReviewAsync(CreateProductReviewDto productReviewDto);
     }
 }

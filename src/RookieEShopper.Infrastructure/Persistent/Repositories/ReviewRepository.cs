@@ -43,7 +43,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             ResponseProductReviewDto response = _mapper.Map<ResponseProductReviewDto>(productReview);
 
             response.Product = await _productReposity.GetProductByIdAsync((int)entityEntry.Entity.ProductId);
-            response.Customer = await _customerRepository.GetCustomerByIdAsync((int)entityEntry.Entity.CustomerId);
+            response.Customer = await _customerRepository.GetCustomerByIdAsync((Guid)entityEntry.Entity.CustomerId);
 
             return response;
         }
@@ -63,7 +63,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     , new ResponseProductReviewDto()
                     {
                         Product = await _productReposity.GetProductByIdAsync((int) productReview.ProductId),
-                        Customer = await _customerRepository.GetCustomerByIdAsync((int) productReview.CustomerId)
+                        Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }            
 
@@ -83,12 +83,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             response = _mapper.Map<ResponseProductReviewDto>(productReview);
 
             response.Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId);
-            response.Customer = await _customerRepository.GetCustomerByIdAsync((int)productReview.CustomerId);
+            response.Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId);
 
             return response;
         }
 
-        public async Task<ICollection<ResponseProductReviewDto>?> GetReviewsByCustomerAsync(int customerId)
+        public async Task<ICollection<ResponseProductReviewDto>?> GetReviewsByCustomerAsync(Guid customerId)
         {
             var productReviews = await _context.ProductReviews
                 .Include(r => r.Customer)
@@ -104,7 +104,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     , new ResponseProductReviewDto()
                     {
                         Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
-                        Customer = await _customerRepository.GetCustomerByIdAsync((int)productReview.CustomerId)
+                        Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }
 
@@ -127,7 +127,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     , new ResponseProductReviewDto()
                     {
                         Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
-                        Customer = await _customerRepository.GetCustomerByIdAsync((int)productReview.CustomerId)
+                        Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }
 

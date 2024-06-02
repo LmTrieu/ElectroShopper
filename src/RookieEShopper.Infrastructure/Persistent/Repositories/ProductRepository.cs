@@ -130,6 +130,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             _mapper.Map(productdto, result);
 
+            result.Category = await _context.Categories
+                .FirstOrDefaultAsync(p => p.Id == productdto.CategoryId);
+
+            result.Brand = await _context.Brands
+                .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
+
             await _context.SaveChangesAsync();
             return result;
         }
@@ -172,6 +178,20 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,int categoryId)
         {
+            var result3 = _context.Products
+                .Where(p => p.Category.Id == categoryId);
+
+            var result2 = _context.Products
+                .Where(p => p.Category.Id == categoryId)
+                .Join(
+                    _context.Inventories,
+                    p => p.Id,
+                    i => i.Product.Id,
+                    (p, i) => new
+                    {
+                        product = p,
+                        numOfProduct = i.StockAmmount,
+                    });
             var result = _context.Products
                 .Where(p => p.Category.Id == categoryId)
                 .Join(

@@ -6,7 +6,7 @@ namespace RookieEShopper.Domain.Data.Entities
     public class ProductReview
     {
         public int Id { get; set; }
-        public int? CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public Customer? Customer { get; set; }
         public int? ProductId { get; set; }
         public Product? Product { get; set; }

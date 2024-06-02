@@ -17,9 +17,12 @@ namespace RookieEcommerce.Auth
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResource(
-         name: "roles",
-         userClaims: new[] {JwtClaimTypes.Role})
-                   };
+                    name: "roles",
+                    userClaims: [JwtClaimTypes.Role]),
+                new IdentityResource(
+                    name: "customer.claims",
+                    userClaims: ["customer.id"]),                     
+                    };
 
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
@@ -81,10 +84,11 @@ namespace RookieEcommerce.Auth
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Profile,                       
                         "rookie.customer",
                         "customer.read",
-                        "customer.write"
+                        "customer.write",
+                        "customer.claims"
                     }                
                 },
                 new() {
@@ -132,7 +136,8 @@ namespace RookieEcommerce.Auth
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "rookie.admin",
-                        "manage"
+                        "manage",
+                        "customer.claims"
                     }
                 }
             };

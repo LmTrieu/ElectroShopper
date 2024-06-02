@@ -7,7 +7,7 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<IEnumerable<ResponseCustomerDto?>> GetAllCustomerAsync();
 
-        Task<ResponseCustomerDto?> GetCustomerByIdAsync(int id);
+        Task<ResponseCustomerDto?> GetCustomerByIdAsync(Guid id);
 
         Task<Customer?> GetDomainCustomerByIdAsync(int id);
 

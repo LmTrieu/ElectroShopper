@@ -78,6 +78,8 @@
                                         <li class="mg-login-box">
                                             <div class="mg-login">
                                                 <a>@User.Claims.Where(c => c.Type == "name").Select(c => c.Value).FirstOrDefault()</a>
+
+                                                <a>@User.Claims.Where(c => c.Type == "customer.id").Select(c => c.Value).FirstOrDefault()</a>
                                                 <br />
                                                 <a>Logout</a>
 

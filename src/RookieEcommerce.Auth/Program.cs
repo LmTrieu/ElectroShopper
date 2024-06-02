@@ -27,23 +27,7 @@ Log.Logger = new LoggerConfiguration()
         theme: AnsiConsoleTheme.Code)
     .CreateLogger();
 
-builder.Host.UseSerilog();
-
-
-//builder.Services.AddCors(options =>
-//{
-//    //Will set policy later
-//    options.AddPolicy(name: MyAllowSpecificOrigins,
-//                      policy =>
-//                      {
-//                          policy.WithOrigins("https://localhost:7266",
-//                                              "https://localhost:7267",
-//                                              "https://localhost:5184",
-//                                              ReadConfig.clientUrls["swagger"])
-//                                .AllowAnyMethod()
-//                                .AllowAnyHeader();
-//                      });
-//});
+builder.Host.UseSerilog();    
 
 builder.Services.AddControllersWithViews();
 
@@ -78,6 +62,7 @@ var identityServerBuilder = builder.Services.AddIdentityServer(options =>
     options.Events.RaiseSuccessEvents = true;
     options.EmitStaticAudienceClaim = false;
 })
+    .AddProfileService<ProfileService>()
     .AddInMemoryIdentityResources(Config.IdentityResources)
     .AddInMemoryApiScopes(Config.GetApiScopes())
     .AddInMemoryApiResources(Config.Apis)

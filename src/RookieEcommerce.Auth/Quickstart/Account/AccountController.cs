@@ -234,7 +234,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
                     NormalizedEmail = _normalizer.NormalizeEmail(registerRequestBodyDto.Email),
                     UserName = registerRequestBodyDto.Email,
                     NormalizedUserName = _normalizer.NormalizeName(registerRequestBodyDto.Email),
-                    //CustomerId = 
+                    CustomerId = new Guid()
                 },
                 registerRequestBodyDto.Password);
 

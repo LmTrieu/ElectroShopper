@@ -10,7 +10,7 @@ namespace RookieEShopper.Domain.Data.Entities
     public class Cart
     {
         public int Id { get; set; }
-        public int? CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         [Precision(18,2)]
         public decimal Total { get; set; }
         public List<CartItem> Items { get; set; } = new List<CartItem>();

@@ -34,7 +34,7 @@ namespace RookieEShopper.Api.Controllers
 
         [HttpGet]
         [Route("Customer/{customerId}")]
-        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByCustomerAsync(int customerId)
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsByCustomerAsync(Guid customerId)
         {
             var productReviews = await _reviewRepository.GetReviewsByCustomerAsync(customerId);
             return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto>

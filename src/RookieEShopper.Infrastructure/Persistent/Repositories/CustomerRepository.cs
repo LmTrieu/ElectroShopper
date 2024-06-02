@@ -52,7 +52,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<ResponseCustomerDto?> GetCustomerByIdAsync(int id)
+        public async Task<ResponseCustomerDto?> GetCustomerByIdAsync(Guid id)
         {         
             return await _context.BaseApplicationUsers
                 .Where(u => u.Customer.Id == id)
