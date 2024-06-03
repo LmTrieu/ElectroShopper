@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityModel;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RookieEShopper.Application.Service.Account;
+using RookieEShopper.Infrastructure.Services;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
+using System.Linq;
+using System.Security.Claims;
 
 namespace RookieEShopper.Infrastructure.Extension.JwtBearer
 {
@@ -30,6 +34,8 @@ namespace RookieEShopper.Infrastructure.Extension.JwtBearer
 
         public static void AddIdentityServer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IUserServices, UserServices>();
+            
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddAuthentication(options =>
@@ -50,6 +56,39 @@ namespace RookieEShopper.Infrastructure.Extension.JwtBearer
                             {"rookie.admin","rookie.customer"},
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async cxt =>
+                        {
+                            var userService = cxt.HttpContext.RequestServices.GetRequiredService<IUserServices>();
+
+                            if (await userService.IsCustomerExist(new Guid(cxt.Principal.FindFirst("sub").Value)))
+                                return;
+
+                            var userInfoRequest = new UserInfoRequest
+                            {
+                                Address = options.Authority + "/connect/userinfo",
+                                Token = cxt.SecurityToken.UnsafeToString()
+                            };
+
+                            using (var client = new HttpClient())
+                            {
+                                var response = await client.GetUserInfoAsync(userInfoRequest);
+
+                                if (!response.Claims.IsNullOrEmpty())
+                                {                                    
+                                    var userId = new Guid(response.Claims.FirstOrDefault(x => x.Type == "sub")?.Value);
+                                    var userName = response.Claims.FirstOrDefault(x => x.Type == "name")?.Value;
+                                    var userEmail = response.Claims.FirstOrDefault(x => x.Type == "email")?.Value;
+
+                                    if (userId != Guid.Empty && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userEmail))
+                                    {                                        
+                                        await userService.EnsureUserExistsAsync(userId, userName, userEmail);
+                                    }
+                                }
+                            }
+                        }
                     };
                 });
             services.AddAuthorization(options =>

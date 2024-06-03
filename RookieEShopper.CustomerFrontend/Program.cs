@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using RookieEShopper.CustomerFrontend.Services;
 using RookieEShopper.CustomerFrontend.Services.Category;
@@ -20,11 +21,17 @@ builder.Services.AddAuthentication(options =>
         options.DefaultScheme = "Cookie";
         options.DefaultChallengeScheme = "oidc";
     })
-    .AddCookie("Cookie")
-    .AddOpenIdConnect("oidc", options =>
-     {
-         options.Authority = "https://localhost:8899";
+    .AddCookie("Cookie", options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.Cookie.MaxAge = options.ExpireTimeSpan;
+        options.SlidingExpiration = true;
 
+    })
+    .AddOpenIdConnect("oidc", options =>
+     {        
+         options.Authority = "https://localhost:8899";
+         
          options.ClientId = "mvc";
          options.ClientSecret = "secret";
          options.ResponseType = "code";
@@ -32,41 +39,42 @@ builder.Services.AddAuthentication(options =>
          options.Scope.Add("profile");
          options.Scope.Add("customer.read");
          options.Scope.Add("customer.write");
+         options.Scope.Add("email");
 
          options.GetClaimsFromUserInfoEndpoint = true;
 
-         options.SaveTokens = true;
+         options.SaveTokens = true;         
 
          options.Events = new OpenIdConnectEvents
          {
 
-             OnRedirectToIdentityProvider = async n =>
-             {
-                //save url to state
-                n.ProtocolMessage.State = n.HttpContext.Request.Path.Value.ToString();
-             },
+             //OnRedirectToIdentityProvider = async n =>
+             //{
+             //   //save url to state
+             //   n.ProtocolMessage.State = n.HttpContext.Request.Path.Value.ToString();
+             //},
 
-             OnTokenValidated = ctx =>
-             {
-                var url = ctx.ProtocolMessage.GetParameter("state");
-                var claims = new List<Claim>
-                {
-                    new Claim("myurl", url)
-                };
-                var appIdentity = new ClaimsIdentity(claims);
+             //OnTokenValidated = ctx =>
+             //{
+             //   var url = ctx.ProtocolMessage.GetParameter("state");
+             //   var claims = new List<Claim>
+             //   {
+             //       new Claim("myurl", url)
+             //   };
+             //   var appIdentity = new ClaimsIdentity(claims);
 
-                //add url to claims
-                ctx.Principal.AddIdentity(appIdentity);
+             //   //add url to claims
+             //   ctx.Principal.AddIdentity(appIdentity);
 
-                return Task.CompletedTask;
-             },
+             //   return Task.CompletedTask;
+             //},
 
-             OnTicketReceived = ctx =>
-             {
-                var url = ctx.Principal.FindFirst("myurl").Value;
-                ctx.ReturnUri = url;
-                return Task.CompletedTask;
-             }
+             //OnTicketReceived = ctx =>
+             //{
+             //   var url = ctx.Principal.FindFirst("myurl").Value;
+             //   ctx.ReturnUri = url;
+             //   return Task.CompletedTask;
+             //}
          };
      });
 

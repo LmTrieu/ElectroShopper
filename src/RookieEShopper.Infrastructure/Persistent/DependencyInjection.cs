@@ -20,7 +20,8 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddUserOptions();
             services.AddAutoMapperConfiguration();
 
-            DbSeed.Initializer(services.BuildServiceProvider());
+
+            DbSeed.EnsureSeedData(configuration.GetConnectionString("DefaultConnection"), services.BuildServiceProvider());
 
             return services;
         }

@@ -10,6 +10,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using RookieEcommerce.Auth.Models.Dtos;
 using RookieEcommerce.Auth.Quickstart;
 using System;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 
 namespace RookieEcommerce.Auth.Quickstart.Account
@@ -222,7 +224,8 @@ namespace RookieEcommerce.Auth.Quickstart.Account
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(LoginCustomerDto registerRequestBodyDto)
+        [DisableCors]
+        public async Task Register(RegisterCustomerDto registerRequestBodyDto)
         {
             if (await IsEmailTaken(registerRequestBodyDto.Email))
                 throw new ArgumentNullException(nameof(registerRequestBodyDto), "Email already taken");
@@ -238,9 +241,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
                 },
                 registerRequestBodyDto.Password);
 
-            
-
-            return View(nameof(Login));
+            Response.Redirect(registerRequestBodyDto.ReturnUrl);
         }
         private async Task<bool> IsEmailTaken(string email)
         {

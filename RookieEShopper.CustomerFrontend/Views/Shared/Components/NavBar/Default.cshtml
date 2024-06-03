@@ -78,11 +78,8 @@
                                         <li class="mg-login-box">
                                             <div class="mg-login">
                                                 <a>@User.Claims.Where(c => c.Type == "name").Select(c => c.Value).FirstOrDefault()</a>
-
-                                                <a>@User.Claims.Where(c => c.Type == "customer.id").Select(c => c.Value).FirstOrDefault()</a>
                                                 <br />
-                                                <a>Logout</a>
-
+                                                <a asp-controller="Auth" asp-action="Logout">Logout</a>
                                             </div>
                                         </li>
                                     }
@@ -90,8 +87,8 @@
                                     {
                                         <li class="mg-login-box">
                                             <div class="mg-login">
-                                                <a class="mg-login-link" href="login.html">LOGIN</a> <span>/</span>
-                                                <a class="" href="login.html">SIGNUP</a>
+                                                <a asp-controller="Auth" asp-action="Login">LOGIN</a> <span>/</span>
+                                                <a href="https://localhost:8899/Account/Register?returnUrl=https://localhost:7063">SIGNUP</a>
                                             </div>
                                         </li>
                                     }

@@ -105,7 +105,7 @@ if (seed)
     var services = scope.ServiceProvider;
     var config = services.GetRequiredService<IConfiguration>();
     var connectionString = config.GetConnectionString("DefaultConnection");
-    SeedRole.EnsureSeedData(connectionString, services);
+    SeedDb.EnsureSeedData(connectionString, services);
 
     Log.Information("Done seeding database.");
     return;

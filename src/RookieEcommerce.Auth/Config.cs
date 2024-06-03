@@ -16,6 +16,7 @@ namespace RookieEcommerce.Auth
                     {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email(),
                 new IdentityResource(
                     name: "roles",
                     userClaims: [JwtClaimTypes.Role]),
@@ -80,11 +81,13 @@ namespace RookieEcommerce.Auth
 
                     AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
                     AllowAccessTokensViaBrowser = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
 
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,                       
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
                         "rookie.customer",
                         "customer.read",
                         "customer.write",
@@ -112,6 +115,7 @@ namespace RookieEcommerce.Auth
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "rookie.admin",
                         "manage"
@@ -130,6 +134,7 @@ namespace RookieEcommerce.Auth
                     FrontChannelLogoutUri = ReadConfig.clientUrls["swagger"] +"/signout-callback-oidc",
                     PostLogoutRedirectUris = { ReadConfig.clientUrls["swagger"] +"/signout-callback-oidc" },
                     AllowedCorsOrigins = { ReadConfig.clientUrls["swagger"] },
+                    AlwaysIncludeUserClaimsInIdToken = true,
 
                     AllowedScopes =
                     {

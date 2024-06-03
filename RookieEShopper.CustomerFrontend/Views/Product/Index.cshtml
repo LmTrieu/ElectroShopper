@@ -187,13 +187,13 @@
             @foreach (var product in Model)
             {
                 <div class="col-md-4 col-sm-6 col-6">
-                    <div class="mg-tab-grid-box">
+                    <div class="card mg-tab-grid-box">
                         <div class="mg-tab-img-box">
-                            <div class="mg-tabs-img">
+                            <div class="card-img-top mg-tabs-img">
                                 <a  asp-controller="Product"
                                     asp-action="Details"
                                     asp-route-productId="@product.Id">
-                                    <img src="https://localhost:7265/ProductImages/@product.Id/@product.MainImagePath" alt="@product.Name">
+                                    <img class="card-img-top-or" src="https://localhost:7265/ProductImages/@product.Id/@product.MainImagePath" alt="@product.Name">
                                 </a>
                             </div>
                             <div class="mg-overlay">
@@ -218,7 +218,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="mg-tab-text mt-3">
+                        <div class="card-body mg-tab-text mt-3">
                             <div class="mg-tab-text-top d-flex justify-content-between align-items-center">
                                 <div class="mg-small-heading">
                                     <a class="text-decoration-none" href="shop.htm"><span>@ViewData["CategoryName"]</span></a>

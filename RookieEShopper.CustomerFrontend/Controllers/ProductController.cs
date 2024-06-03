@@ -38,11 +38,18 @@ namespace RookieEShopper.CustomerFrontend.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> CreateProductReview(CreateProductReviewDto createProductReviewVM)
+        [Route("CreateReview/{id}")]
+        public async Task<ActionResult> CreateProductReview(int id, CreateProductReviewDto createProductReviewVM)
         {
             await _productClient.PostProductReviewAsync(createProductReviewVM);
             return RedirectToAction("Details",new {productId = createProductReviewVM.ProductId});
         }
 
+        [Authorize]
+        [Route("CreateReview/{id}")]
+        public ActionResult CreateProductReview(int id)
+        {
+            return RedirectToAction("Details", new { productId = id});
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace RookieEcommerce.Auth.Services
 {
-    public class SeedRole
+    public class SeedDb
     {
         public static async void EnsureSeedData(string connectionString, IServiceProvider serviceProvider)
         {

@@ -1,53 +1,121 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.Infrastructure.Persistent;
 
 namespace RookieEShopper.Infrastructure.Services
 {
     public static class DbSeed
     {
-        public static async void Initializer(IServiceProvider serviceProvider)
+        public static async void EnsureSeedData(string connectionString, IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-
-            string[] roles = new string[] { "Customer", "Administrator", "Seller" };
-
-            foreach (string role in roles)
+            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                if (roleManager.Roles.Where(r => r.Name == role).IsNullOrEmpty())
+                try
                 {
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    context.Database.Migrate();
+
+                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<BaseApplicationUser>>();
+                    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                    IdentityRole adminRole, customerRole;
+                    CreateRoles(roleManager, out adminRole, out customerRole);
+                    //CreateAccounts(userManager, adminRole, customerRole);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
                 }
             }
-
-            //var Customer = new BaseApplicationUser
-            //{
-            //    Email = "customerA@gmail.com"
-            //};
-
-            //if (!context.Users.Any(u => u.UserName == Customer.Email))
-            //{
-            //    var password = new PasswordHasher<BaseApplicationUser>();
-            //    var hashed = password.HashPassword(Customer, "Abc@321");
-            //    Customer.PasswordHash = hashed;
-
-            //    var userStore = new UserStore<BaseApplicationUser>(context);
-            //    var result = userStore.CreateAsync(Customer);
-            //}
-
-            //AssignRoles(serviceProvider, Customer.Email, roles);
-
-            //context.SaveChangesAsync();
         }
 
-        public static async Task<IdentityResult> AssignRoles(IServiceProvider services, string email, string[] roles)
+        private static void CreateRoles(RoleManager<IdentityRole> roleManager, out IdentityRole? adminRole, out IdentityRole? customerRole)
         {
-            UserManager<BaseApplicationUser> _userManager = services.GetService<UserManager<BaseApplicationUser>>();
-            BaseApplicationUser user = await _userManager.FindByEmailAsync(email);
-            var result = await _userManager.AddToRolesAsync(user, roles);
+            adminRole = roleManager.FindByNameAsync("Admin").Result;
+            if (adminRole == null)
+            {
+                adminRole = new IdentityRole
+                {
+                    Name = "Admin",
+                };
+                _ = roleManager.CreateAsync(new IdentityRole("Admin")).Result;
 
-            return result;
+                //roleManager.AddClaimAsync(adminRole, new(JwtClaimTypes.Role, "Admin")).Wait();
+            }
+
+            customerRole = roleManager.FindByNameAsync("Customer").Result;
+            if (customerRole == null)
+            {
+                customerRole = new IdentityRole
+                {
+                    Name = "Customer",
+                };
+                _ = roleManager.CreateAsync(new IdentityRole("Customer")).Result;
+
+                //roleManager.AddClaimAsync(adminRole, new(JwtClaimTypes.Role, "Customer")).Wait();
+            }
+        }
+        private static void CreateAccounts(UserManager<BaseApplicationUser> userManager, IdentityRole adminRole, IdentityRole customerRole)
+        {
+            var lmtrieu = userManager.FindByNameAsync("lmtrieu").Result;
+
+            if (lmtrieu is null)
+            {
+                lmtrieu = new()
+                {
+                    UserName = "lmtrieu250902@gmail.com",
+                    Email = "lmtrieu250902@gmail.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "1234567890",
+                    LockoutEnabled = false
+                };
+                var result = userManager.CreateAsync(lmtrieu, "205051730").Result;
+
+                if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+
+                result = userManager.AddClaimsAsync(lmtrieu,
+                [
+                    new(JwtClaimTypes.PhoneNumber, lmtrieu.PhoneNumber),
+                    new(JwtClaimTypes.Email, lmtrieu.Email)
+                ]).Result;
+
+                if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+                userManager.AddToRoleAsync(lmtrieu, "Admin").Wait();
+
+                if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+
+            }
+
+            var user = userManager.FindByNameAsync("user").Result;
+
+            if (user is null)
+            {
+                user = new()
+                {
+                    UserName = "normaluser.dev@gmail.com",
+                    Email = "normaluser.dev@gmail.com",
+                    EmailConfirmed = true,
+                    PhoneNumber = "1234567890",
+                    LockoutEnabled = false
+                };
+
+                var result = userManager.CreateAsync(user, "NashRookie").Result;
+                if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+
+                result = userManager.AddClaimsAsync(user,
+                [
+                    new(JwtClaimTypes.PhoneNumber, user.PhoneNumber),
+                    new(JwtClaimTypes.Email, user.Email)
+                ]).Result;
+
+                if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
+
+                userManager.AddToRoleAsync(user, "Customer").Wait();
+            }            
         }
     }
 }

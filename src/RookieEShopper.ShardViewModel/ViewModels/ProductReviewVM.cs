@@ -10,7 +10,7 @@ namespace RookieEShopper.SharedLibrary.ViewModels
     {
         public int Id { get; set; }
         public string Feedback { get; set; } = string.Empty;
-        public string Username { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public int Rating { get; set; }
     }
 }
