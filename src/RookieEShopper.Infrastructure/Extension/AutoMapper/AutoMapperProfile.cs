@@ -24,8 +24,7 @@ namespace RookieEShopper.Infrastructure.Extension.AutoMapper
 
             CreateMap<CreateProductReviewDto, ProductReview>();
             CreateMap<ProductReview, ResponseProductReviewDto>()
-                .ForMember(x => x.Customer, opt => opt.Ignore())
-                .ForMember(x => x.Product, opt => opt.Ignore());
+                .ForMember(x => x.Customer, opt => opt.Ignore());
 
             CreateMap<CreateBrandDto, Brand>();
             CreateMap<UpdateBrandDto, Brand>();

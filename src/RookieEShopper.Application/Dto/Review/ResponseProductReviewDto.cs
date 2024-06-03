@@ -12,7 +12,6 @@ namespace RookieEShopper.Application.Dto.Review
     {
         public int Id { get; set; }
         public ResponseCustomerDto? Customer {  get; set; }
-        public ResponseProductDto? Product {  get; set; } 
         public int Rating { get; set; }
         public string Feedback { get; set; } = string.Empty;
     }

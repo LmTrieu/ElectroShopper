@@ -53,7 +53,7 @@ namespace RookieEShopper.Api.Controllers
             return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto>
             {
                 Data = productReviews.ToList(),
-                Message = "Products fetched successfully",
+                Message = "Reviews fetched successfully",
                 Total = productReviews.Count()
             });
         }

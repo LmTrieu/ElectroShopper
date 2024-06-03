@@ -45,7 +45,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             ResponseProductReviewDto response = _mapper.Map<ResponseProductReviewDto>(productReview);
 
-            response.Product = await _productReposity.GetProductByIdAsync((int)entityEntry.Entity.ProductId);
             response.Customer = await _customerRepository.GetCustomerByIdAsync(entityEntry.Entity.CustomerId);
 
             return response;
@@ -65,7 +64,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 response.Add(_mapper.Map(productReview
                     , new ResponseProductReviewDto()
                     {
-                        Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
                         Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }
@@ -85,7 +83,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             response = _mapper.Map<ResponseProductReviewDto>(productReview);
 
-            response.Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId);
             response.Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId);
 
             return response;
@@ -106,7 +103,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 response.Add(_mapper.Map(productReview
                     , new ResponseProductReviewDto()
                     {
-                        Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
                         Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }
@@ -129,7 +125,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 response.Add(_mapper.Map(productReview
                     , new ResponseProductReviewDto()
                     {
-                        Product = await _productReposity.GetProductByIdAsync((int)productReview.ProductId),
                         Customer = await _customerRepository.GetCustomerByIdAsync(productReview.CustomerId)
                     }));
             }

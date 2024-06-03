@@ -255,9 +255,13 @@
                         <div class="mg-form-section">
                             <div class="container">
                                 <div class="mg-comment-form">
-                                    <form asp-controller="Product" asp-action="CreateProductReview" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
-                                        <input hidden asp-for="postReview.ProductId" name="@nameof(Model.postReview.ProductId)" value="@Model.productDetail.Product.Id" />
-                                        <input hidden asp-for="postReview.CustomerId" name="@nameof(Model.postReview.CustomerId)" value="1" />
+                                    <form asp-controller="Product" asp-action="CreateProductReview" asp-route-id="@Model.productDetail.Product.Id" method="post">
+                                        <input hidden asp-for="postReview.ProductId" name="@nameof(Model.postReview.ProductId)" 
+                                                      value="@Model.productDetail.Product.Id" />
+
+                                        <input hidden asp-for="postReview.CustomerId" name="@nameof(Model.postReview.CustomerId)" 
+                                                      value="@User.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault()" />
+
                                         <div><h5>RATE US</h5></div>
                                         <div class="mg-form-main">
                                             <div class="mg-review-star-rating-form">
@@ -275,16 +279,6 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                    <div class="mg-form-input-field">
-                                                        <input type="text" placeholder="Name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                    <div class="mg-form-input-field">
-                                                        <input type="text" placeholder="Email">
-                                                    </div>
-                                                </div>
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <div class="mg-form-textarea">
                                                         <textarea asp-for="postReview.Feedback" name="@nameof(Model.postReview.Feedback)" placeholder="Your Review"></textarea>
@@ -314,7 +308,7 @@
                                         <div class="mg-review-text-box">
                                             <div class="mg-review-text">
                                                 <div class="mg-reviewer-name me-2">
-                                                    <span>@review.Username</span>
+                                                    <span>@review.Customer.Name</span>
                                                 </div>
                                                 <div class="mg-rating">
                                                     @for(int i = 1; i <= review.Rating; i++)
