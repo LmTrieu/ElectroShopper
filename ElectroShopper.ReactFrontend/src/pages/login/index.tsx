@@ -6,9 +6,10 @@ export const Login = () => {
     <AuthPage
       type="login"
       hideForm={true}
+      title={<h2>Rookie Ecommerce</h2>}
       providers={[
         {
-          name: "identityserver4",
+          name: "identityserver4",          
           icon: (
             <svg
               width="30px"
@@ -69,6 +70,6 @@ export const Login = () => {
         },
       ]}
       registerLink={false}
-    />
+    />    
   );
 };

@@ -20,7 +20,7 @@ import routerBindings, {
 } from "@refinedev/react-router-v6";
 import { dataProvider } from "./providers/data-provider";
 import { App as AntdApp } from "antd";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes, redirect } from "react-router-dom";
 import { AppIcon } from "./components/app-icon";
 import { Header } from "./components/header";
 import {
@@ -38,34 +38,35 @@ import {
 import { Login } from "./pages/login";
 import { useAuth } from "react-oidc-context";
 
-function App() {
-  const { isLoading, error, isAuthenticated, activeNavigator, user, removeUser, signinRedirect, signoutRedirect} = useAuth();
 
+function App() {
+  const { isLoading, error, isAuthenticated, activeNavigator, user, removeUser, signinRedirect, signoutRedirect, signoutSilent } = useAuth();
   switch (activeNavigator) {
     case "signinSilent":
-        return <div>Signing you in...</div>;
+      return <div>Signing you in...</div>;
     case "signoutRedirect":
-        return <div>Signing you out...</div>;
+      return <div>Signing you out...</div>;
   }
   if (isLoading) {
-      return (
-        <div>loading...</div>
-      )
+    return (
+      <div>loading...</div>
+    )
   }
   if (error) {
-      return <span>Oops... {error.message}</span>;
+    return;
   }
 
   const CustomAuthProvider: AuthProvider = {
     login: async () => {
       await signinRedirect();
-      if(user && user.access_token)
+      if (user && user.access_token)
         localStorage.setItem("access_token", user.access_token);
       return {
         success: true,
       };
     },
     logout: async () => {
+      await removeUser();
       await signoutRedirect();
       localStorage.removeItem("access_token");
       return {
@@ -74,16 +75,23 @@ function App() {
       };
     },
     check: async () => {
-      if (isAuthenticated && user && user.scopes && user.scopes.includes("manage")) {        
-        if(user && user.access_token)
+      if (isAuthenticated && user && user.profile && user.profile.role === 'Admin') {
+        if (user && user.access_token)
           localStorage.setItem("access_token", user.access_token);
         return {
-          authenticated: true,          
+          authenticated: true,
         };
       }
+      if (user && user.profile.role != 'Admin') {
+        alert("User not authorized")
+        await signoutRedirect();
+        await removeUser();        
+        localStorage.removeItem("access_token");
+
+      }
       return {
-        authenticated: false,
-        redirectTo: "/login",
+        authenticated: false,      
+        redirectTo: "/",
       };
     },
     getPermissions: async () => {
