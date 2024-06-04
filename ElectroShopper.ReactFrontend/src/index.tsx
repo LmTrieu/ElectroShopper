@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { AuthProvider } from "react-oidc-context";
 
 import App from "./App";
-import { AuthPage } from "@refinedev/antd";
 
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);

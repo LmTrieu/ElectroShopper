@@ -14,8 +14,7 @@ export const ProductList = () => {
   const { tableProps } = useTable({
     resource: "products",
     pagination: { current: 1, pageSize: 10 },
-    syncWithLocation: true,
-    
+    syncWithLocation: true,    
   });
 
   // console.log(tableQueryResult)

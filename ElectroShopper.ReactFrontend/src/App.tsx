@@ -35,6 +35,9 @@ import {
   ProductList,
   ProductShow,
 } from "./pages/products";
+import {
+  CustomerList 
+} from "./pages/customers";
 import { Login } from "./pages/login";
 import { useAuth } from "react-oidc-context";
 
@@ -147,6 +150,13 @@ function App() {
                     canDelete: true,
                   },
                 },
+                {
+                  name: "customers",
+                  list: "/customers",
+                  meta: {
+                    canDelete: false,
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -192,6 +202,9 @@ function App() {
                     <Route path="create" element={<CategoryCreate />} />
                     <Route path="edit/:id" element={<CategoryEdit />} />
                     <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+                  <Route path="/customers">
+                    <Route index element={<CustomerList />} />
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>

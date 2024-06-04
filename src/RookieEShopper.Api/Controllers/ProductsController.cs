@@ -12,6 +12,7 @@ using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.SharedLibrary.HelperClasses;
+using System.Collections.Generic;
 
 namespace RookieEShopper.Api.Controllers
 {
@@ -104,7 +105,7 @@ namespace RookieEShopper.Api.Controllers
         [Authorize(Policy = "GodScope")]
         [HttpPost]
         [Route("Post")]
-        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(ProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
+        public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(ProductDto productdto,IFormFileCollection? galleryImages)
         {
             ValidationResult validationResult = _productValidator.Validate(productdto);
             if (validationResult.IsValid)
@@ -118,6 +119,14 @@ namespace RookieEShopper.Api.Controllers
             {
                 return TypedResults.BadRequest(validationResult.ToDictionary().ToList());
             }
+        }
+
+        [Authorize(Policy = "GodScope")]
+        [HttpPost]
+        [Route("Media")]
+        public async Task<IActionResult> PostPicture([FromForm]IFormFile file)
+        {
+            return Ok(new { image = await _productRepository.UploadOnlyProductImageAsync(file) });
         }
 
         //[HttpPost("{id}")]

@@ -1,11 +1,13 @@
 ﻿using RookieEShopper.Application.Dto.Customer;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedLibrary.HelperClasses;
 
 namespace RookieEShopper.Application.Repositories
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<ResponseCustomerDto?>> GetAllCustomerAsync();
+        Task<PagedList<ResponseCustomerDto?>> GetAllCustomerAsync(QueryParameters query);
 
         Task<ResponseCustomerDto?> GetCustomerByIdAsync(Guid id);
 

@@ -27,6 +27,7 @@ namespace RookieEShopper.Application.Repositories
         Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId);
 
         Task<string> UploadProductImageAsync(Product product, IFormFile image);
+        Task<ProductImageDto> UploadOnlyProductImageAsync(IFormFile image);
 
         Task<ResponseProductDto> UpdateProductInventoryAsync(int productId, int numOfProduct);
 

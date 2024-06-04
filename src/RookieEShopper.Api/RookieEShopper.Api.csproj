@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\ProductImages\1\" />
+    <Folder Include="wwwroot\ProductImages\PlaceHolderPDID\" />
   </ItemGroup>
 
 </Project>

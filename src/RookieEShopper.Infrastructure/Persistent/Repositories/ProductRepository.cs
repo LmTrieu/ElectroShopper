@@ -112,8 +112,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            await CreateInventoryAsync(product, productdto.NumOfProduct);            
-
+            await CreateInventoryAsync(product, productdto.NumOfProduct);
+            await _context.SaveChangesAsync();
+            //Currently ReactApp doesnt use this due to it require this to be a separate endpoint
             await InitialUploadImageLogic(product, productdto.ProductImage, galleryImages);
 
             await _context.SaveChangesAsync();
@@ -143,6 +144,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 result.Brand = await _context.Brands
                     .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
 
+            //Currently ReactApp doesnt use this due to it require this to be a separate endpoint
             if (productdto.ProductImage!= null)
                 result.MainImagePath = await UploadProductImageAsync(result, productdto.ProductImage);
 
@@ -178,15 +180,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             {
                 Directory.CreateDirectory(folderPath);
             }
-            //else
-            //{                
-            //    var existingFiles = Directory.GetFiles(folderPath);
-            //    foreach (var file in existingFiles)
-            //    {
-            //        if (file.Contains(product.MainImagePath))
-            //            File.Delete(file);
-            //    }
-            //}
 
             var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
 
@@ -194,6 +187,27 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             return imagePath.Replace(folderPath, "").TrimStart('\\');
 
+        }
+
+        public async Task<ProductImageDto> UploadOnlyProductImageAsync(IFormFile image)
+        {
+            var folderPath = _env.ContentRootPath + "\\wwwroot\\ProductImages\\PlaceHolderPDID";
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
+
+            await _fileService.uploadImage(imagePath, image);
+
+            return new ProductImageDto {
+                Uid = imagePath.Replace(folderPath, "").TrimStart('\\'),
+                Url = "https:\\localhost:7265\\ProductImages\\PlaceHolderPDID" + imagePath.Replace(folderPath, ""),
+                Name = image.Name,
+                Status = "done"
+            };
         }
 
         public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,int categoryId)
@@ -306,7 +320,5 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             await _context.SaveChangesAsync();
         }
-
-
     }
 }

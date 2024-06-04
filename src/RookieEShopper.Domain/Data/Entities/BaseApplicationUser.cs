@@ -10,6 +10,6 @@ namespace RookieEShopper.Domain.Data.Entities
         public string? Address { get; set; }
         public bool IsLocked { get; set; }
 
-        public virtual Customer? Customer { get; set; }
+        public virtual Customer Customer { get; set; } = new Customer();
     }
 }

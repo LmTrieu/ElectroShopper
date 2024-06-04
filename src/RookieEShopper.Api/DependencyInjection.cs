@@ -19,7 +19,7 @@ namespace RookieEShopper.Api
                     });
                     policy.RequireClaim("role", new List<string>{
                         "Admin"
-                    });
+                    });                    
                 });
                 options.AddPolicy("CustomerScope", policy =>
                 {

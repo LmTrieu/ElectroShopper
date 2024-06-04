@@ -1,26 +1,29 @@
-import { Create, useForm, useSelect } from "@refinedev/antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Create, getValueFromEvent, useForm, useSelect } from "@refinedev/antd";
+import { useApiUrl } from "@refinedev/core";
 import MDEditor from "@uiw/react-md-editor";
-import { Form, Input, Select, InputNumber } from "antd";
+import { Form, Input, Select, InputNumber, Upload, Button } from "antd";
 
 export const ProductCreate = () => {
   const { formProps, saveButtonProps } = useForm({
     action: "create",
     resource: "products",
     meta: {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      hasBody: false
-    } 
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+      hasBody: true,
+      hasPicture: true
+    },
   });
 
   const { selectProps: categorySelectProps } = useSelect({
-    resource: "categories",  
-    optionLabel: "name"
+    resource: "categories",
+    optionLabel: "name",
   });
 
   // const { selectProps: brandSelectProps } = useSelect({
-  //   resource: "brands",  
+  //   resource: "brands",
   //   optionLabel: "Name"
   // });
 
@@ -49,7 +52,7 @@ export const ProductCreate = () => {
         >
           <MDEditor data-color-mode="light" />
         </Form.Item>
-        <Form.Item  
+        <Form.Item
           label={"Category"}
           name={["categoryId"]}
           rules={[
@@ -64,44 +67,62 @@ export const ProductCreate = () => {
           label={"Price"}
           name={["price"]}
           rules={[
-            {        
+            {
               type: "number",
-              min: 1,     
+              min: 1,
               required: true,
             },
           ]}
         >
-          <InputNumber 
+          <InputNumber
             prefix="₫"
-            size = "large"
-            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number} />
+            size="large"
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) =>
+              value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+            }
+          />
         </Form.Item>
         <Form.Item
           label={"Number of product"}
           name={["numOfProduct"]}
           rules={[
-            {        
-              type: "number",
-              min: 1,     
-              required: true,
-            },
-          ]}
-        >
-          <InputNumber 
-            size = "large"/>
-        </Form.Item>
-        {/* <Form.Item  
-          label={"Category"}
-          name={["category", "id"]}
-          rules={[
             {
+              type: "number",
+              min: 1,
               required: true,
             },
           ]}
         >
-          <Select {...categorySelectProps} />
-        </Form.Item> */}
+          <InputNumber size="large" />
+        </Form.Item>
+        <Form.Item
+          label={"Main product image"}
+          name={["productImage"]}
+          valuePropName="productImage"
+          getValueFromEvent={getValueFromEvent}
+          noStyle          
+        >
+          <Upload
+            name="file"
+            action={`https://localhost:7265/api/Products/Media`}
+            multiple
+            headers={{
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }}
+            // onChange={(info) => {
+            //   if (info.file.status === "done") {
+            //     formProps.form?.setFieldsValue({ productImage: info.file.response });
+            //   } else if (info.file.status === "error") {
+            //     alert("Error in uploading picture")
+            //   }
+            // }}
+          >
+            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+          </Upload>
+        </Form.Item>
       </Form>
     </Create>
   );

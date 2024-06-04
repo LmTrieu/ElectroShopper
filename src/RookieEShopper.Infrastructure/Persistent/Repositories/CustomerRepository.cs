@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.Customer;
+using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
+using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
+using RookieEShopper.SharedLibrary.HelperClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+
         public CustomerRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
@@ -26,9 +30,20 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ResponseCustomerDto>> GetAllCustomerAsync()
+        public async Task<PagedList<ResponseCustomerDto>> GetAllCustomerAsync(QueryParameters query)
         {
-            throw new NotImplementedException();
+            var result = _context.BaseApplicationUsers
+                .Include(u => u.Customer)
+                .Select(c => new ResponseCustomerDto
+                {
+                    Id = c.Customer.Id,
+                    Email = c.Email,
+                    Name = c.UserName
+                });
+
+            return await PagedList<ResponseCustomerDto>.ToPagedList(result,
+                    query.PageNumber,
+                    query.PageSize);
         }
 
         public async Task<Customer?> GetDomainCustomerByIdAsync(int id)
@@ -53,7 +68,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         }
 
         public async Task<ResponseCustomerDto?> GetCustomerByIdAsync(Guid id)
-        {         
+        {
             return await _context.BaseApplicationUsers
                 .Where(u => u.Customer.Id == id)
                 .Select(c =>
@@ -63,7 +78,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                         Email = c.Email,
                         Name = c.UserName
                     })
-                .FirstOrDefaultAsync();    
+                .FirstOrDefaultAsync();
         }
     }
 }
