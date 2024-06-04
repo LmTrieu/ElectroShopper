@@ -76,8 +76,8 @@ namespace RookieEcommerce.Auth
                     {
                         ReadConfig.clientUrls["mvc"] +"/signin-oidc"
                     },
-                    FrontChannelLogoutUri = ReadConfig.clientUrls["mvc"] +"/signout-callback-oidc",
-                    PostLogoutRedirectUris = { ReadConfig.clientUrls["mvc"] +"/signout-callback-oidc" },
+                    FrontChannelLogoutUri = ReadConfig.clientUrls["mvc"],
+                    PostLogoutRedirectUris = { ReadConfig.clientUrls["mvc"] },
 
                     AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
                     AllowAccessTokensViaBrowser = true,
@@ -91,7 +91,7 @@ namespace RookieEcommerce.Auth
                         "rookie.customer",
                         "customer.read",
                         "customer.write",
-                        "customer.claims"
+                        "customer.claims",
                     }                
                 },
                 new() {
@@ -99,17 +99,19 @@ namespace RookieEcommerce.Auth
                     ClientName = "React app",
                     ClientUri = ReadConfig.clientUrls["react"],
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
+                    RequirePkce = true,
 
                     RedirectUris =
                     {
-                        ReadConfig.clientUrls["react"] +"/signin-oidc",
+                        ReadConfig.clientUrls["react"],
                     },
-                    FrontChannelLogoutUri = ReadConfig.clientUrls["react"]+ "/signout-oidc",
-                    PostLogoutRedirectUris = { ReadConfig.clientUrls["react"]+"/signout-callback-oidc" },
+                    FrontChannelLogoutUri = ReadConfig.clientUrls["react"],
+                    PostLogoutRedirectUris = { ReadConfig.clientUrls["react"]},
                     AllowedCorsOrigins = { ReadConfig.clientUrls["react"] },
                     AllowAccessTokensViaBrowser = true,
+                    AlwaysIncludeUserClaimsInIdToken = true,
 
                     AllowedScopes =
                     {
@@ -117,7 +119,8 @@ namespace RookieEcommerce.Auth
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "rookie.admin",
+                        "roles",
+                        "account.role",
                         "manage"
                     }
                 },

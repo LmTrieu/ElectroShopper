@@ -26,7 +26,8 @@ export const dataProvider: DataProvider = {
           response = await fetch(`${API_URL}/${resource}/patch/${id}?${params}`, {
             method: "PATCH",
             headers: {
-              ...headers
+              ...headers,
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
           });
         }
@@ -35,7 +36,8 @@ export const dataProvider: DataProvider = {
             method: "PATCH",
             body: JSON.stringify(variables),
             headers: {
-              ...headers
+              ...headers,
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
           });
         }        
@@ -80,7 +82,8 @@ export const dataProvider: DataProvider = {
         response = await fetch(`${API_URL}/${resource}/Post?${params}`, {
           method: "POST",
           headers: {
-            ...headers
+            ...headers,
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         });
       }
@@ -89,7 +92,8 @@ export const dataProvider: DataProvider = {
           method: "POST",
           body: JSON.stringify(variables),
           headers: {
-            ...headers
+            ...headers,
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         });
       }
@@ -104,7 +108,10 @@ export const dataProvider: DataProvider = {
     },
     deleteOne: async ({ resource, id }) => {
       const response = await fetch(`${API_URL}/${resource}/delete/${id}`,{
-        method: "DELETE",          
+        method: "DELETE",      
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }    
       });
 
       if (response.status < 200 || response.status > 299) throw response;

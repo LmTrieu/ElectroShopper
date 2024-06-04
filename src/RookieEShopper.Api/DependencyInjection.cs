@@ -9,7 +9,26 @@ namespace RookieEShopper.Api
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
             services.AddControllers();
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("GodScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", new List<string>{
+                        "manage"
+                    });
+                    policy.RequireClaim("role", new List<string>{
+                        "Admin"
+                    });
+                });
+                options.AddPolicy("CustomerScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", new List<string>{
+                        "customer.read"
+                    });
+                });
+            });
 
             services.AddEndpointsApiExplorer();
 

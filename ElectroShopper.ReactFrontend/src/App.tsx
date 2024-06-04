@@ -1,8 +1,9 @@
-import { Refine } from "@refinedev/core";
+import { AuthProvider, Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
+  AuthPage,
   ErrorComponent,
   ThemedLayoutV2,
   ThemedSiderV2,
@@ -12,6 +13,7 @@ import {
 import "@refinedev/antd/dist/reset.css";
 
 import routerBindings, {
+  CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
   UnsavedChangesNotifier,
@@ -33,47 +35,124 @@ import {
   ProductList,
   ProductShow,
 } from "./pages/products";
+import { Login } from "./pages/login";
+import { useAuth } from "react-oidc-context";
 
 function App() {
+  const { isLoading, error, isAuthenticated, activeNavigator, user, removeUser, signinRedirect, signoutRedirect} = useAuth();
+
+  switch (activeNavigator) {
+    case "signinSilent":
+        return <div>Signing you in...</div>;
+    case "signoutRedirect":
+        return <div>Signing you out...</div>;
+  }
+  if (isLoading) {
+      return (
+        <div>loading...</div>
+      )
+  }
+  if (error) {
+      return <span>Oops... {error.message}</span>;
+  }
+
+  const CustomAuthProvider: AuthProvider = {
+    login: async () => {
+      await signinRedirect();
+      if(user && user.access_token)
+        localStorage.setItem("access_token", user.access_token);
+      return {
+        success: true,
+      };
+    },
+    logout: async () => {
+      await signoutRedirect();
+      localStorage.removeItem("access_token");
+      return {
+        success: true,
+        redirectTo: "/login",
+      };
+    },
+    check: async () => {
+      if (isAuthenticated && user && user.scopes && user.scopes.includes("manage")) {        
+        if(user && user.access_token)
+          localStorage.setItem("access_token", user.access_token);
+        return {
+          authenticated: true,          
+        };
+      }
+      return {
+        authenticated: false,
+        redirectTo: "/login",
+      };
+    },
+    getPermissions: async () => {
+      if (user && user.profile && user.profile.role) {
+        return user.profile.role;
+      }
+      return null;
+    },
+    getIdentity: async () => {
+      if (user) {
+        return {
+          id: user.profile.sub,
+          name:
+            user.profile.name || user.profile.preferred_username || "Admin",
+        };
+      }
+      return null;
+    },
+    onError: async (error) => {
+      console.error(error);
+      return { error };
+    },
+  };
+
   return (
-    <BrowserRouter>      
+    <BrowserRouter>
       <RefineKbarProvider>
-          <AntdApp>
-            <DevtoolsProvider>
-              <Refine 
-                dataProvider={dataProvider}              
-                notificationProvider={useNotificationProvider}
-                routerProvider={routerBindings}
-                resources={[
-                  {
-                    name: "products",
-                    list: "/products",
-                    create: "/products/create",
-                    edit: "/products/edit/:id",
-                    show: "/products/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
+        <AntdApp>
+          <DevtoolsProvider>
+            <Refine
+              dataProvider={dataProvider}
+              notificationProvider={useNotificationProvider}
+              authProvider={CustomAuthProvider}
+              routerProvider={routerBindings}
+              resources={[
+                {
+                  name: "products",
+                  list: "/products",
+                  create: "/products/create",
+                  edit: "/products/edit/:id",
+                  show: "/products/show/:id",
+                  meta: {
+                    canDelete: true,
                   },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
+                },
+                {
+                  name: "categories",
+                  list: "/categories",
+                  create: "/categories/create",
+                  edit: "/categories/edit/:id",
+                  show: "/categories/show/:id",
+                  meta: {
+                    canDelete: true,
                   },
-                ]}
-                options={{
-                  syncWithLocation: true,
-                  warnWhenUnsavedChanges: true
-                }}
-              >
-                <Routes>
-                  <Route
-                    element={
+                },
+              ]}
+              options={{
+                syncWithLocation: true,
+                warnWhenUnsavedChanges: true,
+              }}
+            >
+              <Routes>
+                <Route
+                  element={
+                    <Authenticated
+                      loading={<div>loading...</div>}
+                      key="authenticated-inner"
+                      fallback={<CatchAllNavigate to="/login" />}
+                    >
                       <ThemedLayoutV2
                         Header={() => <Header sticky />}
                         Sider={(props) => <ThemedSiderV2 {...props} fixed />}
@@ -87,34 +166,49 @@ function App() {
                       >
                         <Outlet />
                       </ThemedLayoutV2>
-                    }
-                  >
-                    <Route
-                      index
-                      element={<NavigateToResource resource="products" />}
-                    />
-                    <Route path="/products">
-                      <Route index element={<ProductList />} />
-                      <Route path="create" element={<ProductCreate />} />
-                      <Route path="edit/:id" element={<ProductEdit />} />
-                      <Route path="show/:id" element={<ProductShow />} />
-                    </Route>
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
-                    <Route path="*" element={<ErrorComponent />} />
+                    </Authenticated>
+                  }
+                >
+                  <Route
+                    index
+                    element={<NavigateToResource resource="products" />}
+                  />
+                  <Route path="/products">
+                    <Route index element={<ProductList />} />
+                    <Route path="create" element={<ProductCreate />} />
+                    <Route path="edit/:id" element={<ProductEdit />} />
+                    <Route path="show/:id" element={<ProductShow />} />
                   </Route>
-                </Routes>
+                  <Route path="/categories">
+                    <Route index element={<CategoryList />} />
+                    <Route path="create" element={<CategoryCreate />} />
+                    <Route path="edit/:id" element={<CategoryEdit />} />
+                    <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+                  <Route path="*" element={<ErrorComponent />} />
+                </Route>
 
-                <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
-                <RefineKbar />
-              </Refine>
-            </DevtoolsProvider>
-          </AntdApp>
+                <Route
+                  element={
+                    <Authenticated
+                      loading={<div>loading...</div>}
+                      key="authenticated-outer"
+                      fallback={<Outlet />}
+                    >
+                      <NavigateToResource />
+                    </Authenticated>
+                  }
+                >
+                  <Route path="/login" element={<Login />} />
+                </Route>
+              </Routes>
+
+              <UnsavedChangesNotifier />
+              <DocumentTitleHandler />
+              <RefineKbar />
+            </Refine>
+          </DevtoolsProvider>
+        </AntdApp>
       </RefineKbarProvider>
     </BrowserRouter>
   );

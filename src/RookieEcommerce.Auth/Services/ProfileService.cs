@@ -8,6 +8,7 @@ namespace RookieEcommerce.Auth.Services
 {
     public class ProfileService : IProfileService
     {
+        private readonly UserManager<BaseApplicationUser> _userManager;
         public ProfileService(
             UserManager<BaseApplicationUser> userManager)
         {
@@ -20,7 +21,8 @@ namespace RookieEcommerce.Auth.Services
 
             var claims = new List<Claim>
             {
-                new Claim("customer.id",user.CustomerId.ToString())
+                new Claim("customer.id",user.CustomerId.ToString()),
+                new Claim("account.role",_userManager.GetRolesAsync(user).ToString())
             };
 
             context.IssuedClaims.AddRange(claims);
@@ -31,6 +33,5 @@ namespace RookieEcommerce.Auth.Services
 
             context.IsActive = (user != null) && user.IsActive;
         }
-        private readonly UserManager<BaseApplicationUser> _userManager;
     }
 }

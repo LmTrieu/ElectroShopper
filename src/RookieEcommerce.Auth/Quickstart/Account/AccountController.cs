@@ -230,16 +230,21 @@ namespace RookieEcommerce.Auth.Quickstart.Account
             if (await IsEmailTaken(registerRequestBodyDto.Email))
                 throw new ArgumentNullException(nameof(registerRequestBodyDto), "Email already taken");
 
-            var result = await _userManager.CreateAsync(
-                new BaseApplicationUser
-                {
-                    Email = registerRequestBodyDto.Email,
-                    NormalizedEmail = _normalizer.NormalizeEmail(registerRequestBodyDto.Email),
-                    UserName = registerRequestBodyDto.Email,
-                    NormalizedUserName = _normalizer.NormalizeName(registerRequestBodyDto.Email),
-                    CustomerId = new Guid()
-                },
-                registerRequestBodyDto.Password);
+            var user = new BaseApplicationUser
+            {
+                Email = registerRequestBodyDto.Email,
+                NormalizedEmail = _normalizer.NormalizeEmail(registerRequestBodyDto.Email),
+                UserName = registerRequestBodyDto.Email,
+                NormalizedUserName = _normalizer.NormalizeName(registerRequestBodyDto.Email),
+                CustomerId = new Guid()
+            };
+
+            var result = await _userManager.CreateAsync(user, registerRequestBodyDto.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Customer");
+            }
 
             Response.Redirect(registerRequestBodyDto.ReturnUrl);
         }

@@ -81,33 +81,17 @@ namespace RookieEShopper.Infrastructure.Extension.JwtBearer
                                     var userId = new Guid(response.Claims.FirstOrDefault(x => x.Type == "sub")?.Value);
                                     var userName = response.Claims.FirstOrDefault(x => x.Type == "name")?.Value;
                                     var userEmail = response.Claims.FirstOrDefault(x => x.Type == "email")?.Value;
+                                    var role = response.Claims.FirstOrDefault(x => x.Type == "role")?.Value;
 
                                     if (userId != Guid.Empty && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userEmail))
                                     {                                        
-                                        await userService.EnsureUserExistsAsync(userId, userName, userEmail);
+                                        await userService.EnsureUserExistsAsync(userId, userName, userEmail, role.IsNullOrEmpty()? "Customer" : role);
                                     }
                                 }
                             }
                         }
                     };
-                });
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("GodScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", new List<string>{
-                        "manage"
-                    });
-                });
-                options.AddPolicy("CustomerScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", new List<string>{
-                        "customer.read"
-                    });
-                });
-            });
+                });            
         }
     }
 }

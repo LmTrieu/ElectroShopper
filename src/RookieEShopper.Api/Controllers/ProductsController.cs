@@ -62,7 +62,7 @@ namespace RookieEShopper.Api.Controllers
                 TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully"});
         }
 
-        //[Authorize]
+        [Authorize(Policy = "GodScope")]
         [HttpPatch]
         [Route("Patch/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<string>>> PatchProduct(int id, ProductDto productdto)
@@ -82,7 +82,7 @@ namespace RookieEShopper.Api.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(Policy = "GodScope")]
         [HttpPut]
         [Route("Patch/Stock/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<ResponseProductDto>>, BadRequest>> PutProductStock(int id, int numOfProduct)
@@ -101,7 +101,7 @@ namespace RookieEShopper.Api.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(Policy = "GodScope")]
         [HttpPost]
         [Route("Post")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Product>>, BadRequest<List<KeyValuePair<string, string[]>>>>> PostProduct(ProductDto productdto, [FromForm] IFormFileCollection? galleryImages)
