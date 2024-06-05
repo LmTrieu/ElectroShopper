@@ -1,9 +1,7 @@
 ﻿//Will clean this later after every things checks out
 
-using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using RookieEcommerce.Auth;
 using RookieEcommerce.Auth.Models;
 using RookieEcommerce.Auth.Services;
@@ -27,7 +25,7 @@ Log.Logger = new LoggerConfiguration()
         theme: AnsiConsoleTheme.Code)
     .CreateLogger();
 
-builder.Host.UseSerilog();    
+builder.Host.UseSerilog();
 
 builder.Services.AddControllersWithViews();
 
@@ -89,7 +87,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-
 
 app.UseRouting();
 app.UseIdentityServer();

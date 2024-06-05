@@ -1,8 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
-using RookieEShopper.Application.Dto.Customer;
-using RookieEShopper.Application.Dto.Product;
-using RookieEShopper.Application.Dto.Review;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace RookieEShopper.Infrastructure.Extension.AutoMapper
 {

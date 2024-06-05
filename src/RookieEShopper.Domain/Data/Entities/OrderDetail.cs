@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RookieEShopper.Domain.Data.Entities
+﻿namespace RookieEShopper.Domain.Data.Entities
 {
     public class OrderDetail
     {
-        public int Id { get; set; }     
+        public int Id { get; set; }
         public int Quantity { get; set; }
 
         public Order? Order { get; set; }

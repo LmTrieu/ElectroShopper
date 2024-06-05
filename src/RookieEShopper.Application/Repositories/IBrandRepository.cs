@@ -9,12 +9,12 @@ namespace RookieEShopper.Application.Repositories
 
         Task<Brand> GetBrandByIdAsync(int id);
 
-        Task<Brand> GetBrandByNameAsync(string name);    
+        Task<Brand> GetBrandByNameAsync(string name);
 
         Task<Brand> CreateBrandAsync(CreateBrandDto brandDto);
 
-        Task SetBrandLockStatusAsync(int id,bool IsLock);
-        
+        Task SetBrandLockStatusAsync(int id, bool IsLock);
+
         Task<bool> IsBrandExistAsync(int id);
 
         Task DeleteBrandAsync(int id);

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RookieEcommerce.Auth.Models;
 using Serilog;
-using System.Runtime.InteropServices;
 
 namespace RookieEcommerce.Auth.Services
 {
@@ -58,6 +57,7 @@ namespace RookieEcommerce.Auth.Services
                 //roleManager.AddClaimAsync(adminRole, new(JwtClaimTypes.Role, "Customer")).Wait();
             }
         }
+
         private static void CreateAccounts(UserManager<BaseApplicationUser> userManager, IdentityRole adminRole, IdentityRole customerRole)
         {
             var lmtrieu = userManager.FindByNameAsync("lmtrieu").Result;
@@ -127,6 +127,5 @@ namespace RookieEcommerce.Auth.Services
                 Log.Debug("user already exists");
             }
         }
-
     }
 }

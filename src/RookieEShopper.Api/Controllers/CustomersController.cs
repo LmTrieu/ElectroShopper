@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RookieEShopper.Api.Dto;
 using RookieEShopper.Application.Dto.Customer;
-using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.SharedLibrary.HelperClasses;
 

@@ -15,11 +15,8 @@ namespace RookieEShopper.Application.Repositories
 
         Task<ResponseCustomerDto?> GetCustomerByNameAsync(string name);
 
-        Task<ResponseCustomerDto?> CreateCustomerAsync (CreateCustomerDto customer);
-
         Task LockCustomerAsync(int id);
 
         Task IsCustomerExistAsync(int id);
-
     }
 }

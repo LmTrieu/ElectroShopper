@@ -1,11 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RookieEShopper.Api.Dto;
 using RookieEShopper.SharedLibrary.ViewModels;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace RookieEShopper.CustomerFrontend.Services.Category
 {
@@ -19,6 +14,7 @@ namespace RookieEShopper.CustomerFrontend.Services.Category
 
             _httpClient.BaseAddress = new Uri("https://localhost:7265");
         }
+
         public async Task<ICollection<CategoryGroupVM>?> GetCategoriesAsync()
         {
             var response = await _httpClient.GetAsync("/api/Categories/CategoryGroup");
@@ -29,6 +25,5 @@ namespace RookieEShopper.CustomerFrontend.Services.Category
 
             return JsonConvert.DeserializeObject<ApiListObjectResponse<CategoryGroupVM>>(content)?.Data;
         }
-
     }
 }

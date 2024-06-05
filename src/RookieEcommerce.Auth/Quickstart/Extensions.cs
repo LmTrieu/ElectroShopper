@@ -1,7 +1,6 @@
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
 using RookieEcommerce.Auth.Quickstart.Account;
-using System;
 
 namespace RookieEcommerce.Auth.Quickstart
 {

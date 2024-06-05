@@ -1,20 +1,17 @@
 ﻿using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _context;
+
         public OrderRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public Task CancelOrderAsync(int id)
         {
             throw new NotImplementedException();

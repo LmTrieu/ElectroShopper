@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using RookieEShopper.Application.Dto.Cart;
+﻿using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.Application.Repositories;
-using RookieEShopper.Domain.Data.Entities;
 
 namespace RookieEShopper.Api.Controllers
 {
@@ -13,6 +8,7 @@ namespace RookieEShopper.Api.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;
+
         public CartController(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;

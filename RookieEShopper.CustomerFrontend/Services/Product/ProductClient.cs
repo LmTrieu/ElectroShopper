@@ -2,7 +2,6 @@
 using RookieEShopper.Api.Dto;
 using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.SharedLibrary.ViewModels;
-using System.Net.Http;
 using System.Text;
 
 namespace RookieEShopper.CustomerFrontend.Services.Product
@@ -34,7 +33,7 @@ namespace RookieEShopper.CustomerFrontend.Services.Product
                     feedback = createProductReviewVM.Feedback,
                     rating = createProductReviewVM.Rating
                 }),
-                Encoding.UTF8,"application/json");
+                Encoding.UTF8, "application/json");
             var client = _httpClientFactory.CreateClient("apiClient");
 
             using HttpResponseMessage response = await client

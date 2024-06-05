@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
@@ -22,7 +20,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private readonly IBrandRepository _brandRepository;
         private readonly FileService _fileService;
         private readonly IWebHostEnvironment _env;
-
 
         public ProductRepository(ApplicationDbContext context, IMapper mapper, ICategoryRepository categoryRepository,
             FileService fileService, IWebHostEnvironment env, IBrandRepository brandRepository)
@@ -78,16 +75,16 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                         numOfProduct = i.StockAmmount,
                     })
                     .Select(p => new ResponseDomainProductDto
-                        {
-                            Id = p.product.Id,
-                            Name = p.product.Name,
-                            Price = p.product.Price,
-                            MainImagePath = p.product.MainImagePath,
-                            ImageGallery = p.product.ImageGallery,
-                            Description = p.product.Description,
-                            ProductReviews = p.product.ProductReviews.Select(pr =>pr.Id).ToList(),
-                            NumOfProduct = p.numOfProduct,
-                            Category = _mapper.Map<CategoryVM>(p.product.Category)
+                    {
+                        Id = p.product.Id,
+                        Name = p.product.Name,
+                        Price = p.product.Price,
+                        MainImagePath = p.product.MainImagePath,
+                        ImageGallery = p.product.ImageGallery,
+                        Description = p.product.Description,
+                        ProductReviews = p.product.ProductReviews.Select(pr => pr.Id).ToList(),
+                        NumOfProduct = p.numOfProduct,
+                        Category = _mapper.Map<CategoryVM>(p.product.Category)
                     })
                 .FirstOrDefaultAsync(p => p.Id == productId);
             return product;
@@ -127,29 +124,30 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .Where(p => p.Id == id)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync();
+            if (result is not null)
+            {
+                if (productdto.Price == 0)
+                    productdto.Price = result.Price;
 
-            if (productdto.Price == 0)
-                productdto.Price = result.Price;    
+                _mapper.Map(productdto, result);
 
-            _mapper.Map(productdto, result);
+                if (productdto.NumOfProduct > 0)
+                    await UpdateInventoryAsync(id, productdto.NumOfProduct);
 
-            if (productdto.NumOfProduct > 0)
-                await UpdateInventoryAsync(id, productdto.NumOfProduct);
+                if (productdto.CategoryId != 0)
+                    result.Category = await _context.Categories
+                        .FirstOrDefaultAsync(p => p.Id == productdto.CategoryId);
 
-            if (productdto.CategoryId != 0)
-                result.Category = await _context.Categories
-                    .FirstOrDefaultAsync(p => p.Id == productdto.CategoryId);
-            
-            if (productdto.BrandId!= 0)
-                result.Brand = await _context.Brands
-                    .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
+                if (productdto.BrandId != 0)
+                    result.Brand = await _context.Brands
+                        .FirstOrDefaultAsync(p => p.Id == productdto.BrandId);
 
-            //Currently ReactApp doesnt use this due to it require this to be a separate endpoint
-            if (productdto.ProductImage!= null)
-                result.MainImagePath = await UploadProductImageAsync(result, productdto.ProductImage);
+                //Currently ReactApp doesnt use this due to it require this to be a separate endpoint
+                if (productdto.ProductImage != null)
+                    result.MainImagePath = await UploadProductImageAsync(result, productdto.ProductImage);
 
-            await _context.SaveChangesAsync();
-
+                await _context.SaveChangesAsync();
+            }
             return result;
         }
 
@@ -175,18 +173,17 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<string> UploadProductImageAsync(Product product, IFormFile image)
         {
             var folderPath = _env.ContentRootPath + "\\wwwroot\\ProductImages\\" + product.Id;
-            
+
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
+            var imagePath = $"{folderPath}\\{Guid.NewGuid()}_{image.FileName}";
 
             await _fileService.uploadImage(imagePath, image);
 
             return imagePath.Replace(folderPath, "").TrimStart('\\');
-
         }
 
         public async Task<ProductImageDto> UploadOnlyProductImageAsync(IFormFile image)
@@ -198,11 +195,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 Directory.CreateDirectory(folderPath);
             }
 
-            var imagePath = folderPath + "\\" + Guid.NewGuid().ToString() + "_" + image.FileName;
+            var imagePath = $"{folderPath}\\{Guid.NewGuid()}_{image.FileName}";
 
             await _fileService.uploadImage(imagePath, image);
 
-            return new ProductImageDto {
+            return new ProductImageDto
+            {
                 Uid = imagePath.Replace(folderPath, "").TrimStart('\\'),
                 Url = "https:\\localhost:7265\\ProductImages\\PlaceHolderPDID" + imagePath.Replace(folderPath, ""),
                 Name = image.Name,
@@ -210,22 +208,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             };
         }
 
-        public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,int categoryId)
+        public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId)
         {
-            var result3 = _context.Products
-                .Where(p => p.Category.Id == categoryId);
-
-            var result2 = _context.Products
-                .Where(p => p.Category.Id == categoryId)
-                .Join(
-                    _context.Inventories,
-                    p => p.Id,
-                    i => i.Product.Id,
-                    (p, i) => new
-                    {
-                        product = p,
-                        numOfProduct = i.StockAmmount,
-                    });
             var result = _context.Products
                 .Where(p => p.Category.Id == categoryId)
                 .Join(
@@ -257,7 +241,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         {
             ResponseProductDto product = new ResponseProductDto();
 
-            _mapper.Map(await _context.Products.FindAsync(productId),product);
+            _mapper.Map(await _context.Products.FindAsync(productId), product);
             return product;
         }
 
@@ -267,7 +251,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             if (await GetInventoryAsync(productId) is not null)
                 await UpdateInventoryAsync(productId, numOfProduct);
-            else if(product is not null)
+            else if (product is not null)
                 await CreateInventoryAsync(product, numOfProduct);
 
             return new ResponseProductDto();
@@ -275,7 +259,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         //--- Service function starts here ---
 
-        private async Task InitialUploadImageLogic(Product product,IFormFile? MainImage, IFormFileCollection? galleryImages)
+        private async Task InitialUploadImageLogic(Product product, IFormFile? MainImage, IFormFileCollection? galleryImages)
         {
             if (MainImage is not null)
             {
@@ -312,12 +296,12 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private async Task UpdateInventoryAsync(int productId, int numOfProduct)
         {
             var inventory = await GetInventoryAsync(productId);
-
-            inventory.StockAmmount = numOfProduct;
-            inventory.LastUpdated = DateTime.Now;
-
-            _context.Inventories.Update(inventory);
-
+            if (inventory is not null)
+            {
+                inventory.StockAmmount = numOfProduct;
+                inventory.LastUpdated = DateTime.Now;
+                _context.Inventories.Update(inventory);
+            }
             await _context.SaveChangesAsync();
         }
     }

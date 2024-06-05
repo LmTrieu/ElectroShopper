@@ -9,6 +9,7 @@ namespace RookieEcommerce.Auth.Services
     public class ProfileService : IProfileService
     {
         private readonly UserManager<BaseApplicationUser> _userManager;
+
         public ProfileService(
             UserManager<BaseApplicationUser> userManager)
         {
@@ -27,6 +28,7 @@ namespace RookieEcommerce.Auth.Services
 
             context.IssuedClaims.AddRange(claims);
         }
+
         public async Task IsActiveAsync(IsActiveContext context)
         {
             var user = await _userManager.GetUserAsync(context.Subject);

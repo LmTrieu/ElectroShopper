@@ -20,7 +20,6 @@ namespace RookieEShopper.Infrastructure.Persistent
             services.AddUserOptions();
             services.AddAutoMapperConfiguration();
 
-
             DbSeed.EnsureSeedData(configuration.GetConnectionString("DefaultConnection"), services.BuildServiceProvider());
 
             return services;
@@ -62,6 +61,7 @@ namespace RookieEShopper.Infrastructure.Persistent
 
             return services;
         }
+
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -76,6 +76,5 @@ namespace RookieEShopper.Infrastructure.Persistent
 
             return services;
         }
-
     }
 }

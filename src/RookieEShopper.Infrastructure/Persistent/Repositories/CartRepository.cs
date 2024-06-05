@@ -8,8 +8,9 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
     public class CartRepository : ICartRepository
     {
         private readonly ApplicationDbContext _context;
+
         public CartRepository(ApplicationDbContext context
-            ) 
+            )
         {
             _context = context;
         }
@@ -77,12 +78,11 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             await _context.SaveChangesAsync();
 
-            return cartItem.Cart; 
+            return cartItem.Cart;
         }
 
         public Task<Cart> UpdateCartItemQuantityAsync(UpdateCartItemDto cartItem)
         {
-
             throw new NotImplementedException();
         }
     }

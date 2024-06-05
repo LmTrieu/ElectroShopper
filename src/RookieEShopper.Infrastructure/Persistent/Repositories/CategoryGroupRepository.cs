@@ -2,17 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.CategoryGroup;
-using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.SharedLibrary.HelperClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -20,11 +13,13 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
-        public CategoryGroupRepository(IMapper mapper, ApplicationDbContext context) 
+
+        public CategoryGroupRepository(IMapper mapper, ApplicationDbContext context)
         {
             _mapper = mapper;
             _context = context;
         }
+
         public async Task<CategoryGroup> CreateCategoryGroupAsync(CreateCategoryGroupDto categoryGroupDto)
         {
             var categoryGroup = new CategoryGroup();
@@ -32,7 +27,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             categoryGroup.Categories = new List<Category>();
 
-            ((List<Category>) categoryGroup.Categories)
+            ((List<Category>)categoryGroup.Categories)
                     .AddRange(_context.Categories
                         .Where(c => categoryGroupDto.CategoriesId
                             .Contains(c.Id))
@@ -60,7 +55,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         public async Task<CategoryGroup?> UpdateCategoryListAsync(int id, UpdateCategoryListDto updateCategoryList)
         {
-            var categoryGroup = await _context.CategoryGroups                
+            var categoryGroup = await _context.CategoryGroups
                 .Include(cg => cg.Categories)
                 .Where(cg => cg.Id == id)
                 .FirstOrDefaultAsync();
@@ -69,7 +64,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             {
                 categoryGroup.Categories
                     .ToHashSet()
-                    .RemoveWhere(c => updateCategoryList.CategoriesToRemoveId.Contains(c.Id));            
+                    .RemoveWhere(c => updateCategoryList.CategoriesToRemoveId.Contains(c.Id));
                 categoryGroup.Categories
                     .ToList()
                     .AddRange(await _context.Categories

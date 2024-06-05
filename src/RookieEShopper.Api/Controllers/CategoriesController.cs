@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RookieEShopper.Api.Dto;
 using RookieEShopper.Application.Dto.Category;
 using RookieEShopper.Application.Dto.CategoryGroup;
-using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.Infrastructure.Persistent.Repositories;
 using RookieEShopper.SharedLibrary.HelperClasses;
-using RookieEShopper.SharedLibrary.ViewModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RookieEShopper.Api.Controllers
 {
@@ -118,14 +113,14 @@ namespace RookieEShopper.Api.Controllers
         public async Task<Results<Ok<ApiListObjectResponse<ResponseCategoryGroupDto>>, NotFound<string>>> GetCategoryGroups([FromQuery] QueryParameters query)
         {
             var categoryGroups = await _categoryGroupRepository.GetCategoryGroupsAsync(query);
-            if(categoryGroups.Count() > 0) 
-                return TypedResults.Ok(new ApiListObjectResponse<ResponseCategoryGroupDto> { 
-                    Data = categoryGroups, 
-                    Message = "Groups of categories fetched", 
-                    Total = categoryGroups.Count() 
+            if (categoryGroups.Count() > 0)
+                return TypedResults.Ok(new ApiListObjectResponse<ResponseCategoryGroupDto>
+                {
+                    Data = categoryGroups,
+                    Message = "Groups of categories fetched",
+                    Total = categoryGroups.Count()
                 });
             return TypedResults.NotFound("No category is avaliable");
-
         }
 
         private async Task<bool> CategoryExists(int id)

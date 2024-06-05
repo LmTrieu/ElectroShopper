@@ -9,7 +9,7 @@ $(document).ready(function () {
             },
             email: {
                 required: true,
-				email: true
+                email: true
             },
             phone_number: {
                 required: true
@@ -36,13 +36,13 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
-			$('.mg-contact-form').trigger('reset');
-			$('.alert-msg').fadeIn();
-			
-			/*
-			 * Uncomment below code to send emails
-			 */
-			 
+            $('.mg-contact-form').trigger('reset');
+            $('.alert-msg').fadeIn();
+
+            /*
+             * Uncomment below code to send emails
+             */
+
             /*$.ajax({
                 url: "send-email.php",
                 type: "POST",

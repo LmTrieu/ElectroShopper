@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
+﻿using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RookieEShopper.Infrastructure.Extension.CloudinaryDotNet
 {

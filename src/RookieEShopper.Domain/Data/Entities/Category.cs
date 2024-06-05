@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RookieEShopper.Domain.Data.Entities
+﻿namespace RookieEShopper.Domain.Data.Entities
 {
     public class Category
     {

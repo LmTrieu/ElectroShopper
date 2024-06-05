@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.SharedLibrary.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.Application.Dto.Product
 {

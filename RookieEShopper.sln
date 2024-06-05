@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEShopper.CustomerFron
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RookieEcommerce.Auth", "src\RookieEcommerce.Auth\RookieEcommerce.Auth.csproj", "{9CFCA0BB-CB95-41B8-8163-F16135F29C81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RookieECommerce.UnitTest", "RookieECommerce.UnitTest\RookieECommerce.UnitTest.csproj", "{1C2F78C4-92E1-478B-BD07-E34B2E9CCE32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{9CFCA0BB-CB95-41B8-8163-F16135F29C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CFCA0BB-CB95-41B8-8163-F16135F29C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CFCA0BB-CB95-41B8-8163-F16135F29C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C2F78C4-92E1-478B-BD07-E34B2E9CCE32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2F78C4-92E1-478B-BD07-E34B2E9CCE32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C2F78C4-92E1-478B-BD07-E34B2E9CCE32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2F78C4-92E1-478B-BD07-E34B2E9CCE32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

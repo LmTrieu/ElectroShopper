@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.CustomerFrontend.Models.Dto;
 using RookieEShopper.CustomerFrontend.Services.Product;
@@ -10,6 +9,7 @@ namespace RookieEShopper.CustomerFrontend.Controllers
     public class ProductController : Controller
     {
         private readonly IProductClient _productClient;
+
         public ProductController(IProductClient productClient)
         {
             _productClient = productClient;
@@ -42,14 +42,14 @@ namespace RookieEShopper.CustomerFrontend.Controllers
         public async Task<ActionResult> CreateProductReview(int id, CreateProductReviewDto createProductReviewVM)
         {
             await _productClient.PostProductReviewAsync(createProductReviewVM);
-            return RedirectToAction("Details",new {productId = createProductReviewVM.ProductId});
+            return RedirectToAction("Details", new { productId = createProductReviewVM.ProductId });
         }
 
         [Authorize]
         [Route("CreateReview/{id}")]
         public ActionResult CreateProductReview(int id)
         {
-            return RedirectToAction("Details", new { productId = id});
+            return RedirectToAction("Details", new { productId = id });
         }
     }
 }

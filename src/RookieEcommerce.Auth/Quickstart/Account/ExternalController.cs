@@ -5,17 +5,10 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RookieEcommerce.Auth.Models;
-using RookieEcommerce.Auth.Quickstart;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace RookieEcommerce.Auth.Quickstart.Account
 {
@@ -61,7 +54,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
                 throw new Exception("invalid return URL");
             }
 
-            // start challenge and roundtrip the return URL and scheme 
+            // start challenge and roundtrip the return URL and scheme
             var props = new AuthenticationProperties
             {
                 RedirectUri = Url.Action(nameof(Callback)),
@@ -73,7 +66,6 @@ namespace RookieEcommerce.Auth.Quickstart.Account
             };
 
             return Challenge(props, scheme);
-
         }
 
         /// <summary>

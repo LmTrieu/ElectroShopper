@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RookieEShopper.Application.Dto.Review;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
@@ -13,6 +12,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository _productReposity;
         private readonly ICustomerRepository _customerRepository;
+
         public ReviewRepository(IMapper mapper, ApplicationDbContext context,
                                 IProductRepository productReposity, ICustomerRepository customerRepository)
         {
@@ -21,6 +21,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _productReposity = productReposity;
             _customerRepository = customerRepository;
         }
+
         public async Task<ResponseProductReviewDto?> CreateReviewAsync(CreateProductReviewDto productReviewDto)
         {
             ProductReview productReview = new ProductReview();
@@ -131,6 +132,5 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             return response;
         }
-
     }
 }

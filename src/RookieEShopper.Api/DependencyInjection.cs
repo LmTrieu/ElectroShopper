@@ -1,6 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
 using RookieEShopper.Api.Middlewares;
-using System.Text.Json.Serialization;
 
 namespace RookieEShopper.Api
 {
@@ -19,7 +18,7 @@ namespace RookieEShopper.Api
                     });
                     policy.RequireClaim("role", new List<string>{
                         "Admin"
-                    });                    
+                    });
                 });
                 options.AddPolicy("CustomerScope", policy =>
                 {
@@ -45,7 +44,7 @@ namespace RookieEShopper.Api
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
                             AuthorizationUrl = new Uri("https://localhost:8899/connect/authorize"),
-                            TokenUrl = new Uri("https://localhost:8899/connect/token"), 
+                            TokenUrl = new Uri("https://localhost:8899/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
                                 {"api.rookie", "RookieEcommerce API"}

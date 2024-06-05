@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.Category;
-using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
@@ -52,15 +50,15 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         {
             var category = await _context.Categories.FindAsync(id);
             _context.Categories.Remove(category);
-           
+
             return (await _context.SaveChangesAsync()) > 0;
         }
 
         public async Task<Category> UpdateCategoryAsync(int id, CategoryDto categorydto)
         {
             var category = await _context.Categories.FindAsync(id);
-    
-            _mapper.Map(categorydto,category);
+
+            _mapper.Map(categorydto, category);
 
             var entityEntry = _context.Categories.Update(category);
 

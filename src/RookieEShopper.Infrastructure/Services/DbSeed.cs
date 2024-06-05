@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
 
@@ -59,6 +58,7 @@ namespace RookieEShopper.Infrastructure.Services
                 //roleManager.AddClaimAsync(adminRole, new(JwtClaimTypes.Role, "Customer")).Wait();
             }
         }
+
         private static void CreateAccounts(UserManager<BaseApplicationUser> userManager, IdentityRole adminRole, IdentityRole customerRole)
         {
             var lmtrieu = userManager.FindByNameAsync("lmtrieu").Result;
@@ -87,7 +87,6 @@ namespace RookieEShopper.Infrastructure.Services
                 userManager.AddToRoleAsync(lmtrieu, "Admin").Wait();
 
                 if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
-
             }
 
             var user = userManager.FindByNameAsync("user").Result;
@@ -115,7 +114,7 @@ namespace RookieEShopper.Infrastructure.Services
                 if (!result.Succeeded) throw new Exception(result.Errors.First().Description);
 
                 userManager.AddToRoleAsync(user, "Customer").Wait();
-            }            
+            }
         }
     }
 }

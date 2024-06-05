@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.Customer;
-using RookieEShopper.Application.Dto.Product;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Application.Service;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.SharedLibrary.HelperClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
@@ -24,12 +18,6 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             _context = context;
             _mapper = mapper;
         }
-
-        public Task<ResponseCustomerDto> CreateCustomerAsync(CreateCustomerDto customer)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<PagedList<ResponseCustomerDto>> GetAllCustomerAsync(QueryParameters query)
         {
             var result = _context.BaseApplicationUsers

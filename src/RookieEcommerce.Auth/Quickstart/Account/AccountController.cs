@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
 using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -11,16 +10,10 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RookieEcommerce.Auth.Models;
 using RookieEcommerce.Auth.Models.Dtos;
-using RookieEcommerce.Auth.Quickstart;
-using System;
-using System.Linq;
-using System.Security;
-using System.Threading.Tasks;
 
 namespace RookieEcommerce.Auth.Quickstart.Account
 {
@@ -29,7 +22,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
     public class AccountController : Controller
     {
         private readonly UserManager<BaseApplicationUser> _userManager;
-        private readonly SignInManager<BaseApplicationUser> _signInManager;        
+        private readonly SignInManager<BaseApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -87,7 +80,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
             {
                 if (context != null)
                 {
-                    // if the user cancels, send a result back into IdentityServer as if they 
+                    // if the user cancels, send a result back into IdentityServer as if they
                     // denied the consent (even if this client does not require consent).
                     // this will send back an access denied OIDC error response to the client.
                     await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
@@ -155,7 +148,6 @@ namespace RookieEcommerce.Auth.Quickstart.Account
             return View(vm);
         }
 
-
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -215,7 +207,6 @@ namespace RookieEcommerce.Auth.Quickstart.Account
             return View();
         }
 
-
         //----------- Register -----------
         [HttpGet]
         public async Task<IActionResult> Register()
@@ -248,6 +239,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
 
             Response.Redirect(registerRequestBodyDto.ReturnUrl);
         }
+
         private async Task<bool> IsEmailTaken(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -257,6 +249,7 @@ namespace RookieEcommerce.Auth.Quickstart.Account
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);

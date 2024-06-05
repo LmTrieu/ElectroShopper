@@ -91,14 +91,14 @@ $(document).ready(function () {
     /*
      * show hide
      */
-    $(".mg-forget-password").click(function(){
+    $(".mg-forget-password").click(function () {
         $(".mg-login-form-js").hide();
         $(".mg-forget-form").show();
-      });
+    });
 
-      $(".mg-redirect-login").click(function(){
+    $(".mg-redirect-login").click(function () {
         $(".mg-login-form-js").show();
         $(".mg-forget-form").hide();
-      });
+    });
     /********************************/
 });

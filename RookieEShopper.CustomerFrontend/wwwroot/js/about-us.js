@@ -1,8 +1,8 @@
-$(document).ready(function(){
+$(document).ready(function () {
     /*
      * Video PopUp
      */
-    
+
     $('.mg-video-popup').magnificPopup({
         type: 'iframe',
         closeOnContentClick: true,
@@ -22,13 +22,12 @@ $(document).ready(function(){
         infinite: true,
         responsive: [
             {
-        breakpoint: 767,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1
-        }
-      }
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1
+                }
+            }
         ]
     });
 });
-

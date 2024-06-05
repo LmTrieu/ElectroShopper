@@ -5,7 +5,6 @@ using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using RookieEcommerce.Auth.Services;
-using System.Collections.Generic;
 
 namespace RookieEcommerce.Auth
 {
@@ -22,7 +21,7 @@ namespace RookieEcommerce.Auth
                     userClaims: [JwtClaimTypes.Role]),
                 new IdentityResource(
                     name: "customer.claims",
-                    userClaims: ["customer.id"]),                     
+                    userClaims: ["customer.id"]),
                     };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -50,6 +49,7 @@ namespace RookieEcommerce.Auth
                     }
                 }
             };
+
         public static IEnumerable<ApiScope> GetApiScopes()
         {
             return new List<ApiScope>
@@ -59,7 +59,7 @@ namespace RookieEcommerce.Auth
                 new ApiScope(name: "customer.read",    displayName: "Reads you customers information."),
                 new ApiScope(name: "customer.write", displayName: "Allows customer inputs."),
             };
-        }       
+        }
 
         public static IEnumerable<Client> Clients =>
             new List<Client>
@@ -69,10 +69,10 @@ namespace RookieEcommerce.Auth
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    
+
                     RequirePkce = true,
 
-                    RedirectUris = 
+                    RedirectUris =
                     {
                         ReadConfig.clientUrls["mvc"] +"/signin-oidc"
                     },
@@ -92,7 +92,7 @@ namespace RookieEcommerce.Auth
                         "customer.read",
                         "customer.write",
                         "customer.claims",
-                    }                
+                    }
                 },
                 new() {
                     ClientId = "spa",

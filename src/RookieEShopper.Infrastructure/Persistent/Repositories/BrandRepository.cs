@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using RookieEShopper.Application.Dto.Brand;
 using RookieEShopper.Application.Repositories;
 using RookieEShopper.Domain.Data.Entities;
-using RookieEShopper.Infrastructure.Services;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
     public class BrandRepository : IBrandRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;        
+        private readonly IMapper _mapper;
 
         public BrandRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<Brand> CreateBrandAsync(CreateBrandDto brandDto)
         {
             var brand = new Brand();
@@ -27,7 +26,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             await _context.SaveChangesAsync();
 
-            return newBrandEntityEntry.Entity;            
+            return newBrandEntityEntry.Entity;
         }
 
         public Task DeleteBrandAsync(int id)
@@ -38,7 +37,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<IEnumerable<Brand>> GetAllBrandAsync()
         {
             return await _context.Brands
-                .ToListAsync();            
+                .ToListAsync();
         }
 
         public async Task<Brand?> GetBrandByIdAsync(int id)
@@ -60,14 +59,14 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 .FindAsync(id) is null;
         }
 
-        public async Task SetBrandLockStatusAsync(int id,bool IsLock)
+        public async Task SetBrandLockStatusAsync(int id, bool IsLock)
         {
             var brand = await _context.Brands
                 .Where(b => b.Id == id)
                 .FirstOrDefaultAsync();
 
-            if(brand is not null)
-                brand.IsLocked = IsLock;                
+            if (brand is not null)
+                brand.IsLocked = IsLock;
         }
 
         public Task UpdateBrandAsync(Brand brand)

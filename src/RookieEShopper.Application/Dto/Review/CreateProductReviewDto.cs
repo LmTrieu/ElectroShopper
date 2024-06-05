@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RookieEShopper.Application.Dto.Review
 {
@@ -14,6 +9,7 @@ namespace RookieEShopper.Application.Dto.Review
         public string Feedback { get; set; } = string.Empty;
         public int Rating { get; set; }
     }
+
     public class CreateProductReviewDtoValidator : AbstractValidator<CreateProductReviewDto>
     {
         public CreateProductReviewDtoValidator()

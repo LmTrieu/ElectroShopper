@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace RookieEcommerce.Auth.Models
@@ -8,13 +7,11 @@ namespace RookieEcommerce.Auth.Models
     {
         public IdentityServerFDbContext()
         {
-
         }
 
         public IdentityServerFDbContext(DbContextOptions<IdentityServerFDbContext> options)
             : base(options)
         {
         }
-
     }
 }

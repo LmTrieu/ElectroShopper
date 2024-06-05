@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using RookieEShopper.Api;
 using RookieEShopper.Api.Middlewares;
 using RookieEShopper.Application;
 using RookieEShopper.Domain.Data.Entities;
 using RookieEShopper.Infrastructure.Persistent;
-
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "ReactAdmin";
@@ -59,8 +57,6 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.UseCors(MyAllowSpecificOrigins);
-
-//app.MapIdentityApi<BaseApplicationUser>();
 
 app.MapControllers();
 

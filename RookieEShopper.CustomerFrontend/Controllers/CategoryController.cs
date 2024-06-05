@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RookieEShopper.CustomerFrontend.Services.Product;
 
 namespace RookieEShopper.CustomerFrontend.Controllers
@@ -7,13 +6,15 @@ namespace RookieEShopper.CustomerFrontend.Controllers
     public class CategoryController : Controller
     {
         private readonly IProductClient _productClient;
-        public CategoryController(IProductClient productClient){
+
+        public CategoryController(IProductClient productClient)
+        {
             _productClient = productClient;
         }
-        
+
         // GET: CategoryController/5
         public async Task<ActionResult> Index()
-        {            
+        {
             return View();
         }
 

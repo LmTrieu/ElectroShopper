@@ -15,7 +15,7 @@ namespace RookieEShopper.Application.Repositories
         Task<ResponseDomainProductDto?> GetProductDetailByIdAsync(int productId);
 
         Task<List<Product>> GetProductByNameAsync(string productName);
-        
+
         Task<Product?> CreateProductAsync(ProductDto productdto, IFormFileCollection galleryImages);
 
         Task<Product?> UpdateProductAsync(int id, ProductDto productdto);
@@ -27,9 +27,9 @@ namespace RookieEShopper.Application.Repositories
         Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId);
 
         Task<string> UploadProductImageAsync(Product product, IFormFile image);
+
         Task<ProductImageDto> UploadOnlyProductImageAsync(IFormFile image);
 
         Task<ResponseProductDto> UpdateProductInventoryAsync(int productId, int numOfProduct);
-
     }
 }

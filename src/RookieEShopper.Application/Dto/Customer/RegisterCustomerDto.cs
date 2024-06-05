@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RookieEShopper.Application.Dto.Customer
 {
@@ -15,8 +10,8 @@ namespace RookieEShopper.Application.Dto.Customer
 
         [DataType(DataType.Password)]
         public string? Password { get; set; }
-
     }
+
     public class RegisterCustomerValidator : AbstractValidator<RegisterCustomerDto>
     {
         public RegisterCustomerValidator()

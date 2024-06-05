@@ -17,18 +17,23 @@ namespace RookieEShopper.Api.Controllers
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IValidator<CreateProductReviewDto> _productReviewValidator;
-        public ReviewController(IReviewRepository reviewRepository, IValidator<CreateProductReviewDto> productReviewValidator) 
+
+        public ReviewController(IReviewRepository reviewRepository, IValidator<CreateProductReviewDto> productReviewValidator)
         {
             _productReviewValidator = productReviewValidator;
             _reviewRepository = reviewRepository;
         }
+
         // GET: api/<ReviewController>
         [HttpGet]
-        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>,BadRequest>> GetProductReviewsAsync()
+        public async Task<Results<Ok<ApiListObjectResponse<ResponseProductReviewDto>>, BadRequest>> GetProductReviewsAsync()
         {
             var productReviews = await _reviewRepository.GetAllReviewsAsync();
-            return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto> { 
-                Data = productReviews.ToList(), Message = "Products fetched successfully", Total = productReviews.Count() 
+            return TypedResults.Ok(new ApiListObjectResponse<ResponseProductReviewDto>
+            {
+                Data = productReviews.ToList(),
+                Message = "Products fetched successfully",
+                Total = productReviews.Count()
             });
         }
 

@@ -1,14 +1,9 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using RookieEShopper.CustomerFrontend.Services;
 using RookieEShopper.CustomerFrontend.Services.Category;
 using RookieEShopper.CustomerFrontend.Services.Product;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,12 +21,11 @@ builder.Services.AddAuthentication(options =>
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.Cookie.MaxAge = options.ExpireTimeSpan;
         options.SlidingExpiration = true;
-
     })
     .AddOpenIdConnect("oidc", options =>
-     {        
+     {
          options.Authority = "https://localhost:8899";
-         
+
          options.ClientId = "mvc";
          options.ClientSecret = "secret";
          options.ResponseType = "code";
@@ -43,11 +37,10 @@ builder.Services.AddAuthentication(options =>
 
          options.GetClaimsFromUserInfoEndpoint = true;
 
-         options.SaveTokens = true;         
+         options.SaveTokens = true;
 
          options.Events = new OpenIdConnectEvents
          {
-
              //OnRedirectToIdentityProvider = async n =>
              //{
              //   //save url to state
@@ -99,7 +92,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-else{
+else
+{
     app.UseExceptionHandler("/Home/Error");
 }
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
 
 namespace RookieEShopper.Domain.Data.Entities
 {

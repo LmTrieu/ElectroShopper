@@ -13,6 +13,7 @@ namespace RookieEShopper.Infrastructure.Services
         private readonly ILogger<UserServices> _logger;
         private readonly UserManager<BaseApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+
         public UserServices(ILogger<UserServices> logger, UserManager<BaseApplicationUser> userManager,
             ApplicationDbContext context)
         {
@@ -21,17 +22,17 @@ namespace RookieEShopper.Infrastructure.Services
             _context = context;
         }
 
-        public async Task EnsureUserExistsAsync( Guid customerId, string username, string email, string role)
+        public async Task EnsureUserExistsAsync(Guid customerId, string username, string email, string role)
         {
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
                 user = new BaseApplicationUser { UserName = username, Email = email, Customer = new Customer { Id = customerId } };
-                
+
                 var result = await _userManager.CreateAsync(user);
 
-                if(!role.IsNullOrEmpty())
+                if (!role.IsNullOrEmpty())
                     result = await _userManager.AddToRoleAsync(user, role);
 
                 if (result.Succeeded)
@@ -45,13 +46,14 @@ namespace RookieEShopper.Infrastructure.Services
             }
             if (user.Customer == null)
             {
-                var entityEntry = await _context.Customers.AddAsync(new Customer { Id = customerId });                
+                var entityEntry = await _context.Customers.AddAsync(new Customer { Id = customerId });
 
                 user.Customer = entityEntry.Entity;
 
                 await _context.SaveChangesAsync();
             }
         }
+
         public async Task<bool> IsCustomerExist(Guid customerId)
         {
             return await _context.Users.Where(u => u.Customer.Id == customerId).AnyAsync();

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -72,6 +71,5 @@ namespace RookieEShopper.CustomerFrontend.Services
                 throw; // Re-throw other exceptions
             }
         }
-
     }
 }
