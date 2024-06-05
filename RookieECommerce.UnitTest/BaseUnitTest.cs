@@ -1,5 +1,6 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using RookieEShopper.Application.Dto.Product;
 
 namespace RookieECommerce.UnitTest
 {
@@ -9,7 +10,8 @@ namespace RookieECommerce.UnitTest
 
         public BaseUnitTest()
         {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _fixture = new Fixture();
+            _fixture.Customize(new AutoMoqCustomization());            
         }
     }
 }

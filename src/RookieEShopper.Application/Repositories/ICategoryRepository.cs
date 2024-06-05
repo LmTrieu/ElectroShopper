@@ -9,8 +9,6 @@ namespace RookieEShopper.Application.Repositories
     {
         Task<Category> GetCategoryByIdAsync(int id);
 
-        Task<string> GetCategoryNameByIdAsync(int id);
-
         Task<PagedList<ResponseCategoryDto>> GetAllCategoriesAsync(QueryParameters query);
 
         Task<bool> IsCategoryExistAsync(int id);

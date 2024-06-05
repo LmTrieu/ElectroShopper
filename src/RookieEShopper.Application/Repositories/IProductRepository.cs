@@ -13,7 +13,7 @@ namespace RookieEShopper.Application.Repositories
         Task<ResponseProductDto?> GetProductByIdAsync(int productId);
 
         Task<ResponseDomainProductDto?> GetProductDetailByIdAsync(int productId);
-
+        
         Task<List<Product>> GetProductByNameAsync(string productName);
 
         Task<Product?> CreateProductAsync(ProductDto productdto, IFormFileCollection galleryImages);
