@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RookieEShopper.Application\RookieEShopper.Application.csproj" />
-    <ProjectReference Include="..\RookieEShopper.Domain\RookieEShopper.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

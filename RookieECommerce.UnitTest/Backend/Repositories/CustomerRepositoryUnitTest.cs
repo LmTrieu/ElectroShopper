@@ -78,15 +78,20 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Assert.NotNull(result);
             Assert.IsType<PagedList<ResponseCustomerDto>>(result);
 
-            Assert.Equal(result, expectedCustomers);
+            Assert.Equal(expectedCustomers, result);
             Assert.Equal(expectedCustomers.Count, result.Count);
             Assert.Equal(expectedCustomers.PageSize, result.PageSize);
             Assert.Equal(expectedCustomers.CurrentPage, result.CurrentPage);
             Assert.Equal(expectedCustomers.TotalCount, result.TotalCount);
             Assert.Equal(expectedCustomers.TotalPages, result.TotalPages);
 
-            Assert.Equal(result.FirstOrDefault(), responseCustomerDtos.FirstOrDefault());
-            Assert.Equal(result.LastOrDefault(), responseCustomerDtos.LastOrDefault());
+            Assert.Equal(expectedCustomers.FirstOrDefault(), result.FirstOrDefault());
+            Assert.Equal(expectedCustomers.LastOrDefault(), result.LastOrDefault());
+
+            Assert.Equal(users.FirstOrDefault().Customer.Id, result.FirstOrDefault().Id);
+            Assert.Equal(users.FirstOrDefault().Email, result.FirstOrDefault().Email);
+            Assert.Equal(users.FirstOrDefault().UserName, result.FirstOrDefault().Name);
+
 
             customerRepository.Verify(cr => cr.GetAllCustomerAsync(query), Times.Once);
             _fixture.Behaviors.Remove(new OmitOnRecursionBehavior());

@@ -15,31 +15,37 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
         [Theory]
         [AutoData]
         public async Task GetCategoryByIdAsync_WhenFound_ReturnCategory(
-            int id,
             Category category)
         {
             //Arrange
             var categoryRepository = _fixture.Create<Mock<ICategoryRepository>>();
-            categoryRepository.Setup(cr => cr.GetCategoryByIdAsync(id)).ReturnsAsync(category);
+            categoryRepository.Setup(cr => cr.GetCategoryByIdAsync(category.Id)).ReturnsAsync(category);
 
             //Act
-            var result = await categoryRepository.Object.GetCategoryByIdAsync(id);
+            var result = await categoryRepository.Object.GetCategoryByIdAsync(category.Id);
 
             //Assert
             Assert.NotNull(result);
             Assert.IsType<Category>(result);
 
             Assert.Equal(category, result); 
-
-            categoryRepository.Verify(cr => cr.GetCategoryByIdAsync(id), Times.Once);
+            Assert.Equal(category.Id,result.Id);
+            Assert.Equal(category.Name, result.Name);
+            Assert.Equal(category.Description, result.Description);
+            categoryRepository.Verify(cr => cr.GetCategoryByIdAsync(category.Id), Times.Once);
         }
 
-        [Theory]
-        [AutoData]
-        public async Task GetAllCategoriesAsync_WhenCalled_ReturnsCategories(
-            QueryParameters query)
+        [Fact]
+        public async Task GetAllCategoriesAsync_OnFirstPageSizeTen_ReturnsCategories(
+            )
         {
             // Arrange
+            var query = new QueryParameters
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+
             var categories = _fixture.Create<PagedList<ResponseCategoryDto>>();
 
             var categoryRepositoryMock = new Mock<ICategoryRepository>();
@@ -52,7 +58,8 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             // Assert
             Assert.NotNull(result);
             Assert.IsType<PagedList<ResponseCategoryDto>>(result);
-            
+
+            Assert.Equal(categories, result);
             Assert.Equal(categories.Count, result.Count);
             Assert.Equal(categories.PageSize, result.PageSize);
             Assert.Equal(categories.CurrentPage, result.CurrentPage);
@@ -88,8 +95,8 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Assert.NotNull(result);
             Assert.IsType<Category>(result);
 
-            Assert.Equal(result.Name, categoryDto.Name);
-            Assert.Equal(result.Description, categoryDto.Description);
+            Assert.Equal(categoryDto.Name, result.Name);
+            Assert.Equal(categoryDto.Description, result.Description);
 
             categoryRepository.Verify(cr => cr.CreateCategoryAsync(categoryDto), Times.Once);
         }
@@ -118,8 +125,8 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             //Assert
             Assert.NotNull(result);
             Assert.IsType<Category>(result);
-            Assert.Equal(result.Name, updatedCategory.Name);
-            Assert.Equal(result.Description, updatedCategory.Description);
+            Assert.Equal(updatedCategory.Name, result.Name);
+            Assert.Equal(updatedCategory.Description, result.Description);
 
             categoryRepository.Verify(cr => cr.UpdateCategoryAsync(category.Id, categoryDto), Times.Once);
         }
