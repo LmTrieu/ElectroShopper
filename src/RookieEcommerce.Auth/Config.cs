@@ -69,7 +69,8 @@ namespace RookieEcommerce.Auth
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
-
+                    
+                    RequireClientSecret = true,
                     RequirePkce = true,
 
                     RedirectUris =
@@ -77,7 +78,7 @@ namespace RookieEcommerce.Auth
                         ReadConfig.clientUrls["mvc"] +"/signin-oidc"
                     },
                     FrontChannelLogoutUri = ReadConfig.clientUrls["mvc"],
-                    PostLogoutRedirectUris = { ReadConfig.clientUrls["mvc"] },
+                    PostLogoutRedirectUris = { ReadConfig.clientUrls["mvc"] + "/signout-callback-oidc" },
 
                     AllowedCorsOrigins = {ReadConfig.clientUrls["mvc"] },
                     AllowAccessTokensViaBrowser = true,
@@ -97,10 +98,12 @@ namespace RookieEcommerce.Auth
                 new() {
                     ClientId = "spa",
                     ClientName = "React app",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
                     ClientUri = ReadConfig.clientUrls["react"],
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequireClientSecret = false,
+                    RequireClientSecret = true,
                     RequirePkce = true,
 
                     RedirectUris =
@@ -144,6 +147,8 @@ namespace RookieEcommerce.Auth
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "rookie.admin",
+                        "roles",
+                        "account.role",
                         "manage",
                         "customer.claims"
                     }

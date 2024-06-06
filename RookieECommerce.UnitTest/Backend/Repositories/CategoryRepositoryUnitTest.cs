@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
+using JetBrains.Annotations;
 using Moq;
 using RookieEShopper.Application.Dto.Category;
 using RookieEShopper.Application.Repositories;
@@ -12,13 +13,18 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 {
     public class CategoryRepositoryUnitTest : BaseUnitTest
     {
+        private readonly Mock<ICategoryRepository> categoryRepository;
+        public CategoryRepositoryUnitTest()
+        {
+            categoryRepository = _fixture.Freeze<Mock<ICategoryRepository>>();
+        }
+
         [Theory]
         [AutoData]
         public async Task GetCategoryByIdAsync_WhenFound_ReturnCategory(
             Category category)
         {
             //Arrange
-            var categoryRepository = _fixture.Create<Mock<ICategoryRepository>>();
             categoryRepository.Setup(cr => cr.GetCategoryByIdAsync(category.Id)).ReturnsAsync(category);
 
             //Act
@@ -48,12 +54,11 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 
             var categories = _fixture.Create<PagedList<ResponseCategoryDto>>();
 
-            var categoryRepositoryMock = new Mock<ICategoryRepository>();
-            categoryRepositoryMock.Setup(cr => cr.GetAllCategoriesAsync(query))
+            categoryRepository.Setup(cr => cr.GetAllCategoriesAsync(query))
                 .ReturnsAsync(categories);
 
             // Act
-            var result = await categoryRepositoryMock.Object.GetAllCategoriesAsync(query);
+            var result = await categoryRepository.Object.GetAllCategoriesAsync(query);
 
             // Assert
             Assert.NotNull(result);
@@ -69,7 +74,7 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Assert.Equal(categories.FirstOrDefault(), result.FirstOrDefault());
             Assert.Equal(categories.LastOrDefault(), result.LastOrDefault());
 
-            categoryRepositoryMock.Verify(cr => cr.GetAllCategoriesAsync(query), Times.Once);
+            categoryRepository.Verify(cr => cr.GetAllCategoriesAsync(query), Times.Once);
         }
 
 
@@ -84,7 +89,7 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Description = categoryDto.Description,
                 Name = categoryDto.Name
             };
-            var categoryRepository = _fixture.Create<Mock<ICategoryRepository>>();
+           
             categoryRepository.Setup(cr => cr.CreateCategoryAsync(categoryDto))
                 .ReturnsAsync(category);
 
@@ -115,7 +120,7 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Description = categoryDto.Description
             };
 
-            var categoryRepository = _fixture.Create<Mock<ICategoryRepository>>();
+           
             categoryRepository.Setup(cr => cr.UpdateCategoryAsync(category.Id, categoryDto))
                 .ReturnsAsync(updatedCategory);
 
@@ -137,7 +142,7 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Category category)
         {
             //Arrange
-            var categoryRepository = _fixture.Create<Mock<ICategoryRepository>>();
+           
             categoryRepository.Setup(cr => cr.DeleteCategoryAsync(category.Id))
                 .ReturnsAsync(true);
 

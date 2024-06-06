@@ -12,6 +12,13 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 {
     public class CustomerRepositoryUnitTest : BaseUnitTest
     {
+        private readonly Mock<ICustomerRepository> customerRepository;
+
+        public CustomerRepositoryUnitTest()
+        {
+            customerRepository = _fixture.Freeze<Mock<ICustomerRepository>>();
+        }
+
         [Fact]
         public async Task GetCustomerByIdAsync_WhenFound_ReturnsOneCustomer()
         {
@@ -26,7 +33,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Name = user.UserName
             };
 
-            var customerRepository = _fixture.Create<Mock<ICustomerRepository>>();
             customerRepository.Setup(repo => repo.GetCustomerByIdAsync(user.Customer.Id))
                 .ReturnsAsync(responseCustomerDtos);
             
@@ -67,7 +73,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 
             var expectedCustomers = new PagedList<ResponseCustomerDto>(responseCustomerDtos, responseCustomerDtos.Count,query.PageNumber,query.PageSize);
 
-            var customerRepository = _fixture.Create<Mock<ICustomerRepository>>();
             customerRepository.Setup(cr => cr.GetAllCustomerAsync(query))
                 .ReturnsAsync(expectedCustomers);
 
@@ -110,7 +115,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Name = user.UserName
             };
 
-            var customerRepository = _fixture.Create<Mock<ICustomerRepository>>();
             customerRepository.Setup(repo => repo.GetCustomerByIdAsync(user.Customer.Id))
                 .ReturnsAsync(expectedCustomer);
 
@@ -132,7 +136,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Guid id)
         {
             // Arrange
-            var customerRepository = _fixture.Create<Mock<ICustomerRepository>>();
             customerRepository.Setup(repo => repo.GetCustomerByIdAsync(id))
                 .ReturnsAsync(() => null);
 

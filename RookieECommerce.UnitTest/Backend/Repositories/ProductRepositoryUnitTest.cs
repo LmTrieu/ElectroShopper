@@ -14,6 +14,12 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 {
     public class ProductRepositoryUnitTest : BaseUnitTest
     {
+        private readonly Mock<IProductRepository> productRepository;
+        public ProductRepositoryUnitTest()
+        {
+            productRepository = _fixture.Freeze<Mock<IProductRepository>>();
+        }
+
         [Theory]
         [AutoData]
         public async Task GetAllProductsAsync_ReturnsProductPageList(
@@ -37,7 +43,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 
             var expectedProducts = new PagedList<ResponseProductDto>(responseProductDtos, responseProductDtos.Count, query.PageNumber, query.PageSize);
 
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
             productRepository.Setup(cr => cr.GetAllProductsAsync(query))
                 .ReturnsAsync(expectedProducts);
 
@@ -71,7 +76,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             ResponseDomainProductDto product)
         {
             // Arrange
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
             productRepository.Setup(repo => repo.GetProductDetailByIdAsync(product.Id))
                 .ReturnsAsync(product);
 
@@ -104,8 +108,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Price = productDto.Price,
                 MainImagePath = productDto.ProductImage.FileName
             };
-
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
 
             productRepository.Setup(repo => repo.CreateProductAsync(productDto, null))
                 .ReturnsAsync(expectedProduct);
@@ -153,8 +155,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 MainImagePath = productDto.ProductImage.FileName
             };
 
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
-
             productRepository.Setup(repo => repo.UpdateProductAsync(expectedProduct.Id,productDto))
                 .ReturnsAsync(expectedProduct);
 
@@ -187,16 +187,15 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Product product)
         {
             //Arrange
-            var categoryRepository = _fixture.Create<Mock<IProductRepository>>();
-            categoryRepository.Setup(cr => cr.DeleteProductAsync(product.Id))
+            productRepository.Setup(cr => cr.DeleteProductAsync(product.Id))
                 .ReturnsAsync(true);
 
             //Act
-            var result = await categoryRepository.Object.DeleteProductAsync(product.Id);
+            var result = await productRepository.Object.DeleteProductAsync(product.Id);
 
             //Assert 
             Assert.True(result);
-            categoryRepository.Verify(cr => cr.DeleteProductAsync(product.Id), Times.Once);
+            productRepository.Verify(cr => cr.DeleteProductAsync(product.Id), Times.Once);
         }
 
         [Theory]
@@ -205,16 +204,15 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
             Product product)
         {
             //Arrange
-            var categoryRepository = _fixture.Create<Mock<IProductRepository>>();
-            categoryRepository.Setup(cr => cr.IsProductExistAsync(product.Id))
+            productRepository.Setup(cr => cr.IsProductExistAsync(product.Id))
                 .ReturnsAsync(true);
 
             //Act
-            var result = await categoryRepository.Object.IsProductExistAsync(product.Id);
+            var result = await productRepository.Object.IsProductExistAsync(product.Id);
 
             //Assert 
             Assert.True(result);
-            categoryRepository.Verify(cr => cr.IsProductExistAsync(product.Id), Times.Once);
+            productRepository.Verify(cr => cr.IsProductExistAsync(product.Id), Times.Once);
         }
 
         [Theory]
@@ -240,7 +238,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 
             var expectedProducts = new PagedList<ResponseProductDto>(responseProductDtos, responseProductDtos.Count, query.PageNumber, query.PageSize);
 
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
             productRepository.Setup(cr => cr.GetProductsByCategoryAsync(query, products.FirstOrDefault().Category.Id))
                 .ReturnsAsync(expectedProducts);
 
@@ -278,7 +275,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
 
             var expectedImagePath = Guid.NewGuid() + "_" + image.FileName;
 
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
             productRepository.Setup(cr => cr.UploadProductImageAsync(product, image))
                 .ReturnsAsync(expectedImagePath);
 
@@ -309,7 +305,6 @@ namespace RookieECommerce.UnitTest.Backend.Repositories
                 Status = "done"
             };
 
-            var productRepository = _fixture.Create<Mock<IProductRepository>>();
             productRepository.Setup(cr => cr.UploadOnlyProductImageAsync(image))
                 .ReturnsAsync(expectedProductImageDto);
 

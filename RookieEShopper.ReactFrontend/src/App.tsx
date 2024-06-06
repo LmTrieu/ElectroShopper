@@ -69,9 +69,10 @@ function App() {
       };
     },
     logout: async () => {
-      await removeUser();
       await signoutRedirect();
+      await removeUser();
       localStorage.removeItem("access_token");
+
       return {
         success: true,
         redirectTo: "/login",

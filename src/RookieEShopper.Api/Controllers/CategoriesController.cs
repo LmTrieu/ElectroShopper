@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RookieEShopper.Api.Dto;
@@ -58,6 +59,7 @@ namespace RookieEShopper.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "GodScope")]
         [Route("Post")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, BadRequest<string>>> PostCategory(CategoryDto categoryDto)
         {
@@ -74,6 +76,7 @@ namespace RookieEShopper.Api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Policy = "GodScope")]
         [Route("Delete/{id}")]
         public async Task<Results<Ok<string>, BadRequest<string>>> DeleteCategory(int id)
         {
@@ -83,6 +86,7 @@ namespace RookieEShopper.Api.Controllers
         }
 
         [HttpPatch]
+        [Authorize(Policy = "GodScope")]
         [Route("Patch/{id}")]
         public async Task<Results<Ok<ApiSingleObjectResponse<Category>>, BadRequest<string>>> PatchCategory(int id, CategoryDto categoryDto)
         {
@@ -101,6 +105,7 @@ namespace RookieEShopper.Api.Controllers
         //-- CategoryGroup entities enpoints starts here --
 
         [HttpPost]
+        [Authorize(Policy = "GodScope")]
         [Route("CategoryGroup/Post")]
         public async Task<Results<CreatedAtRoute<CategoryGroup>, BadRequest<string>>> CreateCategoryGroup(CreateCategoryGroupDto createCategoryGroupDto)
         {
