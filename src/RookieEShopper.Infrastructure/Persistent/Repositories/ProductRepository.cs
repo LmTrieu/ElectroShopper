@@ -12,7 +12,7 @@ using RookieEShopper.SharedLibrary.ViewModels;
 
 namespace RookieEShopper.Infrastructure.Persistent.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public partial class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -35,6 +35,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
         public async Task<PagedList<ResponseProductDto>> GetAllProductsAsync(QueryParameters query)
         {
             var result = _context.Products
+                .AsNoTracking()
                 .Join(
                     _context.Inventories,
                     p => p.Id,
@@ -56,39 +57,38 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 });
 
             return await PagedList<ResponseProductDto>.ToPagedList(result,
-                    query.PageNumber,
-                    query.PageSize);
+                query.PageNumber,
+                query.PageSize);
         }
 
         public async Task<ResponseDomainProductDto?> GetProductDetailByIdAsync(int productId)
         {
             var product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.ProductReviews)
-                .Join(
-                    _context.Inventories,
-                    p => p.Id,
-                    i => i.Product.Id,
-                    (p, i) => new
-                    {
-                        product = p,
-                        numOfProduct = i.StockAmmount,
-                    })
-                    .Select(p => new ResponseDomainProductDto
-                    {
-                        Id = p.product.Id,
-                        Name = p.product.Name,
-                        Price = p.product.Price,
-                        MainImagePath = p.product.MainImagePath,
-                        ImageGallery = p.product.ImageGallery,
-                        Description = p.product.Description,
-                        ProductReviews = p.product.ProductReviews.Select(pr => pr.Id).ToList(),
-                        NumOfProduct = p.numOfProduct,
-                        Category = _mapper.Map<CategoryVM>(p.product.Category)
-                    })
-                .FirstOrDefaultAsync(p => p.Id == productId);
+                .AsNoTracking()
+                .Where(p => p.Id == productId)
+                .Select(p => new
+                {
+                    Product = p,
+                    Category = p.Category,
+                    Reviews = p.ProductReviews,
+                    Inventory = _context.Inventories.FirstOrDefault(i => i.Product.Id == p.Id)
+                })
+                .Select(p => new ResponseDomainProductDto
+                {
+                    Id = p.Product.Id,
+                    Name = p.Product.Name,
+                    Price = p.Product.Price,
+                    MainImagePath = p.Product.MainImagePath,
+                    ImageGallery = p.Product.ImageGallery,
+                    Description = p.Product.Description,
+                    ProductReviews = p.Reviews.Select(pr => pr.Id).ToList(),
+                    NumOfProduct = p.Inventory != null ? p.Inventory.StockAmmount : 0,
+                    Category = _mapper.Map<CategoryVM>(p.Category)
+                })
+                .FirstOrDefaultAsync();
             return product;
         }
+
 
         public async Task<List<Product>> GetProductByNameAsync(string productName)
         {
@@ -111,6 +111,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
             await CreateInventoryAsync(product, productdto.NumOfProduct);
             await _context.SaveChangesAsync();
+
             //Currently ReactApp doesnt use this due to it require this to be a separate endpoint
             await InitialUploadImageLogic(product, productdto.ProductImage, galleryImages);
 
@@ -148,6 +149,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
                 await _context.SaveChangesAsync();
             }
+
             return result;
         }
 
@@ -208,7 +210,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
             };
         }
 
-        public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query, int categoryId)
+        public async Task<PagedList<ResponseProductDto>> GetProductsByCategoryAsync(QueryParameters query,
+            int categoryId)
         {
             var result = _context.Products
                 .Where(p => p.Category.Id == categoryId)
@@ -233,8 +236,8 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 });
 
             return await PagedList<ResponseProductDto>.ToPagedList(result,
-            query.PageNumber,
-            query.PageSize);
+                query.PageNumber,
+                query.PageSize);
         }
 
         public async Task<ResponseProductDto?> GetProductByIdAsync(int productId)
@@ -259,12 +262,14 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
 
         //--- Service function starts here ---
 
-        private async Task InitialUploadImageLogic(Product product, IFormFile? MainImage, IFormFileCollection? galleryImages)
+        private async Task InitialUploadImageLogic(Product product, IFormFile? MainImage,
+            IFormFileCollection? galleryImages)
         {
             if (MainImage is not null)
             {
                 product.MainImagePath = await UploadProductImageAsync(product, MainImage);
             }
+
             if (galleryImages is not null)
             {
                 foreach (var image in galleryImages.ToList())
@@ -272,6 +277,19 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                     product.ImageGallery.Add(await UploadProductImageAsync(product, image));
                 }
             }
+
+            var folderPath = Path.Combine(_env.ContentRootPath, "wwwroot", "ProductImages", "PlaceHolderPDID");
+
+            if (Directory.Exists(folderPath))
+            {
+                var files = Directory.EnumerateFiles(folderPath);
+
+                foreach (var file in files)
+                {
+                    File.Delete(file);
+                }
+            }
+
         }
 
         private async Task<Inventory?> GetInventoryAsync(int productId)
@@ -302,6 +320,7 @@ namespace RookieEShopper.Infrastructure.Persistent.Repositories
                 inventory.LastUpdated = DateTime.Now;
                 _context.Inventories.Update(inventory);
             }
+
             await _context.SaveChangesAsync();
         }
     }

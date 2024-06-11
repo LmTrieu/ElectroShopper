@@ -1,6 +1,7 @@
-import { Edit, useForm, useSelect } from "@refinedev/antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Edit, getValueFromEvent, useForm, useSelect } from "@refinedev/antd";
 import MDEditor from "@uiw/react-md-editor";
-import { Form, Input, InputNumber, Select } from "antd";
+import { Button, Form, Input, InputNumber, Select, Upload, message } from "antd";
 
 export const ProductEdit = () => {
   const { formProps, saveButtonProps, queryResult, formLoading } = useForm({
@@ -88,17 +89,37 @@ export const ProductEdit = () => {
           <InputNumber 
             size = "large"/>
         </Form.Item>
-        {/* <Form.Item  
-          label={"Category"}
-          name={["category", "id"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+        <Form.Item
+          label={"Main product image"}
+          name={["productImage"]}
+          valuePropName="productImage"
+          getValueFromEvent={getValueFromEvent}
+          noStyle          
         >
-          <Select {...categorySelectProps} />
-        </Form.Item> */}
+          <Upload
+            name="file"
+            action={`https://localhost:7265/api/Products/Media`}
+            multiple
+            listType="picture"
+            headers={{
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }}
+            beforeUpload={(file) => {const isPNG = file.type === 'image/png';
+              if (!isPNG) {
+                message.error(`${file.name} is not a png file`);
+              }
+              return isPNG || Upload.LIST_IGNORE}}
+            defaultFileList={[{
+              uid: `${productData?.mainImagePath}`,
+              name: `${productData?.mainImagePath}`,
+              status: 'done',
+              url: `https://localhost:7265/ProductImages/${productData?.id}/${productData?.mainImagePath}`,
+              percent: 100,              
+            }]}
+          >
+            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+          </Upload>
+        </Form.Item>
       </Form>
     </Edit>
   );

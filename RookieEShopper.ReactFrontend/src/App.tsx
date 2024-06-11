@@ -69,7 +69,7 @@ function App() {
       };
     },
     logout: async () => {
-      await signoutRedirect();
+      await signoutRedirect();  
       await removeUser();
       localStorage.removeItem("access_token");
 

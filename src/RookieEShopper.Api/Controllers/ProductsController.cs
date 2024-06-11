@@ -43,7 +43,12 @@ namespace RookieEShopper.Api.Controllers
                 };
                 Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return TypedResults.Ok(new ApiListObjectResponse<ResponseProductDto> { Data = result, Message = "Products fetched successfully", Total = result.Count() });
+                return TypedResults.Ok(new ApiListObjectResponse<ResponseProductDto>
+                {
+                    Data = result, 
+                    Message = "Products fetched successfully",
+                    Total = result.Count()
+                });
             }
             return TypedResults.NotFound("No product is available at the moment, try again later");
         }
@@ -56,7 +61,11 @@ namespace RookieEShopper.Api.Controllers
 
             return product is null ?
                 TypedResults.NotFound("No product is available at the moment, try again later") :
-                TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto> { Data = product, Message = "Products fetched successfully" });
+                TypedResults.Ok(new ApiSingleObjectResponse<ResponseDomainProductDto>
+                {
+                    Data = product,
+                    Message = "Products fetched successfully"
+                });
         }
 
         [Authorize(Policy = "GodScope")]
@@ -147,8 +156,7 @@ namespace RookieEShopper.Api.Controllers
 
                 return TypedResults.Ok(new ApiListObjectResponse<ResponseProductDto> { Data = result, Message = "Products fetched successfully", Total = result.Count() });
             }
-            return
-                TypedResults.NotFound("Product not found with the specified ID.");
+            return TypedResults.NotFound("Product not found with the specified ID.");
         }
 
         [Authorize(Policy = "GodScope")]

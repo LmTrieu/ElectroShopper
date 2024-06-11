@@ -112,13 +112,6 @@ export const ProductCreate = () => {
             headers={{
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             }}
-            // onChange={(info) => {
-            //   if (info.file.status === "done") {
-            //     formProps.form?.setFieldsValue({ productImage: info.file.response });
-            //   } else if (info.file.status === "error") {
-            //     alert("Error in uploading picture")
-            //   }
-            // }}
           >
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>

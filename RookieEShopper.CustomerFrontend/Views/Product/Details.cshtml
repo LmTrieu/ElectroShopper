@@ -12,7 +12,7 @@
                         <div class="mg-slide-img">
                             <img src="https://localhost:7265/ProductImages/@Model.productDetail.Product.Id/@Model.productDetail.Product.MainImagePath" alt="">
                         </div>  
-                        @if (Model.productDetail.Product.ImageGallery.Count != 0)
+@*                         @if (Model.productDetail.Product.ImageGallery.Count != 0)
                         {
                             foreach (var product in Model.productDetail.Product.ImageGallery)
                             {
@@ -20,13 +20,19 @@
                                     <img src="https://localhost:7265/ProductImages/@Model.productDetail.Product.Id/@product" alt="">
                                 </div>    
                             }
-                        }                
+                        }  *@               
                     </div>
-                    <div class="mg-product-slider-nav">
-                        <div class="mg-slide-nav-img">
-                            <img src="assets/images/product-slider/product-slider-thumb1.jpg" alt="">
-                        </div>
-                    </div>
+                     <div class="mg-product-slider-nav">
+@*                           @if (Model.productDetail.Product.ImageGallery.Count != 0)
+                          {
+                              foreach (var product in Model.productDetail.Product.ImageGallery)
+                              {
+                                  <div class="mg-slide-nav-img">
+                                      <img src="https://localhost:7265/ProductImages/@Model.productDetail.Product.Id/@product" alt="">
+                                  </div>    
+                              }
+                          }   *@
+                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
